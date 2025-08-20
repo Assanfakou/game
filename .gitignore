@@ -1,0 +1,13 @@
+*.out
+run
+*.vscode
+*.zed
+*.o
+*.gch
+*.a
+*.txt
+*.swap
+file
+minilibx
+test
+
