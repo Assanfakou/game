@@ -10,7 +10,9 @@ cub3D
 *.a
 *.txt
 *.swap
+*.swp
 file
 minilibx
 test
-
+.*.swp
+*.DS_Store
