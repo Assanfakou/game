@@ -1,5 +1,8 @@
 *.out
 run
+game
+cub3d
+cub3D
 *.vscode
 *.zed
 *.o
