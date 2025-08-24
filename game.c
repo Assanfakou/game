@@ -65,61 +65,64 @@ void circleBres(void *mlx, void *win, int xc, int yc, int r)
         usleep(10);
     }
 }
+void mlx_ini(t_mlx *mlx)
+{
+	mlx->mlx = mlx_init();
+	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "14x14 Grid");
+	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
+	mlx->addr= mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->line_length, &mlx->endian);
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
+}
 int main()
 {
-	int bits_pex;
-	int endian;
-	int line_length;
-	void *mlx = mlx_init();
-	void *win = mlx_new_window(mlx, WIDTH, HEIGHT, "14x14 Grid");
-	void *img = mlx_new_image(mlx, WIDTH, HEIGHT);
-	char *add = mlx_get_data_addr(img, &bits_pex, &line_length, &endian);
-	mlx_put_image_to_window(mlx, win, img, 0, 0);
+	t_mlx mlx;
 
 	int blockSize = 50;
 	int gridSize = blockSize * 14;
 
-
+	mlx_ini(&mlx);
 	int col = 0;
 	while (col <= 14)
 	{
 		int row = 0;
 		while (row <= 14) 
 		{
-			drawLineHorizontal(mlx, win, row * blockSize, gridSize);
+			drawLineHorizontal(mlx.mlx, mlx.win, row * blockSize, gridSize);
 			row++;
 		}
-		drawLineVertical(mlx, win, col * blockSize, gridSize);
+		drawLineVertical(mlx.mlx, mlx.win, col * blockSize, gridSize);
 		col++;
 	}
-	circleBres(mlx, win, 350, 350, 10);
+	circleBres(mlx.mlx, mlx.win, 350, 350, 10);
 	for (int i = 0; i < 700; i++)
 	{
 		int j = i;
-		mlx_pixel_put(mlx, win, i+1, j, BLU);
+		mlx_pixel_put(mlx.mlx, mlx.win, i+1, j, BLU);
 		j = i + 1;
-		mlx_pixel_put(mlx, win, i+1, j + 1, BLU);
+		mlx_pixel_put(mlx.mlx, mlx.win, i+1, j + 1, BLU);
 	}
 	int i = 0;
 	for (int j = 700; j > 0; j--)
 	{
-		mlx_pixel_put(mlx, win, i, j, GRE); 
+		mlx_pixel_put(mlx.mlx, mlx.win, i, j, GRE); 
 		i++;
-		mlx_pixel_put(mlx, win, i, j - 1, GRE);
+		mlx_pixel_put(mlx.mlx, mlx.win, i, j - 1, GRE);
 		printf("here %d\n", i);
 	}
 	int x = 89;
 	int y = 89;
-	circleBres(mlx, win, 350, 350, 100);
+	circleBres(mlx.mlx, mlx.win, 350, 350, 100);
+/*
 	circleBres(mlx, win, 350, 350, 150);
 	circleBres(mlx, win, 350, 350, 200);
 	circleBres(mlx, win, 350, 350, 200);
 	circleBres(mlx, win, 350, 350, 250);
 	circleBres(mlx, win, 350, 350, 300);
 	circleBres(mlx, win, 350, 350, 350);
+*/
 
-	mlx_key_hook(win, handle_keypress, NULL);
-	mlx_loop(mlx);
+	mlx_key_hook(mlx.win, handle_keypress, NULL);
+	mlx_loop(mlx.mlx);
 
 }
 
