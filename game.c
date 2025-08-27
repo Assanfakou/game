@@ -9,28 +9,28 @@ int	handle_keypress(int keycode)
 	return (0);
 }
 
-void drawLineVertical(void *mlx, void *win, int x, int height)
+void drawLineVertical(t_mlx *mlx, int x, int height)
 {
     int y;
 
     y = 0;
     while (y <= height)
     {
-        mlx_pixel_put(mlx, win, x, y, RED);
+        my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
         y++;
     }
 }
 
-void drawLineHorizontal(void *mlx, void *win, int y, int width)
+void drawLineHorizontal(t_mlx *mlx, int y, int width)
 {
-    int x;
-    
-    x = 0;
-    while (x <= width)
-    {
-        mlx_pixel_put(mlx, win, x, y, RED);
-        x++;
-    }
+	int x;
+
+	x = 0;
+	while (x <= width)
+	{
+		my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
+		x++;
+	}
 }
 
 void drawCircle(void *mlx, void *win, int xc, int yc, int x, int y)
@@ -65,62 +65,102 @@ void circleBres(void *mlx, void *win, int xc, int yc, int r)
         usleep(10);
     }
 }
+
 void mlx_ini(t_mlx *mlx)
 {
 	mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "14x14 Grid");
 	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
 	mlx->addr= mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->line_length, &mlx->endian);
-	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
+}
+
+void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color)
+{
+    char *dst;
+
+    if (x < 0 || y < 0) 
+	return;  // avoid invalid coords
+    dst = addr + (y * line_length + x * (bpp / 8));
+    *(unsigned int*)dst = color;
+}
+
+void draw_squar(t_mlx *mlx, int x, int y, int color)
+{
+	int i;
+	int j;
+
+	i = 0;
+	while (i < TILE)
+	{
+		j = y;	
+		while (j < TILE)
+		{
+			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, i * TILE, j * TILE, color);
+			j++;
+		}
+		i++; 
+	}
+}
+
+void draw_region(char *addr, int line_length, int bpp, int x_start, int x_end, int y_start, int y_end, int color)
+{
+    for (int y = y_start; y <= y_end; y++)
+    {
+        for (int x = x_start; x <= x_end; x++)
+        {
+            my_mlx_pixel_put(addr, line_length, bpp, x, y, color);
+        }
+    }
+}
+
+void draw_grids(t_mlx *mlx)
+{
+	
+	int blockSize = 50;
+	int gridSize = blockSize * 14;
+	int row;
+	int col = 0;
+
+	while (col <= 14)
+	{
+		row = 0;
+		while (row <= 14)
+		{
+			drawLineHorizontal(mlx, row * blockSize, gridSize);
+			row++;
+		}
+		drawLineVertical(mlx, col * blockSize, gridSize);
+		col++;
+	}
 }
 int main()
 {
 	t_mlx mlx;
+	t_cub cub;
 
-	int blockSize = 50;
-	int gridSize = blockSize * 14;
-
+	char map[14][14] = {
+	{"P1111111111111"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"10000000000001"},
+	{"11111111111111"},
+	};
 	mlx_ini(&mlx);
-	int col = 0;
-	while (col <= 14)
-	{
-		int row = 0;
-		while (row <= 14) 
-		{
-			drawLineHorizontal(mlx.mlx, mlx.win, row * blockSize, gridSize);
-			row++;
-		}
-		drawLineVertical(mlx.mlx, mlx.win, col * blockSize, gridSize);
-		col++;
-	}
+	draw_grids(&mlx);
+	draw_region(mlx.addr, mlx.line_length, mlx.bpp, 100, 200, 200, 300, RED); 
 	circleBres(mlx.mlx, mlx.win, 350, 350, 10);
-	for (int i = 0; i < 700; i++)
-	{
-		int j = i;
-		mlx_pixel_put(mlx.mlx, mlx.win, i+1, j, BLU);
-		j = i + 1;
-		mlx_pixel_put(mlx.mlx, mlx.win, i+1, j + 1, BLU);
-	}
-	int i = 0;
-	for (int j = 700; j > 0; j--)
-	{
-		mlx_pixel_put(mlx.mlx, mlx.win, i, j, GRE); 
-		i++;
-		mlx_pixel_put(mlx.mlx, mlx.win, i, j - 1, GRE);
-		printf("here %d\n", i);
-	}
-	int x = 89;
-	int y = 89;
 	circleBres(mlx.mlx, mlx.win, 350, 350, 100);
-/*
-	circleBres(mlx, win, 350, 350, 150);
-	circleBres(mlx, win, 350, 350, 200);
-	circleBres(mlx, win, 350, 350, 200);
-	circleBres(mlx, win, 350, 350, 250);
-	circleBres(mlx, win, 350, 350, 300);
-	circleBres(mlx, win, 350, 350, 350);
-*/
 
+	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
 	mlx_key_hook(mlx.win, handle_keypress, NULL);
 	mlx_loop(mlx.mlx);
 

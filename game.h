@@ -1,15 +1,17 @@
-#include "minilibx/mlx.h"
+#include "mlx.h"
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
 
-#define WIDTH 1200
-#define HEIGHT 1000
+#define WIDTH 700
+#define HEIGHT 700
+#define TILE 32
 
 #define GRE 0x0000FF00
 #define RED 0x00FF0000
 #define BLU 0x000000FF
 #define ESC 65307
+
 
 
 
@@ -23,4 +25,13 @@ typedef struct s_mlx
 	int line_length;
 	int endian;
 }	t_mlx;
- 	
+
+typedef struct s_cub
+{
+	char map[14][14];
+	int x;
+	int y;
+	struct t_mlx *mlx;
+}	t_cub;
+
+void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color);
