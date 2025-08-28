@@ -35,14 +35,14 @@ void drawLineHorizontal(t_mlx *mlx, int y, int width)
 
 void drawCircle(void *mlx, void *win, int xc, int yc, int x, int y)
 {
-    mlx_pixel_put(mlx, win, xc-x, yc+y, GRE);
-    mlx_pixel_put(mlx, win, xc+x, yc-y, GRE);
-    mlx_pixel_put(mlx, win, xc-x, yc-y, GRE);
-    mlx_pixel_put(mlx, win, xc+y, yc+x, GRE);
-    mlx_pixel_put(mlx, win, xc-y, yc+x, GRE);
-    mlx_pixel_put(mlx, win, xc+y, yc-x, GRE);
-    mlx_pixel_put(mlx, win, xc-y, yc-x, GRE);
-    mlx_pixel_put(mlx, win, xc+x, yc+y, GRE);
+	mlx_pixel_put(mlx, win, xc-x, yc+y, GRE);
+	mlx_pixel_put(mlx, win, xc+x, yc-y, GRE);
+	mlx_pixel_put(mlx, win, xc-x, yc-y, GRE);
+	mlx_pixel_put(mlx, win, xc+y, yc+x, GRE);
+	mlx_pixel_put(mlx, win, xc-y, yc+x, GRE);
+	mlx_pixel_put(mlx, win, xc+y, yc-x, GRE);
+	mlx_pixel_put(mlx, win, xc-y, yc-x, GRE);
+	mlx_pixel_put(mlx, win, xc+x, yc+y, GRE);
 }
 
 void circleBres(void *mlx, void *win, int xc, int yc, int r)
@@ -78,7 +78,7 @@ void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int co
 {
     char *dst;
 
-    if (x < 0 || y < 0) 
+    if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) 
 	return;  // avoid invalid coords
     dst = addr + (y * line_length + x * (bpp / 8));
     *(unsigned int*)dst = color;
@@ -92,13 +92,32 @@ void draw_squar(t_mlx *mlx, int x, int y, int color)
 	i = 0;
 	while (i < TILE)
 	{
-		j = y;	
+		j = 0;	
 		while (j < TILE)
 		{
-			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, i * TILE, j * TILE, color);
+			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x * TILE + i, y * TILE + j, color);
 			j++;
 		}
 		i++; 
+	}
+}
+
+void draw_map(t_cub *game, t_mlx *mlx)
+{
+	int x;
+	int y;
+
+	y = 0;
+	while (game->map[y])
+	{
+		x = 0;
+		while (game->map[y][x])
+		{
+			if (game->map[y][x] == '1')
+				draw_squar(mlx, x, y, RED);
+			x++;
+		}
+		y++;
 	}
 }
 
@@ -109,6 +128,22 @@ void draw_region(char *addr, int line_length, int bpp, int x_start, int x_end, i
         for (int x = x_start; x <= x_end; x++)
         {
             my_mlx_pixel_put(addr, line_length, bpp, x, y, color);
+        }
+    }
+}
+
+void draw_player(t_mlx *mlx, t_player *player)
+{
+    int size = 10; // player radius
+    int i, j;
+
+    for (i = -size; i <= size; i++)
+    {
+        for (j = -size; j <= size; j++)
+        {
+            if (i*i + j*j <= size*size) // circle
+                my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp,
+                                 (int)player->x + i, (int)player->y + j, BLU);
         }
     }
 }
@@ -133,36 +168,72 @@ void draw_grids(t_mlx *mlx)
 		col++;
 	}
 }
+
+
+int render(t_cub *game)
+{
+	ft_bzero(game->mlx->addr, HEIGHT * game->mlx->line_length);
+	draw_grids(game->mlx);
+	draw_map(game, game->mlx);
+	draw_player(game->mlx, game->player);
+	mlx_put_image_to_window(game->mlx->mlx, game->mlx->win, game->mlx->img, 0, 0);
+
+	return (0);
+}
+
+int handle_keypres(int keycode, t_player *player)
+{
+    if (keycode == ESC)
+        exit(EXIT_SUCCESS);
+    if (keycode == 119) // W
+        player->y -= player->speed;
+    if (keycode == 115) // S
+        player->y += player->speed;
+    if (keycode == 97)  // A
+        player->x -= player->speed;
+    if (keycode == 100) // D
+	    player->x += player->speed;
+    return (0);
+}
+
 int main()
 {
 	t_mlx mlx;
 	t_cub cub;
+	t_player player;
 
-	char map[14][14] = {
-	{"P1111111111111"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"10000000000001"},
-	{"11111111111111"},
+	char *map[] = {
+	"01111111111111",
+	"10000000000001",
+	"10000000000001",
+	"10000000000001",
+	"10000P00000001",
+	"10000000000001",
+	"10000000000001",
+	"10000000000001",
+	"10000000000001",
+	"10000000000001",
+	"10000000000001",
+	"10000000000001",
+	"10000000000001",
+	"11111111111111",
+	NULL,
 	};
-	mlx_ini(&mlx);
-	draw_grids(&mlx);
-	draw_region(mlx.addr, mlx.line_length, mlx.bpp, 100, 200, 200, 300, RED); 
-	circleBres(mlx.mlx, mlx.win, 350, 350, 10);
-	circleBres(mlx.mlx, mlx.win, 350, 350, 100);
 
+	mlx_ini(&mlx);
+	cub.map = map;
+	player.x = 0;
+	player.y = 0;
+	player.speed = 10;
+	cub.player = &player;
+	cub.mlx = &mlx;
+	draw_grids(&mlx);
+	draw_map(&cub, &mlx);
+	
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
+	mlx_hook(mlx.win, 2, 1L<<0, handle_keypres, cub.player);
+	mlx_loop_hook(mlx.mlx, render, &cub);
 	mlx_key_hook(mlx.win, handle_keypress, NULL);
 	mlx_loop(mlx.mlx);
-
 }
 
