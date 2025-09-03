@@ -1,8 +1,9 @@
 #include "minilibx/mlx.h"
 #include "libft/libft.h"
+#include <math.h>
 
-#define WIDTH 700
-#define HEIGHT 700
+#define WIDTH 1100
+#define HEIGHT 1000
 #define TILE 50
 
 #define GRE 0x0000FF00
@@ -11,11 +12,18 @@
 #define ESC 65307
 
 
+#define UP 119
+#define DOWN 115
+#define RIGHT 100
+#define LEFT 97
 
 typedef struct s_player
 {
 	double x;
 	double y;
+	double dir_x;
+	double dir_y;
+	double angle;
 	double speed;
 }	t_player;
 

@@ -79,7 +79,7 @@ void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int co
     char *dst;
 
     if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) 
-	return;  // avoid invalid coords
+	return;
     dst = addr + (y * line_length + x * (bpp / 8));
     *(unsigned int*)dst = color;
 }
@@ -150,9 +150,7 @@ void draw_player(t_mlx *mlx, t_player *player)
 
 void draw_grids(t_mlx *mlx)
 {
-	
-	int blockSize = 50;
-	int gridSize = blockSize * 14;
+	int gridSize = TILE * 14;
 	int row;
 	int col = 0;
 
@@ -161,39 +159,75 @@ void draw_grids(t_mlx *mlx)
 		row = 0;
 		while (row <= 14)
 		{
-			drawLineHorizontal(mlx, row * blockSize, gridSize);
+			drawLineHorizontal(mlx, row * TILE, gridSize);
 			row++;
 		}
-		drawLineVertical(mlx, col * blockSize, gridSize);
+		drawLineVertical(mlx, col * TILE, gridSize);
 		col++;
 	}
 }
 
+void draw_line(t_mlx *mlx, int x0, int y0, int x1, int y1, int color)
+{
+    int dx = abs(x1 - x0);
+    int dy = abs(y1 - y0);
+    int sx = (x0 < x1) ? 1 : -1;
+    int sy = (y0 < y1) ? 1 : -1;
+    int err = dx - dy;
+
+    while (1)
+    {
+        my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x0, y0, color);
+        if (x0 == x1 && y0 == y1)
+		break;
+        int e2 = 2 * err;
+        if (e2 > -dy) { err -= dy; x0 += sx;}
+        if (e2 <  dx) { err += dx; y0 += sy; }
+    }
+}
 
 int render(t_cub *game)
 {
-	ft_bzero(game->mlx->addr, HEIGHT * game->mlx->line_length);
+	double line_length = 100;
+	int end_x = (int)(game->player->x + cos(game->player->angle) * line_length);
+	int end_y = (int)(game->player->y + sin(game->player->angle) * line_length);
+
+	ft_bzero(game->mlx->addr, (size_t)game->mlx->line_length * HEIGHT);
+
 	draw_grids(game->mlx);
 	draw_map(game, game->mlx);
 	draw_player(game->mlx, game->player);
-	mlx_put_image_to_window(game->mlx->mlx, game->mlx->win, game->mlx->img, 0, 0);
+	draw_line(game->mlx, (int)game->player->x, (int)game->player->y, end_x, end_y, GRE);
 
-	return (0);
+	mlx_put_image_to_window(game->mlx->mlx, game->mlx->win, game->mlx->img, 0, 0);
+	return 0;
 }
 
 int handle_keypres(int keycode, t_player *player)
 {
-    if (keycode == ESC)
-        exit(EXIT_SUCCESS);
-    if (keycode == 119) // W
-        player->y -= player->speed;
-    if (keycode == 115) // S
-        player->y += player->speed;
-    if (keycode == 97)  // A
-        player->x -= player->speed;
-    if (keycode == 100) // D
-	    player->x += player->speed;
-    return (0);
+	if (keycode == UP)
+	{
+		player->y -= player->dir_y * player->speed;
+		player->x -= player->dir_x * player->speed;
+	}
+	if (keycode == DOWN)
+	{
+		player->y += player->dir_y * player->speed;
+		player->x += player->dir_x * player->speed;
+	}
+	if (keycode == LEFT)
+	{
+		player->angle -= 0.1;
+		player->dir_x = cos(player->angle);
+		player->dir_y = sin(player->angle);
+	}
+	if (keycode == RIGHT)
+	{
+		player->angle += 0.1;
+		player->dir_x = cos(player->angle);
+		player->dir_y = sin(player->angle);
+	}
+	return (0);
 }
 
 int main()
@@ -225,6 +259,9 @@ int main()
 	player.x = 0;
 	player.y = 0;
 	player.speed = 10;
+	player.angle = 0;
+	player.dir_x = cos(player.angle);
+	player.dir_y = sin(player.angle);
 	cub.player = &player;
 	cub.mlx = &mlx;
 	draw_grids(&mlx);
