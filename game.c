@@ -11,14 +11,14 @@ int	handle_keypress(int keycode)
 
 void drawLineVertical(t_mlx *mlx, int x, int height)
 {
-    int y;
+	int y;
 
-    y = 0;
-    while (y <= height)
-    {
-        my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
-        y++;
-    }
+	y = 0;
+	while (y <= height)
+	{
+		my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
+		y++;
+	}
 }
 
 void drawLineHorizontal(t_mlx *mlx, int y, int width)
@@ -33,39 +33,6 @@ void drawLineHorizontal(t_mlx *mlx, int y, int width)
 	}
 }
 
-void drawCircle(void *mlx, void *win, int xc, int yc, int x, int y)
-{
-	mlx_pixel_put(mlx, win, xc-x, yc+y, GRE);
-	mlx_pixel_put(mlx, win, xc+x, yc-y, GRE);
-	mlx_pixel_put(mlx, win, xc-x, yc-y, GRE);
-	mlx_pixel_put(mlx, win, xc+y, yc+x, GRE);
-	mlx_pixel_put(mlx, win, xc-y, yc+x, GRE);
-	mlx_pixel_put(mlx, win, xc+y, yc-x, GRE);
-	mlx_pixel_put(mlx, win, xc-y, yc-x, GRE);
-	mlx_pixel_put(mlx, win, xc+x, yc+y, GRE);
-}
-
-void circleBres(void *mlx, void *win, int xc, int yc, int r)
-{
-    int x = 0, y = r;
-    int d = 3 - 2 * r;
-
-    drawCircle(mlx, win, xc, yc, x, y);
-    while (y >= x)
-    {
-        if (d > 0)
-        {
-            y--; 
-            d = d + 4 * (x - y) + 10;
-        }
-        else
-            d = d + 4 * x + 6;
-        x++;
-        drawCircle(mlx, win, xc, yc, x, y);
-        usleep(10);
-    }
-}
-
 void mlx_ini(t_mlx *mlx)
 {
 	mlx->mlx = mlx_init();
@@ -76,12 +43,12 @@ void mlx_ini(t_mlx *mlx)
 
 void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color)
 {
-    char *dst;
+	char *dst;
 
-    if (x < 0 || y < 0 || x >= WIDTH || y >= HEIGHT) 
-	return;
-    dst = addr + (y * line_length + x * (bpp / 8));
-    *(unsigned int*)dst = color;
+	if (x < -2 || y < 0 || x >= WIDTH || y >= HEIGHT) 
+		return;
+	dst = addr + (y * line_length + x * (bpp / 8));
+	*(unsigned int*)dst = color;
 }
 
 void draw_squar(t_mlx *mlx, int x, int y, int color)
@@ -121,31 +88,27 @@ void draw_map(t_cub *game, t_mlx *mlx)
 	}
 }
 
-void draw_region(char *addr, int line_length, int bpp, int x_start, int x_end, int y_start, int y_end, int color)
-{
-    for (int y = y_start; y <= y_end; y++)
-    {
-        for (int x = x_start; x <= x_end; x++)
-        {
-            my_mlx_pixel_put(addr, line_length, bpp, x, y, color);
-        }
-    }
-}
 
 void draw_player(t_mlx *mlx, t_player *player)
 {
-    int size = 10; // player radius
-    int i, j;
+	int raduis;
+	int i; 
+	int j;
 
-    for (i = -size; i <= size; i++)
-    {
-        for (j = -size; j <= size; j++)
-        {
-            if (i*i + j*j <= size*size) // circle
-                my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp,
-                                 (int)player->x + i, (int)player->y + j, BLU);
-        }
-    }
+	raduis = 10;
+	i = -raduis;
+	while (i <= raduis)
+	{
+		j = -raduis;
+		while (j <= raduis)
+		{
+			if (i*i + j*j <= raduis*raduis)
+				my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp,
+						(int)player->x + i, (int)player->y + j, BLU);
+			j++;
+		}
+		i++;
+	}
 }
 
 void draw_grids(t_mlx *mlx)
@@ -188,16 +151,14 @@ void draw_line(t_mlx *mlx, int x0, int y0, int x1, int y1, int color)
 
 int render(t_cub *game)
 {
-	double line_length = 100;
-	int end_x = (int)(game->player->x + cos(game->player->angle) * line_length);
-	int end_y = (int)(game->player->y + sin(game->player->angle) * line_length);
-
 	ft_bzero(game->mlx->addr, (size_t)game->mlx->line_length * HEIGHT);
 
 	draw_grids(game->mlx);
-	draw_map(game, game->mlx);
 	draw_player(game->mlx, game->player);
-	draw_line(game->mlx, (int)game->player->x, (int)game->player->y, end_x, end_y, GRE);
+	draw_map(game, game->mlx);
+	draw_fov(game);
+	printf("%sangle :%f%s, \n", COLORE, game->player->angle, RESET);
+	printf("cos of angle :%f, \n", cos(game->player->angle));
 
 	mlx_put_image_to_window(game->mlx->mlx, game->mlx->win, game->mlx->img, 0, 0);
 	return 0;
@@ -207,13 +168,13 @@ int handle_keypres(int keycode, t_player *player)
 {
 	if (keycode == UP)
 	{
-		player->y -= player->dir_y * player->speed;
-		player->x -= player->dir_x * player->speed;
+		player->y += player->dir_y * player->speed;
+		player->x += player->dir_x * player->speed;
 	}
 	if (keycode == DOWN)
 	{
-		player->y += player->dir_y * player->speed;
-		player->x += player->dir_x * player->speed;
+		player->y -= player->dir_y * player->speed;
+		player->x -= player->dir_x * player->speed;
 	}
 	if (keycode == LEFT)
 	{
@@ -229,7 +190,23 @@ int handle_keypres(int keycode, t_player *player)
 	}
 	return (0);
 }
+void draw_fov(t_cub *game)
+{
+	int end_x;
+	int end_y;
+	int i;
+	double ray_engle;
 
+	i = 0;
+	while (i < NUM_RAYS)
+	{
+		ray_engle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
+		end_x = (int)(game->player->x + cos(ray_engle) * RAY_LENGTH);	
+		end_y = (int)(game->player->y + sin(ray_engle) * RAY_LENGTH);	
+		draw_line(game->mlx, game->player->x, game->player->y, end_x, end_y, GRE);
+		i++;
+	}
+}
 int main()
 {
 	t_mlx mlx;
@@ -237,13 +214,13 @@ int main()
 	t_player player;
 
 	char *map[] = {
-	"01111111111111",
+	"11111111111111",
 	"10000000000001",
 	"10000000000001",
 	"10000000000001",
-	"10000P00000001",
 	"10000000000001",
 	"10000000000001",
+	"100000P0000001",
 	"10000000000001",
 	"10000000000001",
 	"10000000000001",
@@ -256,12 +233,14 @@ int main()
 
 	mlx_ini(&mlx);
 	cub.map = map;
-	player.x = 0;
-	player.y = 0;
+	player.x = 80;
+	player.y = 80;
 	player.speed = 10;
 	player.angle = 0;
-	player.dir_x = cos(player.angle);
-	player.dir_y = sin(player.angle);
+/*
+	player.dir_x = 0;
+	player.dir_y = 30;
+*/
 	cub.player = &player;
 	cub.mlx = &mlx;
 	draw_grids(&mlx);
@@ -270,7 +249,6 @@ int main()
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
 	mlx_hook(mlx.win, 2, 1L<<0, handle_keypres, cub.player);
 	mlx_loop_hook(mlx.mlx, render, &cub);
-	mlx_key_hook(mlx.win, handle_keypress, NULL);
-	mlx_loop(mlx.mlx);
+	mlx_key_hook(mlx.win, handle_keypress, NULL); mlx_loop(mlx.mlx);
 }
 
