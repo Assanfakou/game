@@ -156,7 +156,8 @@ int render(t_cub *game)
 	draw_grids(game->mlx);
 	draw_player(game->mlx, game->player);
 	draw_map(game, game->mlx);
-	draw_fov(game);
+	cast_all_rays(game);
+//	draw_fov(game);
 	printf("%sangle :%f%s, \n", COLORE, game->player->angle, RESET);
 	printf("cos of angle :%f, \n", cos(game->player->angle));
 
@@ -190,6 +191,69 @@ int handle_keypres(int keycode, t_player *player)
 	}
 	return (0);
 }
+
+void cast_all_rays(t_cub *game)
+{
+    double ray_angle;
+    int i;
+
+    i = 0;
+    while (i < NUM_RAYS)
+    {
+        ray_angle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
+        cast_single_ray(game, ray_angle);  // call our one-ray function
+        i++;
+    }
+}
+
+void cast_single_ray(t_cub *game, double angle)
+{
+    double ray_x = game->player->x;
+    double ray_y = game->player->y;
+    double step_x = cos(angle);
+    double step_y = sin(angle);
+
+    while (1)
+    {
+        ray_x += step_x;
+        ray_y += step_y;
+
+        if (game->map[(int)ray_y / TILE][(int)ray_x / TILE] == '1')
+            break;
+	
+	draw_line(game->mlx, game->player->x, game->player->y, (int)ray_x, (int)ray_y, GRE);
+    }
+}
+
+/*
+void cast_single_ray(t_cub *game, double ray_angle)
+{
+    double ray_x = game->player->x;
+    double ray_y = game->player->y;
+    double step = 1.0; // how far the ray moves each time
+    int map_x, map_y;
+
+    while (1)
+    {
+        // move forward in direction of the ray
+        ray_x += cos(ray_angle) * step;
+        ray_y += sin(ray_angle) * step;
+
+        // convert pixel position to map square
+        map_x = (int)(ray_x / TILE);
+        map_y = (int)(ray_y / TILE);
+
+        // check if we hit a wall
+        if (game->map[map_y][map_x] == '1')
+        {
+            draw_line(game->mlx, game->player->x, game->player->y,
+                      (int)ray_x, (int)ray_y, GRE);
+            break;
+        }
+    }
+}
+*/
+
 void draw_fov(t_cub *game)
 {
 	int end_x;
@@ -217,10 +281,10 @@ int main()
 	"11111111111111",
 	"10000000000001",
 	"10000000000001",
+	"10100000000001",
 	"10000000000001",
-	"10000000000001",
-	"10000000000001",
-	"100000P0000001",
+	"10100000000001",
+	"101100P0000001",
 	"10000000000001",
 	"10000000000001",
 	"10000000000001",
@@ -237,10 +301,8 @@ int main()
 	player.y = 80;
 	player.speed = 10;
 	player.angle = 0;
-/*
-	player.dir_x = 0;
-	player.dir_y = 30;
-*/
+	player.dir_x = cos(player.angle);
+	player.dir_y = sin(player.angle);
 	cub.player = &player;
 	cub.mlx = &mlx;
 	draw_grids(&mlx);
