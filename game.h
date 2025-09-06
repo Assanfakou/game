@@ -3,7 +3,7 @@
 #include <math.h>
 
 #define FOV (M_PI / 3)
-#define NUM_RAYS 50 
+#define NUM_RAYS 600 
 #define RAY_LENGTH 50
 
 # ifndef COLOR
@@ -15,8 +15,8 @@
 # endif
 
 
-#define WIDTH 1000
-#define HEIGHT 1000
+#define WIDTH 700
+#define HEIGHT 700
 #define TILE 50
 
 #define GRE 0x0000FF00
@@ -77,5 +77,5 @@ void draw_fov(t_cub *game);
 void draw_player(t_mlx *mlx, t_player *player);
 void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color);
 void cast_all_rays(t_cub *game);
-void cast_single_ray(t_cub *game, double ray_angle);
+double cast_single_ray(t_cub *game, double ray_angle);
 

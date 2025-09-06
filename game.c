@@ -176,10 +176,10 @@ int render(t_cub *game)
 {
 	ft_bzero(game->mlx->addr, (size_t)game->mlx->line_length * HEIGHT);
 
-	draw_grids(game->mlx);
-	draw_player(game->mlx, game->player);
-	draw_map(game, game->mlx);
-	print_map(game);
+	//draw_grids(game->mlx);
+	//draw_player(game->mlx, game->player);
+	//draw_map(game, game->mlx);
+	//print_map(game);
 	cast_all_rays(game);
 //	draw_fov(game);
 	printf("%sangle :%f%s, \n", COLORE, game->player->angle, RESET);
@@ -241,33 +241,43 @@ void cast_all_rays(t_cub *game)
 {
 	double ray_angle;
 	int i;
+	double distance;
+	double prejection_plane = (WIDTH / 2) / (FOV / 2);
+	double wall_hight;
+	double start_y;
+	double end_y;
 
 	i = 0;
 	while (i < NUM_RAYS)
 	{
 		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
-		cast_single_ray(game, ray_angle);
+		distance = cast_single_ray(game, ray_angle);
+		wall_hight = TILE / distance * (prejection_plane);
+		start_y = (HEIGHT / 2) - (wall_hight / 2);
+		end_y = (HEIGHT / 2) + (wall_hight / 2);
+		draw_line(game->mlx, i, start_y, i, end_y, GRE);
 		i++;
 	}
 }
 
-void cast_single_ray(t_cub *game, double angle)
+double cast_single_ray(t_cub *game, double angle)
 {
-    double ray_x = game->player->x;
-    double ray_y = game->player->y;
-    double step_x = cos(angle);
-    double step_y = sin(angle);
+	double ray_x = game->player->x;
+	double ray_y = game->player->y;
+	double step_x = cos(angle);
+	double step_y = sin(angle);
 
-    while (1)
-    {
-        ray_x += step_x;
-        ray_y += step_y;
+	while (1)
+	{
+		ray_x += step_x;
+		ray_y += step_y;
 
-        if (game->map[(int)ray_y / TILE][(int)ray_x / TILE] == '1')
-            break;
-	
-	draw_line(game->mlx, game->player->x, game->player->y, (int)ray_x, (int)ray_y, GRE);
-    }
+		if (game->map[(int)ray_y / TILE][(int)ray_x / TILE] == '1')
+			break;
+
+	}
+	printf("Distance %f\n", ray_x - (double)game->player->x + (ray_y - (double)game->player->y)); 
+	return (ray_x - (double)game->player->x + (ray_y - (double)game->player->y));
 }
 
 void draw_fov(t_cub *game)
@@ -318,7 +328,7 @@ int main()
 	player.dir_y = sin(player.angle);
 	cub.player = &player;
 	cub.mlx = &mlx;
-	draw_grids(&mlx);
+	//draw_grids(&mlx);
 	draw_map(&cub, &mlx);
 	
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
