@@ -1,9 +1,9 @@
-#include "mlx.h"
+#include "minilibx/mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 
 #define FOV (M_PI / 3)
-#define NUM_RAYS 600 
+#define NUM_RAYS 800 
 #define RAY_LENGTH 50
 
 # ifndef COLOR
@@ -15,8 +15,8 @@
 # endif
 
 
-#define WIDTH 700
-#define HEIGHT 700
+#define WIDTH 800
+#define HEIGHT 800
 #define TILE 50
 
 #define GRE 0x0000FF00

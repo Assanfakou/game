@@ -80,7 +80,7 @@ void draw_map(t_cub *game, t_mlx *mlx)
 		x = 0;
 		while (game->map[y][x])
 		{
-			if (game->map[y][x] == '1')
+			if (game->map[y][x] == '0')
 				draw_squar(mlx, x, y, RED);
 			else if (game->map[y][x] == 'P')
 			{
@@ -255,54 +255,29 @@ void cast_all_rays(t_cub *game)
 		wall_hight = TILE / distance * (prejection_plane);
 		start_y = (HEIGHT / 2) - (wall_hight / 2);
 		end_y = (HEIGHT / 2) + (wall_hight / 2);
-		draw_line(game->mlx, i, start_y, i, end_y, GRE);
+		draw_line(game->mlx, i, start_y, i, end_y, BLU);
 		i++;
 	}
 }
 
-/*
 double cast_single_ray(t_cub *game, double angle)
 {
-	double ray_x = game->player->x;
-	double ray_y = game->player->y;
-	double step_x = cos(angle);
-	double step_y = sin(angle);
+	double ray_x;
+	double ray_y;
+	double step_x;
+	double step_y;
 
+	ray_x = game->player->x;
+	ray_y = game->player->y;
+	step_x = cos(angle);
+	step_y = sin(angle);
 	while (1)
 	{
 		ray_x += step_x;
 		ray_y += step_y;
-
 		if (game->map[(int)ray_y / TILE][(int)ray_x / TILE] == '1')
-			break;
-
+			return (sqrt(pow(ray_x - game->player->x, 2) + pow(ray_y - game->player->y, 2)));
 	}
-	printf("Distance %f\n", ray_x - (double)game->player->x + (ray_y - (double)game->player->y)); 
-	return (sqrt((ray_x - (double)game->player->x) + (ray_y - (double)game->player->y)));
-}
-*/
-double cast_single_ray(t_cub *game, double angle)
-{
-    double ray_x = game->player->x;
-    double ray_y = game->player->y;
-    double step_x = cos(angle);
-    double step_y = sin(angle);
-
-    while (1)
-    {
-        ray_x += step_x;
-        ray_y += step_y;
-
-        if (game->map[(int)ray_y / TILE][(int)ray_x / TILE] == '1')
-        {
-            double dx = ray_x - game->player->x;
-            double dy = ray_y - game->player->y;
-            double distance = sqrt(dx * dx + dy * dy);
-
-
-            return distance;
-        }
-    }
 }
 void draw_fov(t_cub *game)
 {
