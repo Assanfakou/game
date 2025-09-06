@@ -82,12 +82,17 @@ void draw_map(t_cub *game, t_mlx *mlx)
 		{
 			if (game->map[y][x] == '1')
 				draw_squar(mlx, x, y, RED);
+			else if (game->map[y][x] == 'P')
+			{
+				game->player->x = x * TILE + TILE / 2;
+				game->player->y = y * TILE + TILE / 2;
+				game->map[y][x] = '0';
+			}
 			x++;
 		}
 		y++;
 	}
 }
-
 
 void draw_player(t_mlx *mlx, t_player *player)
 {
@@ -148,7 +153,25 @@ void draw_line(t_mlx *mlx, int x0, int y0, int x1, int y1, int color)
         if (e2 <  dx) { err += dx; y0 += sy; }
     }
 }
+void print_map(t_cub *game)
+{
+	int y = 0;
+	int x;
 
+	while (game->map[y])
+	{
+		x = 0;
+		while (game->map[y][x])
+		{
+			printf("%c, ", game->map[y][x]);
+			x++;
+		}
+		printf("\n");
+		y++;
+	}	
+	printf("#############################################\n");
+}
+	
 int render(t_cub *game)
 {
 	ft_bzero(game->mlx->addr, (size_t)game->mlx->line_length * HEIGHT);
@@ -156,6 +179,7 @@ int render(t_cub *game)
 	draw_grids(game->mlx);
 	draw_player(game->mlx, game->player);
 	draw_map(game, game->mlx);
+	print_map(game);
 	cast_all_rays(game);
 //	draw_fov(game);
 	printf("%sangle :%f%s, \n", COLORE, game->player->angle, RESET);
@@ -165,17 +189,38 @@ int render(t_cub *game)
 	return 0;
 }
 
-int handle_keypres(int keycode, t_player *player)
+int handle_keypres(int keycode, t_cub *game)
 {
+	t_player *player;
+	double new_y;
+	double new_x;
+	int map_y;
+	int map_x;
+
+	player = game->player;
 	if (keycode == UP)
 	{
-		player->y += player->dir_y * player->speed;
-		player->x += player->dir_x * player->speed;
+		new_y = player->y + player->dir_y * player->speed;
+		new_x = player->x + player->dir_x * player->speed;
+		map_y = (int)(new_y / TILE);
+		map_x = (int)(new_x / TILE);
+		if (game->map[map_y][map_x] != '1')
+		{
+			player->x = new_x;
+			player->y = new_y;
+		}
 	}
 	if (keycode == DOWN)
 	{
-		player->y -= player->dir_y * player->speed;
-		player->x -= player->dir_x * player->speed;
+		new_y = player->y - player->dir_y * player->speed;
+		new_x = player->x - player->dir_x * player->speed;
+		map_y = (int)(new_y / TILE);
+		map_x = (int)(new_x / TILE);
+		if (game->map[map_y][map_x] != '1')
+		{
+			player->x = new_x;
+			player->y = new_y;
+		}
 	}
 	if (keycode == LEFT)
 	{
@@ -194,16 +239,16 @@ int handle_keypres(int keycode, t_player *player)
 
 void cast_all_rays(t_cub *game)
 {
-    double ray_angle;
-    int i;
+	double ray_angle;
+	int i;
 
-    i = 0;
-    while (i < NUM_RAYS)
-    {
-        ray_angle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
-        cast_single_ray(game, ray_angle);  // call our one-ray function
-        i++;
-    }
+	i = 0;
+	while (i < NUM_RAYS)
+	{
+		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
+		cast_single_ray(game, ray_angle);
+		i++;
+	}
 }
 
 void cast_single_ray(t_cub *game, double angle)
@@ -224,35 +269,6 @@ void cast_single_ray(t_cub *game, double angle)
 	draw_line(game->mlx, game->player->x, game->player->y, (int)ray_x, (int)ray_y, GRE);
     }
 }
-
-/*
-void cast_single_ray(t_cub *game, double ray_angle)
-{
-    double ray_x = game->player->x;
-    double ray_y = game->player->y;
-    double step = 1.0; // how far the ray moves each time
-    int map_x, map_y;
-
-    while (1)
-    {
-        // move forward in direction of the ray
-        ray_x += cos(ray_angle) * step;
-        ray_y += sin(ray_angle) * step;
-
-        // convert pixel position to map square
-        map_x = (int)(ray_x / TILE);
-        map_y = (int)(ray_y / TILE);
-
-        // check if we hit a wall
-        if (game->map[map_y][map_x] == '1')
-        {
-            draw_line(game->mlx, game->player->x, game->player->y,
-                      (int)ray_x, (int)ray_y, GRE);
-            break;
-        }
-    }
-}
-*/
 
 void draw_fov(t_cub *game)
 {
@@ -276,29 +292,26 @@ int main()
 	t_mlx mlx;
 	t_cub cub;
 	t_player player;
-
 	char *map[] = {
-	"11111111111111",
-	"10000000000001",
-	"10000000000001",
-	"10100000000001",
-	"10000000000001",
-	"10100000000001",
-	"101100P0000001",
-	"10000000000001",
-	"10000000000001",
-	"10000000000001",
-	"10000000000001",
-	"10000000000001",
-	"10000000000001",
-	"11111111111111",
-	NULL,
+		strdup("11111111111111"),
+		strdup("1P000000000001"),
+		strdup("10100000000001"),
+		strdup("10000000000001"),
+		strdup("10100000000001"),
+		strdup("10110010000001"),
+		strdup("10000000000001"),
+		strdup("10000000000001"),
+		strdup("10000000000001"),
+		strdup("10000000000001"),
+		strdup("10000000000001"),
+		strdup("10000000000001"),
+		strdup("10000000000001"),
+		strdup("11111111111111"),
+		NULL
 	};
 
 	mlx_ini(&mlx);
 	cub.map = map;
-	player.x = 80;
-	player.y = 80;
 	player.speed = 10;
 	player.angle = 0;
 	player.dir_x = cos(player.angle);
@@ -309,8 +322,9 @@ int main()
 	draw_map(&cub, &mlx);
 	
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
-	mlx_hook(mlx.win, 2, 1L<<0, handle_keypres, cub.player);
+	mlx_hook(mlx.win, 2, 1L<<0, handle_keypres, &cub);
 	mlx_loop_hook(mlx.mlx, render, &cub);
-	mlx_key_hook(mlx.win, handle_keypress, NULL); mlx_loop(mlx.mlx);
+	mlx_key_hook(mlx.win, handle_keypress, NULL);
+	mlx_loop(mlx.mlx);
 }
 
