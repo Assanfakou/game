@@ -171,7 +171,31 @@ void print_map(t_cub *game)
 	}	
 	printf("#############################################\n");
 }
-	
+void draw_floor_and_ceiling(t_mlx *mlx)
+{
+	int y = 0;
+	while (y < HEIGHT / 2)
+	{
+		int x = 0;
+		while (x < WIDTH)
+		{
+			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, GRE);
+			x++;
+		}
+		y++;
+	}
+
+	while (y < HEIGHT)
+	{
+		int x = 0;
+		while (x < WIDTH)
+		{
+			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
+			x++;
+		}
+		y++;
+	}
+}
 int render(t_cub *game)
 {
 	ft_bzero(game->mlx->addr, (size_t)game->mlx->line_length * HEIGHT);
@@ -180,6 +204,7 @@ int render(t_cub *game)
 	//draw_player(game->mlx, game->player);
 	//draw_map(game, game->mlx);
 	//print_map(game);
+	draw_floor_and_ceiling(game->mlx);
 	cast_all_rays(game);
 //	draw_fov(game);
 	printf("%sangle :%f%s, \n", COLORE, game->player->angle, RESET);
