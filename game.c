@@ -260,6 +260,7 @@ void cast_all_rays(t_cub *game)
 	}
 }
 
+/*
 double cast_single_ray(t_cub *game, double angle)
 {
 	double ray_x = game->player->x;
@@ -277,9 +278,32 @@ double cast_single_ray(t_cub *game, double angle)
 
 	}
 	printf("Distance %f\n", ray_x - (double)game->player->x + (ray_y - (double)game->player->y)); 
-	return (ray_x - (double)game->player->x + (ray_y - (double)game->player->y));
+	return (sqrt((ray_x - (double)game->player->x) + (ray_y - (double)game->player->y)));
 }
+*/
+double cast_single_ray(t_cub *game, double angle)
+{
+    double ray_x = game->player->x;
+    double ray_y = game->player->y;
+    double step_x = cos(angle);
+    double step_y = sin(angle);
 
+    while (1)
+    {
+        ray_x += step_x;
+        ray_y += step_y;
+
+        if (game->map[(int)ray_y / TILE][(int)ray_x / TILE] == '1')
+        {
+            double dx = ray_x - game->player->x;
+            double dy = ray_y - game->player->y;
+            double distance = sqrt(dx * dx + dy * dy);
+
+
+            return distance;
+        }
+    }
+}
 void draw_fov(t_cub *game)
 {
 	int end_x;
@@ -304,7 +328,7 @@ int main()
 	t_player player;
 	char *map[] = {
 		strdup("11111111111111"),
-		strdup("1P000000000001"),
+		strdup("1P000000010001"),
 		strdup("10100000000001"),
 		strdup("10000000000001"),
 		strdup("10100000000001"),
