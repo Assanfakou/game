@@ -57,6 +57,15 @@ typedef struct s_mlx
 	int endian;
 }	t_mlx;
 
+typedef struct s_cub
+{
+	char **map;
+	t_mlx *mlx;
+	t_mlx *map_image;
+	t_player *player;
+
+}	t_cub;
+
 typedef struct s_txtrs
 {
 	void *wall;
@@ -64,18 +73,26 @@ typedef struct s_txtrs
 	int sky_color;
 }	t_textrs;
 
-typedef struct s_cub
-{
-	char **map;
-	t_mlx *mlx;
-	t_player *player;
-
-}	t_cub;
+void mlx_ini(t_mlx *mlx, t_mlx *map_image);
 
 void draw_line(t_mlx *mlx, int start_x, int start_y, int end_x, int end_y, int color);
-void draw_fov(t_cub *game);
-void draw_player(t_mlx *mlx, t_player *player);
 void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color);
+
+//ray_casting
 void cast_all_rays(t_cub *game);
 double cast_single_ray(t_cub *game, double ray_angle);
+
+
+int	handle_keypress(int keycode);
+int handle_keypres(int keycode, t_cub *game);
+
+
+
+// map 
+
+void drawLineVertical(t_mlx *mlx, int x, int height);
+void drawLineHorizontal(t_mlx *mlx, int y, int width);
+void draw_squar(t_mlx *mlx, int x, int y, int color);
+void draw_grids(t_mlx *mlx);
+void draw_player(t_mlx *mlx, t_player *player);
 
