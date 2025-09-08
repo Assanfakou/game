@@ -1,4 +1,5 @@
-#include "mlx.h"
+#include "minilibx/mlx.h"
+//#include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 
@@ -65,17 +66,20 @@ typedef struct s_cub
 	t_player *player;
 }	t_cub;
 
+
 typedef struct s_dda
 {
-	double rayder_y;
-	double rayder_x;
-	int map_x;
-	int map_y;
-	double delta_dest_x;
-	double delta_dest_y;
-	double step_x;
-	double step_y;
-}	t_dda;
+    double raydirx;
+    double raydiry;
+    int mapx;
+    int mapy;
+    double sidedistx;
+    double sidedisty;
+    double deltadistx;
+    double deltadisty;
+    int stepx;
+    int stepy;
+}   t_dda;
 
 typedef struct s_txtrs
 {
