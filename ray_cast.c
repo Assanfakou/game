@@ -25,15 +25,22 @@ void cast_all_rays(t_cub *game)
 
 double cast_single_ray(t_cub *game, double angle)
 {
-	double ray_x;
-	double ray_y;
-	double step_x;
-	double step_y;
+	t_dda var;
 
-	ray_x = game->player->x;
-	ray_y = game->player->y;
-	step_x = cos(angle);
-	step_y = sin(angle);
+	var.map_x = (int)(game->player->x / TILE);
+	var.map_y = (int)(game->player->y / TILE);
+	var.ray_x = cos(angle);
+	var.ray_y = sin(angle);
+
+	if (var.ray_y < 0)
+		step_y = -1;
+	if (var.ray_y > 0)
+		step_y = 1;
+	if (var.ray_x < 0)
+		step_x = -1;
+	if (var.ray_x > 0)
+		step_x = 1;
+	
 	while (1)
 	{
 		ray_x += step_x;

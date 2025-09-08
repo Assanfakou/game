@@ -1,9 +1,8 @@
-#include "minilibx/mlx.h"
+#include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 
 #define FOV (M_PI / 3)
-#define NUM_RAYS 800 
 #define RAY_LENGTH 50
 
 # ifndef COLOR
@@ -15,9 +14,10 @@
 # endif
 
 
-#define WIDTH 800
-#define HEIGHT 800
+#define WIDTH 1500
+#define HEIGHT 1000
 #define TILE 50
+#define NUM_RAYS WIDTH 
 
 #define GRE 0x0000FF00
 #define RED 0x00FF0000
@@ -63,8 +63,19 @@ typedef struct s_cub
 	t_mlx *mlx;
 	t_mlx *map_image;
 	t_player *player;
-
 }	t_cub;
+
+typedef struct s_dda
+{
+	double rayder_y;
+	double rayder_x;
+	int map_x;
+	int map_y;
+	double delta_dest_x;
+	double delta_dest_y;
+	double step_x;
+	double step_y;
+}	t_dda;
 
 typedef struct s_txtrs
 {
