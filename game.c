@@ -107,7 +107,6 @@ int render(t_cub *game)
 	printf("cos of angle :%f, \n", cos(game->player->angle));
 
 	mlx_put_image_to_window(game->mlx->mlx, game->mlx->win, game->mlx->img, 0, 0);
-//	mlx_put_image_to_window(game->mlx->mlx, game->mlx->win, game->map_image, 0, 0);
 	return 0;
 }
 
@@ -119,9 +118,9 @@ int main()
 	t_player player;
 	char *map[] = {
 		strdup("11111111111111"),
-		strdup("1P000000010001"),
-		strdup("10100000000001"),
-		strdup("10000000000001"),
+		strdup("1P000010010001"),
+		strdup("10100001000001"),
+		strdup("10000000100001"),
 		strdup("10100000000001"),
 		strdup("10110010000001"),
 		strdup("10000000000001"),
