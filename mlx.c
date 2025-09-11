@@ -1,16 +1,48 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mlx.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/11 17:14:39 by hfakou            #+#    #+#             */
+/*   Updated: 2025/09/11 21:37:08 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
-void mlx_ini(t_mlx *mlx, t_mlx *map_image)
+t_image new_image(t_render render, int width, int height)
 {
-	mlx->mlx = mlx_init();
-	mlx->win = mlx_new_window(mlx->mlx, WIDTH, HEIGHT, "14x14 Grid");
-	mlx->img = mlx_new_image(mlx->mlx, WIDTH, HEIGHT);
-	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->line_length, &mlx->endian);
-	
-	map_image->img = mlx_new_image(mlx->mlx, 100, 100);
-	map_image->addr = mlx_get_data_addr(mlx->img, &mlx->bpp, &mlx->line_length, &mlx->endian);
-	map_image->mlx = mlx->mlx;
-	map_image->win = mlx->win; 
+	t_image new_image;
+
+	new_image.width = width;
+	new_image.height = height;
+	new_image.buff = mlx_new_image(render.mlx, width, height);
+	new_image.addr = mlx_get_data_addr(new_image.buff, &new_image.bpp, &new_image.line_length, &new_image.endian);
+	return (new_image);
+}
+
+
+
+t_cub cub_init(char **map)
+{
+	t_cub cub;
+	t_render render;
+	t_image image;
+	t_image map_img;
+	t_player player;
+
+	render.mlx = mlx_init();
+	render.win = mlx_new_window(render.mlx, WIDTH, HEIGHT, "game");
+	image = new_image(render, WIDTH, HEIGHT);
+	printf("Im adddress: %p\n", image.addr);
+	map_img = new_image(render, WIDTHMAP, HEIGHTMAP);
+	cub.map = map;
+	cub.render = render;
+	cub.image = image;
+	cub.map_img = map_img;
+	return (cub);
 }
 
 void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color)

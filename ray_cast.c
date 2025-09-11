@@ -18,7 +18,7 @@ void cast_all_rays(t_cub *game)
 		wall_hight = TILE / distance * (prejection_plane / 2);
 		start_y = (HEIGHT / 2) - (wall_hight / 2);
 		end_y = (HEIGHT / 2) + (wall_hight / 2);
-		draw_line(game->mlx, i, start_y, i, end_y, BLU);
+		draw_line(&game->image, i, start_y, i, end_y, BLU);
 		i++;
 	}
 }
@@ -26,50 +26,50 @@ void cast_all_rays(t_cub *game)
 
 double cast_single_ray(t_cub *game, double angle)
 {
-    t_dda var;
+	t_dda var;
 
-    var.raydirx = cos(angle);
-    var.raydiry = sin(angle);
-    var.mapx = (int)(game->player->x / TILE);
-    var.mapy = (int)(game->player->y / TILE);
-    var.deltadistx = fabs(1 / var.raydirx);
-    var.deltadisty = fabs(1 / var.raydiry);
-    if (var.raydirx < 0)
-    {
-        var.stepx = -1;
-        var.sidedistx = (game->player->x - var.mapx * TILE) / fabs(var.raydirx);
-    }
-    else
-    {
-        var.stepx = 1;
-        var.sidedistx = ((var.mapx + 1) * TILE - game->player->x) / fabs(var.raydirx);
-    }
-    if (var.raydiry < 0)
-    {
-        var.stepy = -1;
-        var.sidedisty = (game->player->y - var.mapy * TILE) / fabs(var.raydiry);
-    }
-    else
-    {
-        var.stepy = 1;
-        var.sidedisty = ((var.mapy + 1) * TILE - game->player->y) / fabs(var.raydiry);
-    }
-    while (1)
-    {
-        if (var.sidedistx < var.sidedisty)
-        {
-            var.sidedistx += var.deltadistx * TILE;
-            var.mapx += var.stepx;
-	    if (game->map[var.mapy][var.mapx] == '1')
-		    return (var.sidedistx - var.deltadistx * TILE);
-        }
-        else
-        {
-            var.sidedisty += var.deltadisty * TILE;
-            var.mapy += var.stepy;
-	    if (game->map[var.mapy][var.mapx] == '1')
-		    return (var.sidedisty - var.deltadisty * TILE);
-        }
-    }
+	var.raydirx = cos(angle);
+	var.raydiry = sin(angle);
+	var.mapx = (int)(game->player->x / TILE);
+	var.mapy = (int)(game->player->y / TILE);
+	var.deltadistx = fabs(1 / var.raydirx);
+	var.deltadisty = fabs(1 / var.raydiry);
+	if (var.raydirx < 0)
+	{
+		var.stepx = -1;
+		var.sidedistx = (game->player->x - var.mapx * TILE) / fabs(var.raydirx);
+	}
+	else
+	{
+		var.stepx = 1;
+		var.sidedistx = ((var.mapx + 1) * TILE - game->player->x) / fabs(var.raydirx);
+	}
+	if (var.raydiry < 0)
+	{
+		var.stepy = -1;
+		var.sidedisty = (game->player->y - var.mapy * TILE) / fabs(var.raydiry);
+	}
+	else
+	{
+		var.stepy = 1;
+		var.sidedisty = ((var.mapy + 1) * TILE - game->player->y) / fabs(var.raydiry);
+	}
+	while (1)
+	{
+		if (var.sidedistx < var.sidedisty)
+		{
+			var.sidedistx += var.deltadistx * TILE;
+			var.mapx += var.stepx;
+			if (game->map[var.mapy][var.mapx] == '1')
+				return (var.sidedistx - var.deltadistx * TILE);
+		}
+		else
+		{
+			var.sidedisty += var.deltadisty * TILE;
+			var.mapy += var.stepy;
+			if (game->map[var.mapy][var.mapx] == '1')
+				return (var.sidedisty - var.deltadisty * TILE);
+		}
+	}
 }
 

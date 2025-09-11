@@ -1,5 +1,5 @@
-#include "minilibx/mlx.h"
-//#include "mlx.h"
+//#include "minilibx/mlx.h"
+#include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 
@@ -20,6 +20,10 @@
 #define TILE 50
 #define NUM_RAYS WIDTH 
 
+
+#define WIDTHMAP 300
+#define HEIGHTMAP 200
+
 #define GRE 0x0000FF00
 #define RED 0x00FF0000
 #define BLU 0x000000FF
@@ -37,6 +41,23 @@ typedef struct s_vector
 	double y;
 }	t_vector;
 
+typedef struct s_image
+{
+	void *addr;
+	void *buff;
+	int bpp;
+	int line_length;
+	int endian;
+	int width;
+	int height;
+}	t_image;
+
+typedef struct s_render 
+{
+	void *mlx;
+	void *win;
+}	t_render;
+
 typedef struct s_player
 {
 	double x;
@@ -47,7 +68,7 @@ typedef struct s_player
 	double speed;
 }	t_player;
 
-typedef struct s_mlx
+typedef struct smlx
 {
 	void *win;
 	void *mlx;
@@ -61,8 +82,9 @@ typedef struct s_mlx
 typedef struct s_cub
 {
 	char **map;
-	t_mlx *mlx;
-	t_mlx *map_image;
+	t_render render;
+	t_image image;
+	t_image map_img;
 	t_player *player;
 }	t_cub;
 
@@ -88,9 +110,8 @@ typedef struct s_txtrs
 	int sky_color;
 }	t_textrs;
 
-void mlx_ini(t_mlx *mlx, t_mlx *map_image);
 
-void draw_line(t_mlx *mlx, int start_x, int start_y, int end_x, int end_y, int color);
+void draw_line(t_image *image, int start_x, int start_y, int end_x, int end_y, int color);
 void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color);
 
 //ray_casting
@@ -100,14 +121,17 @@ double cast_single_ray(t_cub *game, double ray_angle);
 
 int	handle_keypress(int keycode);
 int handle_keypres(int keycode, t_cub *game);
+//mlx
 
+t_image new_image(t_render render, int width, int height);
+t_cub cub_init(char **map);
 
 
 // map 
 
-void drawLineVertical(t_mlx *mlx, int x, int height);
-void drawLineHorizontal(t_mlx *mlx, int y, int width);
-void draw_squar(t_mlx *mlx, int x, int y, int color);
-void draw_grids(t_mlx *mlx);
-void draw_player(t_mlx *mlx, t_player *player);
+void drawLineVertical(t_image *image, int x, int height);
+void drawLineHorizontal(t_image *image, int y, int width);
+void draw_squar(t_image *image, int x, int y, int color);
+void draw_grids(t_image *image);
+void draw_player(t_image *image, t_player *player);
 

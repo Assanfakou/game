@@ -1,31 +1,31 @@
 #include "game.h"
 
-
-void drawLineVertical(t_mlx *mlx, int x, int height)
+#define TILEIM 10 
+void drawLineVertical(t_image *img, int x, int height)
 {
 	int y;
 
 	y = 0;
 	while (y <= height)
 	{
-		my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
+		my_mlx_pixel_put(img->addr, img->line_length, img->bpp, x, y, RED);
 		y++;
 	}
 }
 
-void drawLineHorizontal(t_mlx *mlx, int y, int width)
+void drawLineHorizontal(t_image *image, int y, int width)
 {
 	int x;
 
 	x = 0;
 	while (x <= width)
 	{
-		my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
+		my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x, y, RED);
 		x++;
 	}
 }
 
-void draw_squar(t_mlx *mlx, int x, int y, int color)
+void draw_squar(t_image *image, int x, int y, int color)
 {
 	int i;
 	int j;
@@ -36,14 +36,14 @@ void draw_squar(t_mlx *mlx, int x, int y, int color)
 		j = 0;	
 		while (j < TILE)
 		{
-			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x * TILE + i, y * TILE + j, color);
+			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x * TILE + i, y * TILE + j, color);
 			j++;
 		}
 		i++; 
 	}
 }
 
-void draw_player(t_mlx *mlx, t_player *player)
+void draw_player(t_image *image, t_player *player)
 {
 	int raduis;
 	int i; 
@@ -57,7 +57,7 @@ void draw_player(t_mlx *mlx, t_player *player)
 		while (j <= raduis)
 		{
 			if (i*i + j*j <= raduis*raduis)
-				my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp,
+				my_mlx_pixel_put(image->addr, image->line_length, image->bpp,
 						(int)player->x + i, (int)player->y + j, BLU);
 			j++;
 		}
@@ -65,9 +65,10 @@ void draw_player(t_mlx *mlx, t_player *player)
 	}
 }
 
-void draw_grids(t_mlx *mlx)
+
+void draw_grids(t_image *image)
 {
-	int gridSize = TILE * 14;
+	int gridSize = TILEIM * 14;
 	int row;
 	int col = 0;
 
@@ -76,10 +77,10 @@ void draw_grids(t_mlx *mlx)
 		row = 0;
 		while (row <= 14)
 		{
-			drawLineHorizontal(mlx, row * TILE, gridSize);
+			drawLineHorizontal(image, row * TILEIM, 20);
 			row++;
 		}
-		drawLineVertical(mlx, col * TILE, gridSize);
+		drawLineVertical(image, col * TILEIM, 20);
 		col++;
 	}
 }
