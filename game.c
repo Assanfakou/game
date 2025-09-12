@@ -6,7 +6,7 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 16:44:59 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/12 22:16:35 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,17 @@ void draw_map(t_cub *game)
 				draw_squar(&game->map_img, x, y, RED);
 			if (game->map[y][x] == 'P')
 			{
-				game->player->x = x * TILE + TILE / 2;
-				game->player->y = y * TILE + TILE / 2;
+				game->player->x = x * TILE + TILE /2;
+				game->player->y = y * TILE + TILE /2;
 				game->map[y][x] = '0';
 			}
 			x++;
 		}
 		y++;
 	}
+	
 }
+
 
 void draw_line(t_image *image, int x0, int y0, int x1, int y1, int color)
 {
@@ -51,11 +53,18 @@ void draw_line(t_image *image, int x0, int y0, int x1, int y1, int color)
         if (x0 == x1 && y0 == y1)
 		break;
         int e2 = 2 * err;
-        if (e2 > -dy) { err -= dy; x0 += sx;}
-        if (e2 <  dx) { err += dx; y0 += sy; }
+        if (e2 > -dy)
+	{
+		err -= dy;
+		x0 += sx;
+	}
+        if (e2 <  dx)
+	{
+		err += dx;
+		y0 += sy;
+	}
     }
 }
-
 void print_map(t_cub *game)
 {
 	int y = 0;
@@ -75,7 +84,7 @@ void print_map(t_cub *game)
 	printf("#############################################\n");
 }
 
-void draw_floor_and_ceiling(t_mlx *mlx)
+void draw_floor_and_ceiling(t_image *image)
 {
 	int y = 0;
 	while (y < HEIGHT / 2)
@@ -83,7 +92,7 @@ void draw_floor_and_ceiling(t_mlx *mlx)
 		int x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, GRE);
+			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x, y, GRE);
 			x++;
 		}
 		y++;
@@ -94,7 +103,7 @@ void draw_floor_and_ceiling(t_mlx *mlx)
 		int x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(mlx->addr, mlx->line_length, mlx->bpp, x, y, RED);
+			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x, y, RED);
 			x++;
 		}
 		y++;
@@ -112,24 +121,37 @@ void colorize(t_image *image, int width, int height)
 	}
 }
 
+double get_delta_time(void)
+{
+	static struct timeval last_time = {0, 0};
+	struct timeval current_time;
+	double delta;
+
+	gettimeofday(&current_time, NULL);
+	if (last_time.tv_sec == 0 && last_time.tv_usec == 0)
+		last_time = current_time;
+
+	delta = (current_time.tv_sec - last_time.tv_sec) +
+		(current_time.tv_usec - last_time.tv_usec) / 1000000.0;
+	last_time = current_time;
+	return (delta);
+}
+
 int render(t_cub *game)
 {
-	printf("adress of addr image  %p\n", &game->image);
 	ft_bzero(game->image.addr, (size_t)game->image.line_length * HEIGHT);
-/*
-	printf("%sangle :%f%s, \n", COLORE, game->player->angle, RESET);
-*/
 	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * HEIGHTMAP);
 
 	draw_grids(&game->map_img);
 	//colorize(&game->map_img, WIDTHMAP, HEIGHTMAP);
+
 	draw_player(&game->map_img, game->player);
+
  	draw_map(game);
 	//print_map(game);
 	//draw_floor_and_ceiling(game->mlx);
 	cast_all_rays(game);
-	printf("cos of angle :%f, \n", cos(game->player->angle));
-
+	printf("FPS : %d\n", (int)(1.0 / get_delta_time()));
 	mlx_put_image_to_window(game->render.mlx, game->render.win, game->image.buff, 0, 0);
 
 	mlx_put_image_to_window(game->render.mlx, game->render.win, game->map_img.buff, 0, 0);
@@ -164,15 +186,13 @@ int main()
 	player.dir_y = sin(player.angle);
 	cub.player = &player;
 	print_map(&cub);
-	printf("win addr %p\n mlx addr %p\n", cub.render.win, cub.render.mlx);
 
-	//draw_grids(&cub.image);
+	//draw_grids(&cub.map_img);
 	draw_map(&cub);
 	
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0, 0);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);
 	mlx_hook(cub.render.win, 2, 1L<<0, handle_keypres, &cub);
-	printf("adress of addr image 1 %p\n", &cub.image);
 	mlx_loop_hook(cub.render.mlx, render, &cub);
 	mlx_key_hook(cub.render.win, handle_keypress, NULL);
 	mlx_loop(cub.render.mlx);

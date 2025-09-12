@@ -6,7 +6,7 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:14:39 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 16:02:16 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/12 19:21:28 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,6 @@ t_image new_image(t_render render, int width, int height)
 	new_image.addr = mlx_get_data_addr(new_image.buff, &new_image.bpp, &new_image.line_length, &new_image.endian);
 	return (new_image);
 }
-
-
 
 t_cub cub_init(char **map)
 {

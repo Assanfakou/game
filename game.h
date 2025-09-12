@@ -2,6 +2,7 @@
 #include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
+#include <sys/time.h>
 
 #define FOV (M_PI / 3)
 #define RAY_LENGTH 50
@@ -21,8 +22,8 @@
 #define NUM_RAYS WIDTH 
 
 
-#define WIDTHMAP 300
-#define HEIGHTMAP 250
+#define WIDTHMAP 280
+#define HEIGHTMAP 280
 
 #define GRE 0x0000FF00
 #define RED 0x00FF0000

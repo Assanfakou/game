@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   map.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
+/*   Updated: 2025/09/12 23:30:34 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
 #define TILEIM 20
@@ -43,13 +55,15 @@ void draw_squar(t_image *image, int x, int y, int color)
 	}
 }
 
+
+
 void draw_player(t_image *image, t_player *player)
 {
 	int raduis;
 	int i; 
 	int j;
-
-	raduis = 10;
+	
+	raduis = 5;
 	i = -raduis;
 	while (i <= raduis)
 	{
@@ -57,8 +71,9 @@ void draw_player(t_image *image, t_player *player)
 		while (j <= raduis)
 		{
 			if (i*i + j*j <= raduis*raduis)
-				my_mlx_pixel_put(image->addr, image->line_length, image->bpp,
-						(int)player->x + i, (int)player->y + j, BLU);
+				my_mlx_pixel_put(image->addr, image->line_length, image->bpp, (player->x / TILE) * TILEIM + i, player->y / TILE * TILEIM + j, 0xFFFFFF);
+
+
 			j++;
 		}
 		i++;
@@ -67,7 +82,7 @@ void draw_player(t_image *image, t_player *player)
 
 void draw_grids(t_image *image)
 {
-	int gridSize = TILEIM * 14;
+	int gridSize = TILEIM;
 	int row;
 	int col = 0;
 
@@ -76,10 +91,10 @@ void draw_grids(t_image *image)
 		row = 0;
 		while (row <= 14)
 		{
-			drawLineHorizontal(image, row * TILEIM, WIDTHMAP);
+			drawLineHorizontal(image, row * gridSize, WIDTHMAP);
 			row++;
 		}
-		drawLineVertical(image, col * TILEIM, HEIGHTMAP);
+		drawLineVertical(image, col * gridSize, HEIGHTMAP);
 		col++;
 	}
 }
