@@ -22,7 +22,7 @@
 
 
 #define WIDTHMAP 300
-#define HEIGHTMAP 200
+#define HEIGHTMAP 250
 
 #define GRE 0x0000FF00
 #define RED 0x00FF0000

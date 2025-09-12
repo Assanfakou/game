@@ -6,7 +6,7 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/11 21:35:30 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/12 16:44:59 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,8 @@ void draw_map(t_cub *game)
 		x = 0;
 		while (game->map[y][x])
 		{
-/*
-			if (game->map[y][x] == '0')
-				draw_squar(&game->image, x, y, RED);
-*/
+			if (game->map[y][x] == '1')
+				draw_squar(&game->map_img, x, y, RED);
 			if (game->map[y][x] == 'P')
 			{
 				game->player->x = x * TILE + TILE / 2;
@@ -116,24 +114,25 @@ void colorize(t_image *image, int width, int height)
 
 int render(t_cub *game)
 {
-	printf("adress %p\n", &game->image.addr);
-	ft_bzero(&game->image.addr, (size_t)game->image.line_length * HEIGHT);
+	printf("adress of addr image  %p\n", &game->image);
+	ft_bzero(game->image.addr, (size_t)game->image.line_length * HEIGHT);
+/*
 	printf("%sangle :%f%s, \n", COLORE, game->player->angle, RESET);
-	//ft_bzero(&game->map_img.addr, (size_t)game->map_img.line_length * HEIGHTMAP);
+*/
+	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * HEIGHTMAP);
 
-	draw_grids(&game->image);
-	colorize(&game->image, WIDTHMAP, HEIGHTMAP);
-	draw_player(&game->image, game->player);
+	draw_grids(&game->map_img);
+	//colorize(&game->map_img, WIDTHMAP, HEIGHTMAP);
+	draw_player(&game->map_img, game->player);
  	draw_map(game);
 	//print_map(game);
 	//draw_floor_and_ceiling(game->mlx);
-	// cast_all_rays(game);
+	cast_all_rays(game);
 	printf("cos of angle :%f, \n", cos(game->player->angle));
 
-/*
-	mlx_put_image_to_window(&game->render.mlx, &game->render.win, game->map_img.buff, 0, 0);
-*/
-	mlx_put_image_to_window(&game->render.mlx, &game->render.win, game->image.buff, 0, 0);
+	mlx_put_image_to_window(game->render.mlx, game->render.win, game->image.buff, 0, 0);
+
+	mlx_put_image_to_window(game->render.mlx, game->render.win, game->map_img.buff, 0, 0);
 	return 0;
 }
 
@@ -171,10 +170,11 @@ int main()
 	draw_map(&cub);
 	
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0, 0);
-//	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);
+	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);
 	mlx_hook(cub.render.win, 2, 1L<<0, handle_keypres, &cub);
+	printf("adress of addr image 1 %p\n", &cub.image);
 	mlx_loop_hook(cub.render.mlx, render, &cub);
-	//mlx_key_hook(cub.render.win, handle_keypress, NULL);
+	mlx_key_hook(cub.render.win, handle_keypress, NULL);
 	mlx_loop(cub.render.mlx);
 }
 

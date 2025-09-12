@@ -1,6 +1,6 @@
 #include "game.h"
 
-#define TILEIM 10 
+#define TILEIM 20
 void drawLineVertical(t_image *img, int x, int height)
 {
 	int y;
@@ -31,12 +31,12 @@ void draw_squar(t_image *image, int x, int y, int color)
 	int j;
 
 	i = 0;
-	while (i < TILE)
+	while (i < TILEIM)
 	{
 		j = 0;	
-		while (j < TILE)
+		while (j < TILEIM)
 		{
-			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x * TILE + i, y * TILE + j, color);
+			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x * TILEIM + i, y * TILEIM + j, color);
 			j++;
 		}
 		i++; 
@@ -65,7 +65,6 @@ void draw_player(t_image *image, t_player *player)
 	}
 }
 
-
 void draw_grids(t_image *image)
 {
 	int gridSize = TILEIM * 14;
@@ -77,10 +76,10 @@ void draw_grids(t_image *image)
 		row = 0;
 		while (row <= 14)
 		{
-			drawLineHorizontal(image, row * TILEIM, 20);
+			drawLineHorizontal(image, row * TILEIM, WIDTHMAP);
 			row++;
 		}
-		drawLineVertical(image, col * TILEIM, 20);
+		drawLineVertical(image, col * TILEIM, HEIGHTMAP);
 		col++;
 	}
 }

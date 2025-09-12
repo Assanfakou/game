@@ -6,7 +6,7 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:14:39 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/11 21:37:08 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/12 16:02:16 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,11 @@ t_cub cub_init(char **map)
 	render.mlx = mlx_init();
 	render.win = mlx_new_window(render.mlx, WIDTH, HEIGHT, "game");
 	image = new_image(render, WIDTH, HEIGHT);
-	printf("Im adddress: %p\n", image.addr);
 	map_img = new_image(render, WIDTHMAP, HEIGHTMAP);
 	cub.map = map;
 	cub.render = render;
 	cub.image = image;
+	printf("image adddress: %p\n", &cub.image);
 	cub.map_img = map_img;
 	return (cub);
 }
