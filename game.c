@@ -6,7 +6,7 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 22:16:35 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/12 23:41:30 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,6 +151,7 @@ int render(t_cub *game)
 	//print_map(game);
 	//draw_floor_and_ceiling(game->mlx);
 	cast_all_rays(game);
+	cast_all_map_rays(game);
 	printf("FPS : %d\n", (int)(1.0 / get_delta_time()));
 	mlx_put_image_to_window(game->render.mlx, game->render.win, game->image.buff, 0, 0);
 

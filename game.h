@@ -21,6 +21,7 @@
 #define TILE 50
 #define NUM_RAYS WIDTH 
 
+#define TILEIM 20
 
 #define WIDTHMAP 280
 #define HEIGHTMAP 280
@@ -136,3 +137,4 @@ void draw_squar(t_image *image, int x, int y, int color);
 void draw_grids(t_image *image);
 void draw_player(t_image *image, t_player *player);
 
+void cast_all_map_rays(t_cub *game);

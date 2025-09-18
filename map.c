@@ -6,13 +6,12 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 23:30:34 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/19 00:28:26 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
 
-#define TILEIM 20
 void drawLineVertical(t_image *img, int x, int height)
 {
 	int y;
