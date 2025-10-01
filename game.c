@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 22:16:35 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/01 20:36:02 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@ void draw_map(t_cub *game)
 				draw_squar(&game->map_img, x, y, RED);
 			if (game->map[y][x] == 'P')
 			{
-				game->player->x = x * TILE + TILE /2;
-				game->player->y = y * TILE + TILE /2;
+				game->player->vec_p->x = x * TILE + TILE /2;
+				game->player->vec_p->y = y * TILE + TILE /2;
 				game->map[y][x] = '0';
 			}
 			x++;
@@ -182,8 +182,14 @@ int main()
 	cub = cub_init(map);
 	player.speed = 10;
 	player.angle = 0;
-	player.dir_x = cos(player.angle);
-	player.dir_y = sin(player.angle);
+	t_vector p;
+	t_vector d;
+	p.x = 0;
+	p.y = 0;
+	d.x = cos(player.angle);
+	d.y = sin(player.angle);
+	player.vec_d = &d;
+	player.vec_p = &p;
 	cub.player = &player;
 	print_map(&cub);
 

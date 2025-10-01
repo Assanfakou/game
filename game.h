@@ -1,5 +1,5 @@
-//#include "minilibx/mlx.h"
-#include "mlx.h"
+#include "minilibx/mlx.h"
+//#include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 #include <sys/time.h>
@@ -15,6 +15,7 @@
 #  define RESET "\e[0m"
 # endif
 
+#define TILEIM 20
 
 #define WIDTH 1500
 #define HEIGHT 1000
@@ -61,15 +62,13 @@ typedef struct s_render
 
 typedef struct s_player
 {
-	double x;
-	double y;
-	double dir_x;
-	double dir_y;
+	t_vector *vec_p;
+	t_vector *vec_d;
 	double angle;
 	double speed;
 }	t_player;
 
-typedef struct smlx
+typedef struct s_mlx
 {
 	void *win;
 	void *mlx;
