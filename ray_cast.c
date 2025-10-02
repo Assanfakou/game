@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/01 20:47:27 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/02 22:40:50 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ double cast_single_ray(t_cub *game, double angle)
 	var.raydiry = sin(angle);
 	var.mapx = (int)(game->player->vec_p->x / TILE);
 	var.mapy = (int)(game->player->vec_p->y / TILE);
-	var.deltadistx = sqrt(1 + (var.raydiry * var.raydiry) / (var.raydirx * var.raydirx));
-	var.deltadistx = sqrt(1 + (var.raydirx * var.raydirx) / (var.raydiry * var.raydiry));
+	var.deltadistx = fabs(1 / var.raydirx);
+	var.deltadisty = fabs(1 / var.raydiry);
 	if (var.raydirx < 0)
 	{
 		var.stepx = -1;
