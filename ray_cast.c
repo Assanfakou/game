@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/03 14:29:54 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/03 14:35:53 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 void cast_single_ray_map(t_cub *game, double angle)
 {
-    double ray_x = game->player->x;
-    double ray_y = game->player->y;
+    double ray_x = game->player->vec_p->x;
+    double ray_y = game->player->vec_p->y;
     double step_x = cos(angle) * 2; // step size, smaller = smoother line
     double step_y = sin(angle) * 2;
 
@@ -33,8 +33,8 @@ void cast_single_ray_map(t_cub *game, double angle)
         // scale world coords -> minimap coords
         draw_line(
             &game->map_img,
-            (int)(game->player->x / TILE * TILEIM),
-            (int)(game->player->y / TILE * TILEIM),
+            (int)(game->player->vec_p->x / TILE * TILEIM),
+            (int)(game->player->vec_p->y / TILE * TILEIM),
             (int)(ray_x / TILE * TILEIM),
             (int)(ray_y / TILE * TILEIM),
             GRE
