@@ -6,7 +6,7 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 23:41:30 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/26 08:41:29 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,33 +38,51 @@ void draw_map(t_cub *game)
 	
 }
 
-
-void draw_line(t_image *image, int x0, int y0, int x1, int y1, int color)
+void	update_point(int *x0, int *y0, int *err, int dx, int dy, int sx, int sy)
 {
-    int dx = abs(x1 - x0);
-    int dy = abs(y1 - y0);
-    int sx = (x0 < x1) ? 1 : -1;
-    int sy = (y0 < y1) ? 1 : -1;
-    int err = dx - dy;
+	int	e2;
 
-    while (1)
-    {
-        my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x0, y0, color);
-        if (x0 == x1 && y0 == y1)
-		break;
-        int e2 = 2 * err;
-        if (e2 > -dy)
+	e2 = *err * 2;
+	if (e2 > -dy)
 	{
-		err -= dy;
-		x0 += sx;
+		*err -= dy;
+		*x0 += sx;
 	}
-        if (e2 <  dx)
+	if (e2 < dx)
 	{
-		err += dx;
-		y0 += sy;
+		*err += dx;
+		*y0 += sy;
 	}
-    }
 }
+
+void	draw_line(t_image *img, int x0, int y0, int x1, int y1, int color)
+{
+	int	dx;
+	int	dy;
+	int	sx;
+	int	sy;
+	int	err;
+
+	dx = abs(x1 - x0);
+	dy = abs(y1 - y0);
+	if (x0 < x1)
+		sx = 1;
+	else
+		sx = -1;
+	if (y0 < y1)
+		sy = 1;
+	else
+		sy = -1;
+	err = dx - dy;
+	while (1)
+	{
+		my_mlx_pixel_put(img->addr, img->line_length, img->bpp, x0, y0, color);
+		if (x0 == x1 && y0 == y1)
+			break ;
+		update_point(&x0, &y0, &err, dx, dy, sx, sy);
+	}
+}
+
 void print_map(t_cub *game)
 {
 	int y = 0;
@@ -142,16 +160,16 @@ int render(t_cub *game)
 	ft_bzero(game->image.addr, (size_t)game->image.line_length * HEIGHT);
 	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * HEIGHTMAP);
 
-	draw_grids(&game->map_img);
+	//draw_grids(&game->map_img);
 	//colorize(&game->map_img, WIDTHMAP, HEIGHTMAP);
 
-	draw_player(&game->map_img, game->player);
+	//draw_player(&game->map_img, game->player);
 
- 	draw_map(game);
+ //	draw_map(game);
 	//print_map(game);
-	//draw_floor_and_ceiling(game->mlx);
+	//draw_floor_and_ceiling(game->image);
 	cast_all_rays(game);
-	cast_all_map_rays(game);
+	//cast_all_map_rays(game);
 	printf("FPS : %d\n", (int)(1.0 / get_delta_time()));
 	mlx_put_image_to_window(game->render.mlx, game->render.win, game->image.buff, 0, 0);
 

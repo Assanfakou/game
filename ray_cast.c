@@ -6,12 +6,42 @@
 /*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/19 00:35:25 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/09/26 06:57:02 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
 
+void cast_single_ray_map(t_cub *game, double angle)
+{
+    double ray_x = game->player->x;
+    double ray_y = game->player->y;
+    double step_x = cos(angle) * 2; // step size, smaller = smoother line
+    double step_y = sin(angle) * 2;
+
+    while (1)
+    {
+        ray_x += step_x;
+        ray_y += step_y;
+
+        int map_x = (int)(ray_x / TILE);
+        int map_y = (int)(ray_y / TILE);
+
+        if (game->map[map_y][map_x] == '1')
+            break;
+
+        // scale world coords -> minimap coords
+        draw_line(
+            &game->map_img,
+            (int)(game->player->x / TILE * TILEIM),
+            (int)(game->player->y / TILE * TILEIM),
+            (int)(ray_x / TILE * TILEIM),
+            (int)(ray_y / TILE * TILEIM),
+            GRE
+        );
+    }
+}
+/*
 void cast_single_ray_map(t_cub *game, double angle)
 {
 	double ray_x = game->player->x;
@@ -25,9 +55,10 @@ void cast_single_ray_map(t_cub *game, double angle)
 		ray_y += step_y;
 		if (game->map[(int)ray_y / TILEIM][(int)ray_x / TILEIM] == '1')
 			break;
-		draw_line(&game->map_img, game->player->x / TILE * TILEIM, game->player->y / TILE * TILEIM, (int)ray_x, (int)ray_y, GRE);
+		draw_line(&game->map_img, game->player->x / TILEIM, game->player->y / TILEIM, (int)ray_x, (int)ray_y, GRE);
 	}
 }
+*/
 
 void cast_all_rays(t_cub *game)
 {
@@ -43,7 +74,7 @@ void cast_all_rays(t_cub *game)
 	while (i < NUM_RAYS)
 	{
 		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
-		cast_single_ray_map(game, ray_angle);
+		//cast_single_ray_map(game, ray_angle);
 		distance = cast_single_ray(game, ray_angle);
 		wall_hight = TILE / distance * (prejection_plane / 2);
 		start_y = (HEIGHT / 2) - (wall_hight / 2);
@@ -52,6 +83,7 @@ void cast_all_rays(t_cub *game)
 		i++;
 	}
 }
+
 void cast_all_map_rays(t_cub *game)
 {
 	double ray_angle;
