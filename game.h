@@ -22,8 +22,6 @@
 #define TILE 50
 #define NUM_RAYS WIDTH 
 
-#define TILEIM 20
-
 #define WIDTHMAP 280
 #define HEIGHTMAP 280
 

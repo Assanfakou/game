@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/03 14:29:01 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/03 17:18:43 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,17 +128,6 @@ void draw_floor_and_ceiling(t_image *image)
 	}
 }
 
-void colorize(t_image *image, int width, int height)
-{
-	for (int i = 0; i < width; i++)
-	{
-		for (int j = 0; j < height; j++)
-		{
-			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, i, j, RED);			
-		}
-	}
-}
-
 double get_delta_time(void)
 {
 	static struct timeval last_time = {0, 0};
@@ -160,13 +149,12 @@ int render(t_cub *game)
 	ft_bzero(game->image.addr, (size_t)game->image.line_length * HEIGHT);
 	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * HEIGHTMAP);
 
-	//draw_grids(&game->map_img);
+	draw_grids(&game->map_img);
 	//colorize(&game->map_img, WIDTHMAP, HEIGHTMAP);
 
-	//draw_player(&game->map_img, game->player);
+	draw_player(&game->map_img, game->player);
 
- //	draw_map(game);
-	//print_map(game);
+ 	draw_map(game);
 	//draw_floor_and_ceiling(game->image);
 	cast_all_rays(game);
 	//cast_all_map_rays(game);
