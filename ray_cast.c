@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_cast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/26 06:57:02 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/03 14:29:54 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,29 +104,29 @@ double cast_single_ray(t_cub *game, double angle)
 
 	var.raydirx = cos(angle);
 	var.raydiry = sin(angle);
-	var.mapx = (int)(game->player->x / TILE);
-	var.mapy = (int)(game->player->y / TILE);
+	var.mapx = (int)(game->player->vec_p->x / TILE);
+	var.mapy = (int)(game->player->vec_p->y / TILE);
 	var.deltadistx = fabs(1 / var.raydirx);
 	var.deltadisty = fabs(1 / var.raydiry);
 	if (var.raydirx < 0)
 	{
 		var.stepx = -1;
-		var.sidedistx = (game->player->x - var.mapx * TILE) / fabs(var.raydirx);
+		var.sidedistx = (game->player->vec_p->x - var.mapx * TILE) / fabs(var.raydirx);
 	}
 	else
 	{
 		var.stepx = 1;
-		var.sidedistx = ((var.mapx + 1) * TILE - game->player->x) / fabs(var.raydirx);
+		var.sidedistx = ((var.mapx + 1) * TILE - game->player->vec_p->x) / fabs(var.raydirx);
 	}
 	if (var.raydiry < 0)
 	{
 		var.stepy = -1;
-		var.sidedisty = (game->player->y - var.mapy * TILE) / fabs(var.raydiry);
+		var.sidedisty = (game->player->vec_p->y - var.mapy * TILE) / fabs(var.raydiry);
 	}
 	else
 	{
 		var.stepy = 1;
-		var.sidedisty = ((var.mapy + 1) * TILE - game->player->y) / fabs(var.raydiry);
+		var.sidedisty = ((var.mapy + 1) * TILE - game->player->vec_p->y) / fabs(var.raydiry);
 	}
 	while (1)
 	{
@@ -146,4 +146,3 @@ double cast_single_ray(t_cub *game, double angle)
 		}
 	}
 }
-

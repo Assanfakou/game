@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/19 00:28:26 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/03 14:29:45 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,6 @@ void draw_squar(t_image *image, int x, int y, int color)
 	}
 }
 
-
-
 void draw_player(t_image *image, t_player *player)
 {
 	int raduis;
@@ -70,9 +68,7 @@ void draw_player(t_image *image, t_player *player)
 		while (j <= raduis)
 		{
 			if (i*i + j*j <= raduis*raduis)
-				my_mlx_pixel_put(image->addr, image->line_length, image->bpp, (player->x / TILE) * TILEIM + i, player->y / TILE * TILEIM + j, 0xFFFFFF);
-
-
+				my_mlx_pixel_put(image->addr, image->line_length, image->bpp, (player->vec_p->x / TILE) * TILEIM + i, player->vec_p->y / TILE * TILEIM + j, 0xFFFFFF);
 			j++;
 		}
 		i++;
@@ -81,19 +77,19 @@ void draw_player(t_image *image, t_player *player)
 
 void draw_grids(t_image *image)
 {
-	int gridSize = TILEIM;
 	int row;
-	int col = 0;
+	int col;
 
+	col = 0;
 	while (col <= 14)
 	{
 		row = 0;
 		while (row <= 14)
 		{
-			drawLineHorizontal(image, row * gridSize, WIDTHMAP);
+			drawLineHorizontal(image, row * TILEIM, WIDTHMAP);
 			row++;
 		}
-		drawLineVertical(image, col * gridSize, HEIGHTMAP);
+		drawLineVertical(image, col * TILEIM, HEIGHTMAP);
 		col++;
 	}
 }
