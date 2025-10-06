@@ -3,6 +3,7 @@
 #include "libft/libft.h"
 #include <math.h>
 #include <sys/time.h>
+#include "parse/parsing.h"
 
 #define FOV (M_PI / 3)
 #define RAY_LENGTH 50
@@ -80,7 +81,9 @@ typedef struct s_mlx
 
 typedef struct s_cub
 {
+
 	char **map;
+	t_game *data;
 	t_render render;
 	t_image image;
 	t_image map_img;
@@ -135,3 +138,5 @@ void draw_grids(t_image *image);
 void draw_player(t_image *image, t_player *player);
 
 void cast_all_map_rays(t_cub *game);
+
+int	get_data(t_game *game, int argc, char **argv);

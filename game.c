@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/03 17:18:43 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/06 19:50:26 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,17 +83,18 @@ void	draw_line(t_image *img, int x0, int y0, int x1, int y1, int color)
 	}
 }
 
-void print_map(t_cub *game)
+void print_map(char **map)
 {
 	int y = 0;
 	int x;
+	printf("here2\n");
 
-	while (game->map[y])
+	while (map[y])
 	{
 		x = 0;
-		while (game->map[y][x])
+		while (map[y][x])
 		{
-			printf("%c, ", game->map[y][x]);
+			printf("%c", map[y][x]);
 			x++;
 		}
 		printf("\n");
@@ -165,10 +166,11 @@ int render(t_cub *game)
 	return 0;
 }
 
-int main()
+int main(int ac, char **av)
 {
 	t_cub cub;
 	t_player player;
+	t_game data;
 	char *map[] = {
 		strdup("11111111111111"),
 		strdup("1P000010010001"),
@@ -186,6 +188,12 @@ int main()
 		strdup("11111111111111"),
 		NULL
 	};
+	if (get_data(&data, ac, av))
+		return 1;
+	print_map(data.map);
+	printf("here\n");
+	printf("adress of map%p\n", data.map);
+
 	cub = cub_init(map);
 	player.speed = 10;
 	player.angle = 0;
@@ -198,7 +206,6 @@ int main()
 	player.vec_d = &d;
 	player.vec_p = &p;
 	cub.player = &player;
-	print_map(&cub);
 
 	//draw_grids(&cub.map_img);
 	draw_map(&cub);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:14:39 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 19:21:28 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/06 16:20:12 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ t_cub cub_init(char **map)
 	t_render render;
 	t_image image;
 	t_image map_img;
-	t_player player;
 
 	render.mlx = mlx_init();
 	render.win = mlx_new_window(render.mlx, WIDTH, HEIGHT, "game");

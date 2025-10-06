@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lzari <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:49:52 by lzari             #+#    #+#             */
-/*   Updated: 2025/10/03 09:49:53 by lzari            ###   ########.fr       */
+/*   Updated: 2025/10/06 16:11:41 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,7 @@ void		print_final_result(t_game *game);
 
 int			is_valid_map_char(char c);
 int			is_player_char(char c);
+
+
 
 #endif

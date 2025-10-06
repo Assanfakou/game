@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lzari <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:38 by lzari             #+#    #+#             */
-/*   Updated: 2025/10/03 09:48:41 by lzari            ###   ########.fr       */
+/*   Updated: 2025/10/06 19:52:44 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,9 +118,8 @@ void	print_parsed_elements(t_game *game)
 	printf("========================\n\n");
 }
 
-int	main(int argc, char **argv)
+int	get_data(t_game *game, int argc, char **argv)
 {
-	t_game	game;
 	char	*file_content;
 	char	**lines;
 	int		line_count;
@@ -128,12 +127,12 @@ int	main(int argc, char **argv)
 
 	if (!valid_argument(argc, argv))
 		return (1);
-	init_game_struct(&game, argv[1]);
+	init_game_struct(game, argv[1]);
 	file_content = read_entire_file(argv[1]);
 	if (!file_content)
 	{
 		print_error("Failed to read file");
-		free_game_struct(&game);
+		free_game_struct(game);
 		return (1);
 	}
 	line_count = count_lines(file_content);
@@ -141,7 +140,7 @@ int	main(int argc, char **argv)
 	{
 		print_error("Empty file");
 		free(file_content);
-		free_game_struct(&game);
+		free_game_struct(game);
 		return (1);
 	}
 	lines = split_lines(file_content, line_count);
@@ -149,66 +148,67 @@ int	main(int argc, char **argv)
 	{
 		print_error("Failed to split file content");
 		free(file_content);
-		free_game_struct(&game);
+		// free_game_struct(game);
 		return (1);
 	}
-	map_start = parse_elements(lines, &game);
+	map_start = parse_elements(lines, game);
+	printf("add 1 %p\n", game);
 	printf("DEBUG: map_start returned = %d\n", map_start);
 	if (map_start == 0)
 	{
 		printf("Error: Failed to parse elements (textures/colors)\n");
-		free(file_content);
-		free_string_array(lines);
-		free_game_struct(&game);
+		// free(file_content);
+		// free_string_array(lines);
+		// free_game_struct(game);
 		return (1);
 	}
 
 	printf("\n=== PARSED ELEMENTS ===\n");
 
-	if (game.north_texture)
-		printf("North texture: %s\n", game.north_texture);
+	if (game->north_texture)
+		printf("North texture: %s\n", game->north_texture);
 	else
 		printf("North texture: NULL\n");
 
-	if (game.south_texture)
-		printf("South texture: %s\n", game.south_texture);
+	if (game->south_texture)
+		printf("South texture: %s\n", game->south_texture);
 	else
 		printf("South texture: NULL\n");
 
-	if (game.west_texture)
-		printf("West texture: %s\n", game.west_texture);
+	if (game->west_texture)
+		printf("West texture: %s\n", game->west_texture);
 	else
 		printf("West texture: NULL\n");
 
-	if (game.east_texture)
-		printf("East texture: %s\n", game.east_texture);
+	if (game->east_texture)
+		printf("East texture: %s\n", game->east_texture);
 	else
 		printf("East texture: NULL\n");
 
 	printf("Floor color: R:%d G:%d B:%d\n",
-		game.floor_color[0],
-		game.floor_color[1],
-		game.floor_color[2]);
+		game->floor_color[0],
+		game->floor_color[1],
+		game->floor_color[2]);
 
 	printf("Ceiling color: R:%d G:%d B:%d\n",
-		game.ceiling_color[0],
-		game.ceiling_color[1],
-		game.ceiling_color[2]);
+		game->ceiling_color[0],
+		game->ceiling_color[1],
+		game->ceiling_color[2]);
 
 	printf("========================\n\n");
 
 	printf("DEBUG: Starting map parsing at line %d\n", map_start);
-	if (!parse_map(lines, map_start, &game))
+	if (!parse_map(lines, map_start, game))
 	{
 		printf("Error: Map parsing failed\n");
 		free(file_content);
 		free_string_array(lines);
-		free_game_struct(&game);
+		free_game_struct(game);
 		return (1);
 	}
-	print_final_result(&game);
-	free(file_content);
-	free_string_array(lines);
-	free_game_struct(&game);
+	print_final_result(game);
+	// free(file_content);
+	// free_string_array(lines);
+	// free_game_struct(game);
 	return (0);
 }
