@@ -1,5 +1,5 @@
-//#include "minilibx/mlx.h"
-#include "mlx.h"
+#include "minilibx/mlx.h"
+//#include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 #include <sys/time.h>
