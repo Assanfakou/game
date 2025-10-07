@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/03 14:29:45 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/07 01:43:25 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,21 +75,21 @@ void draw_player(t_image *image, t_player *player)
 	}
 }
 
-void draw_grids(t_image *image)
+void draw_grids(t_cub *game)
 {
 	int row;
 	int col;
 
 	col = 0;
-	while (col <= 14)
+	while (col <= game->data->map_width)
 	{
 		row = 0;
-		while (row <= 14)
+		while (row <= game->data->map_height)
 		{
-			drawLineHorizontal(image, row * TILEIM, WIDTHMAP);
+			drawLineHorizontal(&game->image, row * TILEIM, game->data->map_width * TILEIM);
 			row++;
 		}
-		drawLineVertical(image, col * TILEIM, HEIGHTMAP);
+		drawLineVertical(&game->image, col * TILEIM, game->data->map_height * TILEIM);
 		col++;
 	}
 }

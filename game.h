@@ -16,9 +16,9 @@
 #  define RESET "\e[0m"
 # endif
 
-#define TILEIM 20
+#define TILEIM 10
 
-#define WIDTH 1500
+#define WIDTH 1800
 #define HEIGHT 1000
 #define TILE 50
 #define NUM_RAYS WIDTH 
@@ -82,7 +82,6 @@ typedef struct s_mlx
 typedef struct s_cub
 {
 
-	char **map;
 	t_game *data;
 	t_render render;
 	t_image image;
@@ -126,7 +125,7 @@ int handle_keypres(int keycode, t_cub *game);
 //mlx
 
 t_image new_image(t_render render, int width, int height);
-t_cub cub_init(char **map);
+t_cub cub_init(t_game *game);
 
 
 // map 
@@ -134,7 +133,7 @@ t_cub cub_init(char **map);
 void drawLineVertical(t_image *image, int x, int height);
 void drawLineHorizontal(t_image *image, int y, int width);
 void draw_squar(t_image *image, int x, int y, int color);
-void draw_grids(t_image *image);
+void draw_grids(t_cub *game);
 void draw_player(t_image *image, t_player *player);
 
 void cast_all_map_rays(t_cub *game);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_cast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/03 19:59:57 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/07 01:53:18 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ void cast_all_rays(t_cub *game)
 	while (i < NUM_RAYS)
 	{
 		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
+		printf("angle %f\n", ray_angle);
 		distance = cast_single_ray(game, ray_angle);
+
 		wall_hight = TILE / distance * (prejection_plane / 2);
 		start_y = (HEIGHT / 2) - (wall_hight / 2);
 		end_y = (HEIGHT / 2) + (wall_hight / 2);
@@ -36,6 +38,7 @@ void cast_all_rays(t_cub *game)
 		i++;
 	}
 }
+
 void decide_where(t_dda *var, t_cub *game)
 {
 	var->deltadistx = fabs(1 / var->raydirx);
@@ -70,6 +73,7 @@ double cast_single_ray(t_cub *game, double angle)
 	var.raydiry = sin(angle);
 	var.mapx = (int)(game->player->vec_p->x / TILE);
 	var.mapy = (int)(game->player->vec_p->y / TILE);
+
 	decide_where(&var, game);
 	while (1)
 	{
@@ -77,8 +81,9 @@ double cast_single_ray(t_cub *game, double angle)
 		{
 			var.sidedistx += var.deltadistx * TILE;
 			var.mapx += var.stepx;
-			if (game->map[var.mapy][var.mapx] == '1')
+			if (game->data->map[var.mapy][var.mapx] == '1')
 			{	
+				
 				distance = var.sidedistx - var.deltadistx * TILE;
 				ve.x = game->player->vec_p->x + var.raydirx * distance;
 				ve.y = game->player->vec_p->y + var.raydiry * distance;
@@ -88,9 +93,10 @@ double cast_single_ray(t_cub *game, double angle)
 		}
 		else
 		{
+			printf("not here\n");
 			var.sidedisty += var.deltadisty * TILE;
 			var.mapy += var.stepy;
-			if (game->map[var.mapy][var.mapx] == '1')
+			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
 				distance = var.sidedisty - var.deltadisty * TILE;
 				ve.x = game->player->vec_p->x + var.raydirx * distance;
