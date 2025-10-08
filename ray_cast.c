@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/07 01:53:18 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/08 17:31:10 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_vector ve;
 void cast_all_rays(t_cub *game)
 {
 	double ray_angle;
-	int i;
+	int	i;
 	double distance;
 	double prejection_plane = (WIDTH / 2) / (FOV / 2);
 	double wall_hight;
@@ -28,7 +28,7 @@ void cast_all_rays(t_cub *game)
 	while (i < NUM_RAYS)
 	{
 		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / NUM_RAYS);
-		printf("angle %f\n", ray_angle);
+		// printf("angle %f\n", ray_angle);
 		distance = cast_single_ray(game, ray_angle);
 
 		wall_hight = TILE / distance * (prejection_plane / 2);
@@ -83,7 +83,6 @@ double cast_single_ray(t_cub *game, double angle)
 			var.mapx += var.stepx;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{	
-				
 				distance = var.sidedistx - var.deltadistx * TILE;
 				ve.x = game->player->vec_p->x + var.raydirx * distance;
 				ve.y = game->player->vec_p->y + var.raydiry * distance;
@@ -93,7 +92,7 @@ double cast_single_ray(t_cub *game, double angle)
 		}
 		else
 		{
-			printf("not here\n");
+			// printf("not here\n");
 			var.sidedisty += var.deltadisty * TILE;
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')

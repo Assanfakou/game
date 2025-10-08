@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/07 01:43:25 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/08 17:21:34 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,10 +86,10 @@ void draw_grids(t_cub *game)
 		row = 0;
 		while (row <= game->data->map_height)
 		{
-			drawLineHorizontal(&game->image, row * TILEIM, game->data->map_width * TILEIM);
+			drawLineHorizontal(&game->map_img, row * TILEIM, game->data->map_width * TILEIM);
 			row++;
 		}
-		drawLineVertical(&game->image, col * TILEIM, game->data->map_height * TILEIM);
+		drawLineVertical(&game->map_img, col * TILEIM, game->data->map_height * TILEIM);
 		col++;
 	}
 }

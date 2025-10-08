@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/07 01:58:07 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/08 17:26:51 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ void print_map(char **map)
 		x = 0;
 		while (map[y][x])
 		{
-			printf("%c", map[y][x]);
+			printf("%c, ", map[y][x]);
 			x++;
 		}
 		printf("\n");
@@ -150,7 +150,7 @@ double get_delta_time(void)
 int render(t_cub *game)
 {
 	ft_bzero(game->image.addr, (size_t)game->image.line_length * HEIGHT);
-	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * HEIGHTMAP);
+	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * game->data->map_height * TILEIM);
 	
 	draw_grids(game);
 	//colorize(&game->map_img, WIDTHMAP, HEIGHTMAP);
@@ -197,6 +197,7 @@ int main(int ac, char **av)
 
 	//draw_grids(&cub.map_img);
 	draw_map(&cub);
+	print_map(cub.data->map);
 	printf("here4\n");
 	
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0, 0);
