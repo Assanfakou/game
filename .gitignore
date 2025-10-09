@@ -1,6 +1,7 @@
 *.out
 run
 game
+cub
 cub3d
 cub3D
 *.vscode
