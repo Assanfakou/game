@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/09 21:46:23 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/09 22:12:55 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	draw_line(t_image *img, int x0, int y0, int x1, int y1, int color)
 	err = dx - dy;
 	while (1)
 	{
-		my_mlx_pixel_put(img->addr, img->line_length, img->bpp, x0, y0, color);
+		my_mlx_pixel_put(img, x0, y0, color);
 		if (x0 == x1 && y0 == y1)
 			break ;
 		update_point(&x0, &y0, &err, dx, dy, sx, sy);
@@ -113,7 +113,7 @@ void draw_floor_and_ceiling(t_image *image)
 		int x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x, y, GRE);
+			my_mlx_pixel_put(image, x, y, GRE);
 			x++;
 		}
 		y++;
@@ -124,7 +124,7 @@ void draw_floor_and_ceiling(t_image *image)
 		int x = 0;
 		while (x < WIDTH)
 		{
-			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x, y, RED);
+			my_mlx_pixel_put(image, x, y, RED);
 			x++;
 		}
 		y++;

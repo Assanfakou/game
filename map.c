@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/08 17:21:34 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/09 22:14:22 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void drawLineVertical(t_image *img, int x, int height)
 	y = 0;
 	while (y <= height)
 	{
-		my_mlx_pixel_put(img->addr, img->line_length, img->bpp, x, y, RED);
+		my_mlx_pixel_put(img, x, y, RED);
 		y++;
 	}
 }
@@ -31,7 +31,7 @@ void drawLineHorizontal(t_image *image, int y, int width)
 	x = 0;
 	while (x <= width)
 	{
-		my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x, y, RED);
+		my_mlx_pixel_put(image, x, y, RED);
 		x++;
 	}
 }
@@ -47,7 +47,7 @@ void draw_squar(t_image *image, int x, int y, int color)
 		j = 0;	
 		while (j < TILEIM)
 		{
-			my_mlx_pixel_put(image->addr, image->line_length, image->bpp, x * TILEIM + i, y * TILEIM + j, color);
+			my_mlx_pixel_put(image, x * TILEIM + i, y * TILEIM + j, color);
 			j++;
 		}
 		i++; 
@@ -68,7 +68,7 @@ void draw_player(t_image *image, t_player *player)
 		while (j <= raduis)
 		{
 			if (i*i + j*j <= raduis*raduis)
-				my_mlx_pixel_put(image->addr, image->line_length, image->bpp, (player->vec_p->x / TILE) * TILEIM + i, player->vec_p->y / TILE * TILEIM + j, 0xFFFFFF);
+				my_mlx_pixel_put(image, (player->vec_p->x / TILE) * TILEIM + i, player->vec_p->y / TILE * TILEIM + j, 0xFFFFFF);
 			j++;
 		}
 		i++;
