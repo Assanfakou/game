@@ -24,7 +24,7 @@ int handle_keypres(int keycode, t_cub *game)
 		new_x = player->vec_p->x + player->vec_d->x * player->speed;
 		map_y = (int)(new_y / TILE);
 		map_x = (int)(new_x / TILE);
-		if (game->map[map_y][map_x] != '1')
+		if (game->data->map[map_y][map_x] != '1')
 		{
 			player->vec_p->x = new_x;
 			player->vec_p->y = new_y;
@@ -36,7 +36,7 @@ int handle_keypres(int keycode, t_cub *game)
 		new_x = player->vec_p->x - player->vec_d->x * player->speed;
 		map_y = (int)(new_y / TILE);
 		map_x = (int)(new_x / TILE);
-		if (game->map[map_y][map_x] != '1')
+		if (game->data->map[map_y][map_x] != '1')
 		{
 			player->vec_p->x = new_x;
 			player->vec_p->y = new_y;

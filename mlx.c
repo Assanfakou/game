@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   mlx.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:14:39 by hfakou            #+#    #+#             */
-/*   Updated: 2025/09/12 19:21:28 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/09 21:55:34 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
-
+int hight;
+int width;
 t_image new_image(t_render render, int width, int height)
 {
 	t_image new_image;
@@ -23,19 +24,20 @@ t_image new_image(t_render render, int width, int height)
 	return (new_image);
 }
 
-t_cub cub_init(char **map)
+t_cub cub_init(t_game *data)
 {
 	t_cub cub;
 	t_render render;
 	t_image image;
 	t_image map_img;
-	t_player player;
 
 	render.mlx = mlx_init();
-	render.win = mlx_new_window(render.mlx, WIDTH, HEIGHT, "game");
-	image = new_image(render, WIDTH, HEIGHT);
-	map_img = new_image(render, WIDTHMAP, HEIGHTMAP);
-	cub.map = map;
+	hight = data->map_height * TILE;
+	width = data->map_width * TILE;
+	render.win = mlx_new_window(render.mlx, data->map_width * TILE, data->map_height * TILE, "game");
+	image = new_image(render, data->map_width * TILE, data->map_height * TILE);
+	map_img = new_image(render, data->map_width * TILEIM, data->map_height * TILEIM);
+	printf("hight %d && width %d\n", data->map_height * TILEIM, data->map_width * TILEIM);
 	cub.render = render;
 	cub.image = image;
 	printf("image adddress: %p\n", &cub.image);
@@ -47,7 +49,7 @@ void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int co
 {
 	char *dst;
 
-	if (x < -2 || y < 0 || x >= WIDTH || y >= HEIGHT) 
+	if (x < -2 || y < 0 || x >= width || y >= hight) 
 		return;
 	dst = addr + (y * line_length + x * (bpp / 8));
 	*(unsigned int*)dst = color;

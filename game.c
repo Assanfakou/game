@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/03 17:18:43 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/09 21:46:23 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,28 @@ void draw_map(t_cub *game)
 {
 	int x;
 	int y;
+	char **map;
 
 	y = 0;
-	while (game->map[y])
+	map = game->data->map;
+	while (map[y])
 	{
 		x = 0;
-		while (game->map[y][x])
+		while (map[y][x])
 		{
-			if (game->map[y][x] == '1')
-				draw_squar(&game->map_img, x, y, RED);
-			if (game->map[y][x] == 'P')
+			if (map[y][x] == '1')
+			 	draw_squar(&game->map_img, x, y, RED);
+			if (map[y][x] == 'N')
 			{
-				game->player->vec_p->x = x * TILE + TILE /2;
-				game->player->vec_p->y = y * TILE + TILE /2;
-				game->map[y][x] = '0';
+				// game->player->vec_p->x = x * TILE + TILE /2;
+				// game->player->vec_p->y = y * TILE + TILE /2;
+				// map[y][x] = '0';
 			}
 			x++;
 		}
 		y++;
 	}
+	printf("here3\n");
 	
 }
 
@@ -83,17 +86,17 @@ void	draw_line(t_image *img, int x0, int y0, int x1, int y1, int color)
 	}
 }
 
-void print_map(t_cub *game)
+void print_map(char **map)
 {
 	int y = 0;
 	int x;
 
-	while (game->map[y])
+	while (map[y])
 	{
 		x = 0;
-		while (game->map[y][x])
+		while (map[y][x])
 		{
-			printf("%c, ", game->map[y][x]);
+			printf("%c, ", map[y][x]);
 			x++;
 		}
 		printf("\n");
@@ -146,17 +149,18 @@ double get_delta_time(void)
 
 int render(t_cub *game)
 {
-	ft_bzero(game->image.addr, (size_t)game->image.line_length * HEIGHT);
-	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * HEIGHTMAP);
-
-	draw_grids(&game->map_img);
+	ft_bzero(game->image.addr, (size_t)game->image.line_length * game->data->map_height * TILE);
+	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * game->data->map_height * TILEIM);
+	
+	draw_grids(game);
 	//colorize(&game->map_img, WIDTHMAP, HEIGHTMAP);
-
+	
 	draw_player(&game->map_img, game->player);
-
- 	draw_map(game);
+	
+	draw_map(game);
 	//draw_floor_and_ceiling(game->image);
 	cast_all_rays(game);
+	printf("debug here\n");
 	//cast_all_map_rays(game);
 	printf("FPS : %d\n", (int)(1.0 / get_delta_time()));
 	mlx_put_image_to_window(game->render.mlx, game->render.win, game->image.buff, 0, 0);
@@ -165,43 +169,36 @@ int render(t_cub *game)
 	return 0;
 }
 
-int main()
+int main(int ac, char **av)
 {
 	t_cub cub;
 	t_player player;
-	char *map[] = {
-		strdup("11111111111111"),
-		strdup("1P000010010001"),
-		strdup("10100001000001"),
-		strdup("10000000100001"),
-		strdup("10100000000001"),
-		strdup("10110010000001"),
-		strdup("10000000000001"),
-		strdup("10000000000001"),
-		strdup("10000000000001"),
-		strdup("10000000000001"),
-		strdup("10000000000001"),
-		strdup("10000000000001"),
-		strdup("10000000000001"),
-		strdup("11111111111111"),
-		NULL
-	};
-	cub = cub_init(map);
+	t_game data;
+
+	if (get_data(&data, ac, av))
+		return 1;
+	print_map(data.map);
+	// printf("player pos x %d,y %d\n", data.player_x, data.player_y);
+	
+	cub = cub_init(&data);
+	printf("player pos2 x (*%c)\n", data.map[0][0]);
 	player.speed = 10;
 	player.angle = 0;
 	t_vector p;
 	t_vector d;
-	p.x = 0;
-	p.y = 0;
+	p.x = data.player_x * TILE + TILE / 2;
+	p.y = data.player_y * TILE + TILE / 2;
 	d.x = cos(player.angle);
 	d.y = sin(player.angle);
 	player.vec_d = &d;
 	player.vec_p = &p;
 	cub.player = &player;
-	print_map(&cub);
+	cub.data = &data;
 
 	//draw_grids(&cub.map_img);
 	draw_map(&cub);
+	print_map(cub.data->map);
+	printf("here4\n");
 	
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0, 0);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);
