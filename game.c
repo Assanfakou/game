@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/08 17:26:51 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/09 21:46:23 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,7 +149,7 @@ double get_delta_time(void)
 
 int render(t_cub *game)
 {
-	ft_bzero(game->image.addr, (size_t)game->image.line_length * HEIGHT);
+	ft_bzero(game->image.addr, (size_t)game->image.line_length * game->data->map_height * TILE);
 	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length * game->data->map_height * TILEIM);
 	
 	draw_grids(game);

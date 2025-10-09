@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_cast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/08 17:31:10 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/09 21:57:30 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void cast_all_rays(t_cub *game)
 	double ray_angle;
 	int	i;
 	double distance;
-	double prejection_plane = (WIDTH / 2) / (FOV / 2);
+	double prejection_plane = (game->data->map_width * TILE / 2) / (FOV / 2);
 	double wall_hight;
 	double start_y;
 	double end_y;
@@ -32,9 +32,9 @@ void cast_all_rays(t_cub *game)
 		distance = cast_single_ray(game, ray_angle);
 
 		wall_hight = TILE / distance * (prejection_plane / 2);
-		start_y = (HEIGHT / 2) - (wall_hight / 2);
-		end_y = (HEIGHT / 2) + (wall_hight / 2);
-		draw_line(&game->image, i, start_y, i, end_y, BLU);
+		start_y = (game->data->map_height * TILE / 2) - (wall_hight / 2);
+		end_y = (game->data->map_height * TILE / 2) + (wall_hight / 2);
+		draw_line(&game->image, i, start_y, i, end_y, 0xFFFFFF);
 		i++;
 	}
 }
