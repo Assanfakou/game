@@ -6,13 +6,12 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 17:14:39 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/09 22:12:03 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/10 00:07:50 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
-int hight;
-int width;
+
 t_image new_image(t_render render, int width, int height)
 {
 	t_image new_image;
@@ -20,7 +19,8 @@ t_image new_image(t_render render, int width, int height)
 	new_image.width = width;
 	new_image.height = height;
 	new_image.buff = mlx_new_image(render.mlx, width, height);
-	new_image.addr = mlx_get_data_addr(new_image.buff, &new_image.bpp, &new_image.line_length, &new_image.endian);
+	new_image.addr = mlx_get_data_addr(new_image.buff, &new_image.bpp,
+		&new_image.line_length, &new_image.endian);
 	return (new_image);
 }
 
@@ -32,15 +32,11 @@ t_cub cub_init(t_game *data)
 	t_image map_img;
 
 	render.mlx = mlx_init();
-	hight = data->map_height * TILE;
-	width = data->map_width * TILE;
 	render.win = mlx_new_window(render.mlx, data->map_width * TILE, data->map_height * TILE, "game");
 	image = new_image(render, data->map_width * TILE, data->map_height * TILE);
 	map_img = new_image(render, data->map_width * TILEIM, data->map_height * TILEIM);
-	printf("hight %d && width %d\n", data->map_height * TILEIM, data->map_width * TILEIM);
 	cub.render = render;
 	cub.image = image;
-	printf("image adddress: %p\n", &cub.image);
 	cub.map_img = map_img;
 	return (cub);
 }
