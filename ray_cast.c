@@ -6,31 +6,37 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/10 08:49:08 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/10 11:06:54 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
+
+void wall_hight_draw(t_cub *game, double distance, int i)
+{
+	double wall_hight;
+	double start_y;
+	double end_y;
+
+	wall_hight = game->image.height * (TILE / distance);
+	start_y = (game->image.height / 2) - (wall_hight / 2);
+	end_y = (game->image.height / 2) + (wall_hight / 2);
+	for (int y = start_y; y <= end_y; y++)
+		my_mlx_pixel_put(&game->image, i, y, 0xFFFFFFF);
+}
 
 void cast_all_rays(t_cub *game)
 {
 	double ray_angle;
 	int	i;
 	double distance;
-	double wall_hight;
-	double start_y;
-	double end_y;
 
 	i = 0;
 	while (i < game->image.width)
 	{
 		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / game->image.width);
 		distance = cast_single_ray(game, ray_angle);
-
-		wall_hight = game->image.height / distance * TILE;
-		start_y = (game->image.height / 2) - (wall_hight / 2);
-		end_y = (game->image.height / 2) + (wall_hight / 2);
-		draw_line(&game->image, i, start_y, i, end_y, 0xFFFFFF);
+		wall_hight_draw(game, distance, i);
 		i++;
 	}
 }
@@ -100,7 +106,7 @@ double cast_single_ray(t_cub *game, double angle)
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
 				draw_rays_map(game, var, 1);
-				return (var.sidedistx - var.deltadistx * TILE);
+				return ((var.sidedistx - var.deltadistx * TILE) * cos(angle - game->player->angle));
 			}
 		}
 		else
@@ -110,7 +116,8 @@ double cast_single_ray(t_cub *game, double angle)
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
 				draw_rays_map(game, var, 0);
-				return (var.sidedisty - var.deltadisty * TILE);
+				// printf("fisheye :%f\n", cos(angle - game->player->angle));
+				return ((var.sidedisty - var.deltadisty * TILE) * cos(angle - game->player->angle));
 			}
 		}
 
