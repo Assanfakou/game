@@ -16,7 +16,7 @@
 #  define RESET "\e[0m"
 # endif
 
-#define TILEIM 15
+#define TILEIM 12
 
 #define WIDTH 1800
 #define HEIGHT 1000
@@ -113,7 +113,7 @@ typedef struct s_txtrs
 
 
 void draw_line(t_image *image, int start_x, int start_y, int end_x, int end_y, int color);
-void my_mlx_pixel_put(char *addr, int line_length, int bpp, int x, int y, int color);
+void my_mlx_pixel_put(t_image *image, int x, int y, int color);
 
 //ray_casting
 void cast_all_rays(t_cub *game);
