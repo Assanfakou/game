@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/10 00:06:37 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/10 00:23:53 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ int rgb_to_int(int r, int g, int b)
 {
 	int collor;
 
-	collor = (r << 16) | (g << 10) | b;
+	collor = (r << 16) | (g << 8) | b;
 	return (collor);
 }
 void draw_floor_and_ceiling(t_image *image, t_game *game)
@@ -154,10 +154,11 @@ int render(t_cub *game)
 	
 	draw_player(&game->map_img, game->player);
 	
-	printf("C %d F %d\n", game->data->ceiling_color[0], game->data->floor_color[0]);
+	// printf("C %d F %d\n", game->data->ceiling_color[0], game->data->floor_color[0]);
 	draw_map(game);
-	// draw_floor_and_ceiling(&game->image, game->data);
+	draw_floor_and_ceiling(&game->image, game->data);
 	cast_all_rays(game);
+	printf("FPS: %d\n", (int)(1.0 / get_delta_time()));
 	mlx_put_image_to_window(game->render.mlx, game->render.win, game->image.buff, 0, 0);
 	mlx_put_image_to_window(game->render.mlx, game->render.win, game->map_img.buff, 0, 0);
 	return 0;
@@ -176,6 +177,7 @@ void set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 		p->angle = M_PI;	
 	else if (data.player_dir == 'E')
 		p->angle = 0;	
+
 	d->x = cos(p->angle);
 	d->y = sin(p->angle);
 	p->vec_d = d;
