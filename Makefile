@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -O3
 NAME = cub
 MLX = -Lminilibx -lmlx -lXext -lX11 -lm
 INCLUDE = libft/libft.a

@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/10 10:57:01 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/10 11:17:29 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,7 +172,7 @@ void set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 	if (data.player_dir == 'N')
 		p->angle = M_PI / 2 * 3;	
 	else if (data.player_dir == 'S')
-		p->angle = M_PI / 2;	
+		p->angle = M_PI / 2;
 	else if (data.player_dir == 'W')
 		p->angle = M_PI;	
 	else if (data.player_dir == 'E')

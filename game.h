@@ -16,7 +16,7 @@
 #  define RESET "\e[0m"
 # endif
 
-#define TILEIM 15
+#define TILEIM 12
 
 #define WIDTH 1800
 #define HEIGHT 1000
