@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/10 11:06:54 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/14 01:30:55 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,17 @@ void wall_hight_draw(t_cub *game, double distance, int i)
 	double wall_hight;
 	double start_y;
 	double end_y;
+	int y;
 
 	wall_hight = game->image.height * (TILE / distance);
 	start_y = (game->image.height / 2) - (wall_hight / 2);
 	end_y = (game->image.height / 2) + (wall_hight / 2);
-	for (int y = start_y; y <= end_y; y++)
+	y = start_y;
+	while (y <= end_y)
+	{
 		my_mlx_pixel_put(&game->image, i, y, 0xFFFFFFF);
+		y++;
+	}
 }
 
 void cast_all_rays(t_cub *game)
