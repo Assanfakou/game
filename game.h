@@ -92,14 +92,11 @@ typedef struct s_cub
 
 typedef struct s_dda
 {
-    double raydirx;
-    double raydiry;
+	t_vector sidedist;
+	t_vector raydir;
+	t_vector deltadist;
     int mapx;
     int mapy;
-    double sidedistx;
-    double sidedisty;
-    double deltadistx;
-    double deltadisty;
     int stepx;
     int stepy;
 }   t_dda;

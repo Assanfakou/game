@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/14 01:30:55 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/15 17:27:46 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,27 +48,27 @@ void cast_all_rays(t_cub *game)
 
 void decide_where(t_dda *var, t_cub *game)
 {
-	var->deltadistx = fabs(1 / var->raydirx);
-	var->deltadisty = fabs(1 / var->raydiry);
-	if (var->raydirx < 0)
+	var->deltadist.x = fabs(1 / var->raydir.x);
+	var->deltadist.y = fabs(1 / var->raydir.y);
+	if (var->raydir.x < 0)
 	{
 		var->stepx = -1;
-		var->sidedistx = (game->player->vec_p->x - var->mapx * TILE) / fabs(var->raydirx);
+		var->sidedist.x = (game->player->vec_p->x - var->mapx * TILE) / fabs(var->raydir.x);
 	}
 	else
 	{
 		var->stepx = 1;
-		var->sidedistx = ((var->mapx + 1) * TILE - game->player->vec_p->x) / fabs(var->raydirx);
+		var->sidedist.x = ((var->mapx + 1) * TILE - game->player->vec_p->x) / fabs(var->raydir.x);
 	}
-	if (var->raydiry < 0)
+	if (var->raydir.y < 0)
 	{
 		var->stepy = -1;
-		var->sidedisty = (game->player->vec_p->y - var->mapy * TILE) / fabs(var->raydiry);
+		var->sidedist.y = (game->player->vec_p->y - var->mapy * TILE) / fabs(var->raydir.y);
 	}
 	else
 	{
 		var->stepy = 1;
-		var->sidedisty = ((var->mapy + 1) * TILE - game->player->vec_p->y) / fabs(var->raydiry);
+		var->sidedist.y = ((var->mapy + 1) * TILE - game->player->vec_p->y) / fabs(var->raydir.y);
 	}
 }
 void draw_rays_map(t_cub *game, t_dda var, int flag)
@@ -78,16 +78,16 @@ void draw_rays_map(t_cub *game, t_dda var, int flag)
 
 	if (flag)
 	{
-		distance = var.sidedistx - var.deltadistx * TILE;
-		ve.x = game->player->vec_p->x + var.raydirx * distance;
-		ve.y = game->player->vec_p->y + var.raydiry * distance;
+		distance = var.sidedist.x - var.deltadist.x * TILE;
+		ve.x = game->player->vec_p->x + var.raydir.x * distance;
+		ve.y = game->player->vec_p->y + var.raydir.y * distance;
 		draw_line(&game->map_img, game->player->vec_p->x / TILE * TILEIM, game->player->vec_p->y / TILE * TILEIM,ve.x/TILE *TILEIM, ve.y /TILE *TILEIM, GRE); 
 	}
 	else
 	{
-		distance = var.sidedisty - var.deltadisty * TILE;
-		ve.x = game->player->vec_p->x + var.raydirx * distance;
-		ve.y = game->player->vec_p->y + var.raydiry * distance;
+		distance = var.sidedist.y - var.deltadist.y * TILE;
+		ve.x = game->player->vec_p->x + var.raydir.x * distance;
+		ve.y = game->player->vec_p->y + var.raydir.y * distance;
 		draw_line(&game->map_img, game->player->vec_p->x / TILE * TILEIM, game->player->vec_p->y / TILE * TILEIM,ve.x / TILE * TILEIM, ve.y / TILE * TILEIM, GRE); 
 	}
 }
@@ -96,33 +96,33 @@ double cast_single_ray(t_cub *game, double angle)
 {
 	t_dda var;
 
-	var.raydirx = cos(angle);
-	var.raydiry = sin(angle);
+	var.raydir.x = cos(angle);
+	var.raydir.y = sin(angle);
 	var.mapx = (int)(game->player->vec_p->x / TILE);
 	var.mapy = (int)(game->player->vec_p->y / TILE);
 
 	decide_where(&var, game);
 	while (1)
 	{
-		if (var.sidedistx < var.sidedisty)
+		if (var.sidedist.x < var.sidedist.y)
 		{
-			var.sidedistx += var.deltadistx * TILE;
+			var.sidedist.x += var.deltadist.x * TILE;
 			var.mapx += var.stepx;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
 				draw_rays_map(game, var, 1);
-				return ((var.sidedistx - var.deltadistx * TILE) * cos(angle - game->player->angle));
+				return ((var.sidedist.x - var.deltadist.x * TILE) * cos(angle - game->player->angle));
 			}
 		}
 		else
 		{
-			var.sidedisty += var.deltadisty * TILE;
+			var.sidedist.y += var.deltadist.y * TILE;
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
 				draw_rays_map(game, var, 0);
 				// printf("fisheye :%f\n", cos(angle - game->player->angle));
-				return ((var.sidedisty - var.deltadisty * TILE) * cos(angle - game->player->angle));
+				return ((var.sidedist.y - var.deltadist.y * TILE) * cos(angle - game->player->angle));
 			}
 		}
 
