@@ -136,3 +136,4 @@ void draw_player(t_image *image, t_player *player);
 void cast_all_map_rays(t_cub *game);
 
 int	get_data(t_game *game, int argc, char **argv);
+void wall_hight_draw(t_cub *game, double distance, int i);
