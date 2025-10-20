@@ -199,7 +199,7 @@ int	get_data(t_game *game, int argc, char **argv)
 	printf("DEBUG: Starting map parsing at line %d\n", map_start);
 	if (!parse_map(lines, map_start, game))
 	{
-		printf("Error: Map parsing failed\n");
+		// printf("Error: Map parsing failed\n");
 		free(file_content);
 		free_string_array(lines);
 		free_game_struct(game);
