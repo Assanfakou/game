@@ -205,7 +205,7 @@ int	get_data(t_game *game, int argc, char **argv)
 		free_game_struct(game);
 		return (1);
 	}
-	print_final_result(game);
+	// print_final_result(game);
 	// free(file_content);
 	// free_string_array(lines);
 	// free_game_struct(game);

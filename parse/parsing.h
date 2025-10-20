@@ -87,6 +87,26 @@ void		print_final_result(t_game *game);
 int			is_valid_map_char(char c);
 int			is_player_char(char c);
 
+int			parse_map_array(char **lines, int start_idx, t_game *game);
+int			validate_map_characters(t_game *game);
+int			parse_rgb_components(char *color_str, int *rgb);
+int			count_commas(char *str);
+int			parse_one_rgb_component(char *color_str, int *pos, int *value);
+int			parse_map_array(char **lines, int start_idx, t_game *game);
+int			validate_map_characters(t_game *game);
+char		*get_padded_line(char *line, int width);
+int			parse_map_array(char **lines, int start_idx, t_game *game);
+int			count_map_lines(char **lines, int start_idx);
+char		*pad_line_with_spaces(char *line, int target_width);
+int			get_max_line_length(char **lines, int start_idx);
+char		*get_padded_line(char *line, int width);
 
+char		*ft_strdup(const char *s);
+char		*trim_whitespace(char *str);
+int			count_lines(char *content);
+char		*read_entire_file(char *filename);
+char		**split_lines(char *content, int line_count);
+int			copy_line(char *content, char **lines, int line_idx, int *i);
+char		**free_and_return_null(char **lines, int line_idx);
 
 #endif
