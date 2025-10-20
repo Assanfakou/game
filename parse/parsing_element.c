@@ -24,21 +24,6 @@ static char	*get_color_part(char *trimmed)
 	return (trim_whitespace(trimmed + i));
 }
 
-static int	check_duplicate_color(t_game *game, char *trimmed)
-{
-	if (ft_strncmp(trimmed, "F", 1) == 0 && game->floor_color[0] != -1)
-	{
-		printf("Error: Duplicate floor color\n");
-		return (0);
-	}
-	if (ft_strncmp(trimmed, "C", 1) == 0 && game->ceiling_color[0] != -1)
-	{
-		printf("Error: Duplicate ceiling color\n");
-		return (0);
-	}
-	return (1);
-}
-
 static int	assign_color(char *trimmed, char *color_part, t_game *game)
 {
 	if (!check_duplicate_color(game, trimmed))
@@ -83,6 +68,28 @@ int	parse_color_line(char *line, t_game *game)
 	return (result);
 }
 
+static int	process_line(char *line, t_game *game, int *elements_found)
+{
+	if (is_texture_line(line))
+	{
+		if (!parse_texture_line(line, game))
+			return (0);
+		(*elements_found)++;
+	}
+	else if (is_color_line(line))
+	{
+		if (!parse_color_line(line, game))
+			return (0);
+		(*elements_found)++;
+	}
+	else
+	{
+		printf("Error: Invalid line format: '%s'\n", line);
+		return (0);
+	}
+	return (1);
+}
+
 int	parse_elements(char **lines, t_game *game)
 {
 	int	i;
@@ -90,31 +97,12 @@ int	parse_elements(char **lines, t_game *game)
 
 	i = 0;
 	elements_found = 0;
-	while (lines[i])
+	while (lines[i] && elements_found < 6)
 	{
-		if (ft_strlen(lines[i]) == 0)
+		if (ft_strlen(lines[i]) != 0)
 		{
-			i++;
-			continue ;
-		}
-		if (elements_found >= 6)
-			break ;
-		if (is_texture_line(lines[i]))
-		{
-			if (!parse_texture_line(lines[i], game))
+			if (!process_line(lines[i], game, &elements_found))
 				return (0);
-			elements_found++;
-		}
-		else if (is_color_line(lines[i]))
-		{
-			if (!parse_color_line(lines[i], game))
-				return (0);
-			elements_found++;
-		}
-		else
-		{
-			printf("Error: Invalid line format: '%s'\n", lines[i]);
-			return (0);
 		}
 		i++;
 	}

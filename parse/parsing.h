@@ -108,5 +108,9 @@ char		*read_entire_file(char *filename);
 char		**split_lines(char *content, int line_count);
 int			copy_line(char *content, char **lines, int line_idx, int *i);
 char		**free_and_return_null(char **lines, int line_idx);
+int			check_duplicate_color(t_game *game, char *trimmed);
+int			validate_texture_file(char *path);
+char		*extract_path_string(char *start, int len);
+void		trim_trailing_spaces(char *result);
 
 #endif

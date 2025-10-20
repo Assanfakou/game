@@ -12,35 +12,6 @@
 
 #include "parsing.h"
 
-int	validate_texture_file(char *path)
-{
-	int	fd;
-
-	if (!path || ft_strlen(path) == 0)
-	{
-		printf("Error: Empty texture path\n");
-		return (0);
-	}
-	if (!validate_texture_extension(path))
-	{
-		printf("Error: Texture must be .xpm file: %s\n", path);
-		return (0);
-	}
-	if (is_directory(path))
-	{
-		printf("Error: Texture path is a directory: %s\n", path);
-		return (0);
-	}
-	fd = open(path, O_RDONLY);
-	if (fd == -1)
-	{
-		printf("Error: Texture file not found: %s\n", path);
-		return (0);
-	}
-	close(fd);
-	return (1);
-}
-
 static char	*get_texture_path(char *trimmed)
 {
 	int		i;
@@ -57,22 +28,10 @@ static char	*get_texture_path(char *trimmed)
 	len = ft_strlen(start);
 	if (len == 0)
 		return (NULL);
-	result = malloc(len + 1);
+	result = extract_path_string(start, len);
 	if (!result)
 		return (NULL);
-	i = 0;
-	while (i < len)
-	{
-		result[i] = start[i];
-		i++;
-	}
-	result[i] = '\0';
-	i = len - 1;
-	while (i >= 0 && ft_isspace(result[i]))
-	{
-		result[i] = '\0';
-		i--;
-	}
+	trim_trailing_spaces(result);
 	return (result);
 }
 
@@ -88,10 +47,41 @@ static void	assign_texture(t_game *game, char *trimmed, char *path)
 		game->east_texture = path;
 }
 
+static int	validate_path_and_file(char *trimmed, char *path)
+{
+	if (!check_extra_content(trimmed, path))
+	{
+		free(path);
+		return (0);
+	}
+	if (!validate_texture_file(path))
+	{
+		free(path);
+		return (0);
+	}
+	return (1);
+}
+
+static int	process_texture_path(char *trimmed, t_game *game)
+{
+	char	*path;
+
+	path = get_texture_path(trimmed);
+	if (!path)
+	{
+		printf("Error: Missing texture path\n");
+		return (0);
+	}
+	if (!validate_path_and_file(trimmed, path))
+		return (0);
+	assign_texture(game, trimmed, path);
+	return (1);
+}
+
 int	parse_texture_line(char *line, t_game *game)
 {
 	char	*trimmed;
-	char	*path;
+	int		result;
 
 	trimmed = trim_whitespace(line);
 	if (!trimmed)
@@ -101,26 +91,7 @@ int	parse_texture_line(char *line, t_game *game)
 		free(trimmed);
 		return (0);
 	}
-	path = get_texture_path(trimmed);
-	if (!path)
-	{
-		printf("Error: Missing texture path\n");
-		free(trimmed);
-		return (0);
-	}
-	if (!check_extra_content(trimmed, path))
-	{
-		free(path);
-		free(trimmed);
-		return (0);
-	}
-	if (!validate_texture_file(path))
-	{
-		free(path);
-		free(trimmed);
-		return (0);
-	}
-	assign_texture(game, trimmed, path);
+	result = process_texture_path(trimmed, game);
 	free(trimmed);
-	return (1);
+	return (result);
 }
