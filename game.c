@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/10 11:17:29 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/17 13:53:55 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,7 @@ int main(int ac, char **av)
 
 	if (get_data(&data, ac, av))
 		return 1;
+	printf("name : %s", data.east_texture);
 	print_map(data.map);
 	
 	cub = cub_init(&data);

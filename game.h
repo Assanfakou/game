@@ -81,11 +81,11 @@ typedef struct s_mlx
 
 typedef struct s_cub
 {
-
 	t_game *data;
 	t_render render;
 	t_image image;
 	t_image map_img;
+	t_image texture_test;
 	t_player *player;
 }	t_cub;
 

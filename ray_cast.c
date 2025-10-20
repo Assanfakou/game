@@ -6,11 +6,20 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/15 17:27:46 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/17 16:27:24 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
+
+t_vector wallx;
+unsigned int get_tex_color(t_image *texture, int x, int y)
+{
+	char *dest;
+
+	dest = texture->addr + (y * texture->line_length + x * (texture->bpp / 8));
+	return *(unsigned int *)(dest);	
+}
 
 void wall_hight_draw(t_cub *game, double distance, int i)
 {
@@ -22,12 +31,32 @@ void wall_hight_draw(t_cub *game, double distance, int i)
 	wall_hight = game->image.height * (TILE / distance);
 	start_y = (game->image.height / 2) - (wall_hight / 2);
 	end_y = (game->image.height / 2) + (wall_hight / 2);
+
+
+	double step = 1.0 * game->texture_test.height / wall_hight;
+	double tex_pos = (start_y - game->texture_test.height / 2 + wall_hight / 2) * step;
+
 	y = start_y;
-	while (y <= end_y)
+	while (y < end_y)
 	{
-		my_mlx_pixel_put(&game->image, i, y, 0xFFFFFFF);
+		int tex_y = (int)tex_pos & (game->texture_test.height - 1);
+		tex_pos += step;
+
+		wallx.x /= TILE;
+		wallx.x -= floor(wallx.x);
+		int tex_x = (int)(wallx.x * game->texture_test.width);
+		printf("wallx %f\n", wallx.x); 
+
+		unsigned int color = get_tex_color(&game->texture_test, tex_x, tex_y);
+
+		my_mlx_pixel_put(&game->image, i, y, color);
 		y++;
 	}
+	// while (y <= end_y)
+	// {
+	// 	// my_mlx_pixel_put(&game->image, i, y, 0xFFFFFFF);
+	// 	y++;
+	// }
 }
 
 void cast_all_rays(t_cub *game)
@@ -111,6 +140,7 @@ double cast_single_ray(t_cub *game, double angle)
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
 				draw_rays_map(game, var, 1);
+				wallx.x = game->player->vec_p->y + (var.sidedist.x - var.deltadist.x * TILE) * var.raydir.y;
 				return ((var.sidedist.x - var.deltadist.x * TILE) * cos(angle - game->player->angle));
 			}
 		}
@@ -120,6 +150,7 @@ double cast_single_ray(t_cub *game, double angle)
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
+				wallx.x = game->player->vec_p->x + (var.sidedist.y - var.deltadist.y * TILE) * var.raydir.x;
 				draw_rays_map(game, var, 0);
 				// printf("fisheye :%f\n", cos(angle - game->player->angle));
 				return ((var.sidedist.y - var.deltadist.y * TILE) * cos(angle - game->player->angle));
