@@ -87,6 +87,7 @@ typedef struct s_cub
 	t_image map_img;
 	t_image texture_test;
 	t_player *player;
+	double xwall;
 }	t_cub;
 
 
@@ -137,3 +138,4 @@ void cast_all_map_rays(t_cub *game);
 
 int	get_data(t_game *game, int argc, char **argv);
 void wall_hight_draw(t_cub *game, double distance, int i);
+unsigned int get_tex_color(t_image *tex, int x, int y);

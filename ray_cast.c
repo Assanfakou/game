@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/17 16:27:24 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/23 12:24:48 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,49 +16,34 @@ t_vector wallx;
 unsigned int get_tex_color(t_image *texture, int x, int y)
 {
 	char *dest;
-
+	if (x < 0)
+		x = 0;
+	if (x >= texture->width)
+		x = texture->width - 1;
+	if (y < 0)
+		y = 0;
+	if (y >= texture->height)
+		y = texture->height - 1;
 	dest = texture->addr + (y * texture->line_length + x * (texture->bpp / 8));
 	return *(unsigned int *)(dest);	
 }
-
 void wall_hight_draw(t_cub *game, double distance, int i)
 {
-	double wall_hight;
-	double start_y;
-	double end_y;
-	int y;
+    double wall_hight = game->image.height * (TILE / distance);
+    double start_y = (game->image.height / 2) - (wall_hight / 2);
+    double end_y = (game->image.height / 2) + (wall_hight / 2);
+    double step = 1.0 * game->texture_test.height / wall_hight;
+    double tex_pos = (start_y - game->image.height / 2 + wall_hight / 2) * step;
+    int texX = (int)(game->xwall * game->texture_test.width);
 
-	wall_hight = game->image.height * (TILE / distance);
-	start_y = (game->image.height / 2) - (wall_hight / 2);
-	end_y = (game->image.height / 2) + (wall_hight / 2);
-
-
-	double step = 1.0 * game->texture_test.height / wall_hight;
-	double tex_pos = (start_y - game->texture_test.height / 2 + wall_hight / 2) * step;
-
-	y = start_y;
-	while (y < end_y)
-	{
-		int tex_y = (int)tex_pos & (game->texture_test.height - 1);
-		tex_pos += step;
-
-		wallx.x /= TILE;
-		wallx.x -= floor(wallx.x);
-		int tex_x = (int)(wallx.x * game->texture_test.width);
-		printf("wallx %f\n", wallx.x); 
-
-		unsigned int color = get_tex_color(&game->texture_test, tex_x, tex_y);
-
-		my_mlx_pixel_put(&game->image, i, y, color);
-		y++;
-	}
-	// while (y <= end_y)
-	// {
-	// 	// my_mlx_pixel_put(&game->image, i, y, 0xFFFFFFF);
-	// 	y++;
-	// }
+    for (int y = start_y; y < end_y; y++)
+    {
+        int texY = (int)tex_pos;
+        tex_pos += step;
+        unsigned int color = get_tex_color(&game->texture_test, texX, texY);
+        my_mlx_pixel_put(&game->image, i, y, color);
+    }
 }
-
 void cast_all_rays(t_cub *game)
 {
 	double ray_angle;
@@ -100,6 +85,7 @@ void decide_where(t_dda *var, t_cub *game)
 		var->sidedist.y = ((var->mapy + 1) * TILE - game->player->vec_p->y) / fabs(var->raydir.y);
 	}
 }
+
 void draw_rays_map(t_cub *game, t_dda var, int flag)
 {
 	double distance;
@@ -141,6 +127,9 @@ double cast_single_ray(t_cub *game, double angle)
 			{
 				draw_rays_map(game, var, 1);
 				wallx.x = game->player->vec_p->y + (var.sidedist.x - var.deltadist.x * TILE) * var.raydir.y;
+				wallx.x /= TILE;
+				wallx.x -= floor(wallx.x);
+				game->xwall = wallx.x;
 				return ((var.sidedist.x - var.deltadist.x * TILE) * cos(angle - game->player->angle));
 			}
 		}
@@ -150,8 +139,11 @@ double cast_single_ray(t_cub *game, double angle)
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
-				wallx.x = game->player->vec_p->x + (var.sidedist.y - var.deltadist.y * TILE) * var.raydir.x;
 				draw_rays_map(game, var, 0);
+				wallx.x = game->player->vec_p->x + (var.sidedist.y - var.deltadist.y * TILE) * var.raydir.x;
+				wallx.x /= TILE;
+				wallx.x -= floor(wallx.x);
+				game->xwall = wallx.x;
 				// printf("fisheye :%f\n", cos(angle - game->player->angle));
 				return ((var.sidedist.y - var.deltadist.y * TILE) * cos(angle - game->player->angle));
 			}

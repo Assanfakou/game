@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/17 13:53:55 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/23 09:13:14 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ void print_map(char **map)
 	}	
 	printf("#############################################\n");
 }
+
 int rgb_to_int(int r, int g, int b)
 {
 	int collor;
@@ -144,7 +145,6 @@ double get_delta_time(void)
 	last_time = current_time;
 	return (delta);
 }
-
 int render(t_cub *game)
 {
 	ft_bzero(game->image.addr, (size_t)game->image.line_length * game->data->map_height * TILE);
