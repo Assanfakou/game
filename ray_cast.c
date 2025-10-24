@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/24 19:00:46 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/24 19:52:38 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -177,9 +177,9 @@ double cast_single_ray(t_cub *game, double angle)
 			{
 				hit = true;	
 				if (var.raydir.y > 0)
-					game->dir = 'N';
-				else
 					game->dir = 'S';
+				else
+					game->dir = 'N';
 				draw_rays_map(game, var, 0);
 				wallx.x = game->player->vec_p->x + (var.sidedist.y - var.deltadist.y * TILE) * var.raydir.x;
 				wallx.x /= TILE;
