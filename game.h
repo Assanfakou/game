@@ -4,6 +4,7 @@
 #include <math.h>
 #include <sys/time.h>
 #include "parse/parsing.h"
+#include <stdbool.h>
 
 #define FOV (M_PI / 3)
 #define RAY_LENGTH 50
@@ -54,6 +55,15 @@ typedef struct s_image
 	int height;
 }	t_image;
 
+
+typedef struct s_textures
+{
+	t_image south;
+	t_image north;
+	t_image east;
+	t_image west;
+}	t_textures;
+
 typedef struct s_render 
 {
 	void *mlx;
@@ -85,9 +95,10 @@ typedef struct s_cub
 	t_render render;
 	t_image image;
 	t_image map_img;
-	t_image texture_test;
+	t_textures tex;
 	t_player *player;
 	double xwall;
+	char dir;
 }	t_cub;
 
 
@@ -102,12 +113,7 @@ typedef struct s_dda
     int stepy;
 }   t_dda;
 
-typedef struct s_txtrs
-{
-	void *wall;
-	int floor_color;
-	int sky_color;
-}	t_textrs;
+
 
 
 void draw_line(t_image *image, int start_x, int start_y, int end_x, int end_y, int color);
