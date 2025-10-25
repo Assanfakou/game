@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/09 22:14:22 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 13:37:03 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void drawLineVertical(t_image *img, int x, int height)
 	y = 0;
 	while (y <= height)
 	{
-		my_mlx_pixel_put(img, x, y, RED);
+		my_mlx_pixel_put(img, x, y, 0xFFD700);
 		y++;
 	}
 }
@@ -60,7 +60,7 @@ void draw_player(t_image *image, t_player *player)
 	int i; 
 	int j;
 	
-	raduis = 5;
+	raduis = 4;
 	i = -raduis;
 	while (i <= raduis)
 	{

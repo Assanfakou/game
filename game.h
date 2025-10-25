@@ -21,7 +21,7 @@
 
 #define WIDTH 1800
 #define HEIGHT 1000
-#define TILE 50
+#define TILE 60
 #define NUM_RAYS WIDTH 
 
 #define WIDTHMAP 280

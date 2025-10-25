@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/24 17:11:14 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 13:43:33 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void draw_map(t_cub *game)
 		while (map[y][x])
 		{
 			if (map[y][x] == '1')
-			 	draw_squar(&game->map_img, x, y, RED);
+			 	draw_squar(&game->map_img, x, y, 0xFFD700);
 			x++;
 		}
 		y++;
@@ -79,25 +79,6 @@ void	draw_line(t_image *img, int x0, int y0, int x1, int y1, int color)
 	}
 }
 
-void print_map(char **map)
-{
-	int y = 0;
-	int x;
-
-	while (map[y])
-	{
-		x = 0;
-		while (map[y][x])
-		{
-			printf("%c, ", map[y][x]);
-			x++;
-		}
-		printf("\n");
-		y++;
-	}	
-	printf("#############################################\n");
-}
-
 int rgb_to_int(int r, int g, int b)
 {
 	int collor;
@@ -105,6 +86,7 @@ int rgb_to_int(int r, int g, int b)
 	collor = (r << 16) | (g << 8) | b;
 	return (collor);
 }
+
 void draw_floor_and_ceiling(t_image *image, t_game *game)
 {
 	int y = 0;
@@ -145,6 +127,7 @@ double get_delta_time(void)
 	last_time = current_time;
 	return (delta);
 }
+
 int render(t_cub *game)
 {
 	ft_bzero(game->image.addr, (size_t)game->image.line_length * game->data->map_height * TILE);
@@ -195,7 +178,6 @@ int main(int ac, char **av)
 	if (get_data(&data, ac, av))
 		return 1;
 	printf("name : %s", data.east_texture);
-	print_map(data.map);
 	
 	cub = cub_init(&data);
 
@@ -205,7 +187,6 @@ int main(int ac, char **av)
 	cub.data = &data;
 
 	draw_map(&cub);
-	print_map(cub.data->map);
 	
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0, 0);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);

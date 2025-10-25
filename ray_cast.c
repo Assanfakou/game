@@ -6,12 +6,12 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/24 20:34:16 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 13:50:05 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
-bool hit = false;
+
 t_vector wallx;
 unsigned int get_tex_color(t_image *texture, int x, int y)
 {
@@ -27,15 +27,17 @@ unsigned int get_tex_color(t_image *texture, int x, int y)
 	dest = texture->addr + (y * texture->line_length + x * (texture->bpp / 8));
 	return *(unsigned int *)(dest);
 }
+
 void wall_hight_draw(t_cub *game, double distance, int i)
 {
-    double wall_hight = game->image.height * (100 / distance);
+    double wall_hight = game->image.height * (TILE / distance);
     double start_y = (game->image.height / 2) - (wall_hight / 2);
     double end_y = (game->image.height / 2) + (wall_hight / 2);
-    double step = 1.0 * game->tex.east.height / wall_hight;
+    double step;
     double tex_pos;
-    int texX = (int)(game->xwall * game->tex.east.width);
+    int texX;
 	unsigned int color;
+
 	if (game->dir == 'S')
 	{
     	step = 1.0 * game->tex.south.height / wall_hight;
@@ -51,16 +53,18 @@ void wall_hight_draw(t_cub *game, double distance, int i)
     	step = 1.0 * game->tex.west.height / wall_hight;
     	texX = (int)(game->xwall * game->tex.west.width);
 	}
-	else if (game->dir == 'E')
+	else
 	{
     	step = 1.0 * game->tex.east.height / wall_hight;
     	texX = (int)(game->xwall * game->tex.east.width);
 	}
-	
+
 	tex_pos = (start_y - game->image.height / 2 + wall_hight / 2) * step;
-    for (int y = start_y; y < end_y; y++)
+	int y = start_y;
+    while (y < end_y)
     {
         int texY = (int)tex_pos;
+		//adding the steps
         tex_pos += step;
 		if (game->dir == 'S')
         	color = get_tex_color(&game->tex.south, texX, texY);
@@ -70,10 +74,11 @@ void wall_hight_draw(t_cub *game, double distance, int i)
         	color = get_tex_color(&game->tex.west, texX, texY);
 		else
         	color = get_tex_color(&game->tex.east, texX, texY);
-
         my_mlx_pixel_put(&game->image, i, y, color);
+		y++;
     }
 }
+
 void cast_all_rays(t_cub *game)
 {
 	double ray_angle;
@@ -94,6 +99,9 @@ void decide_where(t_dda *var, t_cub *game)
 {
 	var->deltadist.x = fabs(1 / var->raydir.x) * TILE;
 	var->deltadist.y = fabs(1 / var->raydir.y) * TILE;
+	var->mapx = (int)(game->player->vec_p->x / TILE);
+	var->mapy = (int)(game->player->vec_p->y / TILE);
+
 	if (var->raydir.x < 0)
 	{
 		var->stepx = -1;
@@ -143,9 +151,6 @@ double cast_single_ray(t_cub *game, double angle)
 
 	var.raydir.x = cos(angle);
 	var.raydir.y = sin(angle);
-	var.mapx = (int)(game->player->vec_p->x / TILE);
-	var.mapy = (int)(game->player->vec_p->y / TILE);
-	// printf("name : %s\n", game->data->east_texture);
 
 	decide_where(&var, game);
 	while (1)
@@ -156,7 +161,6 @@ double cast_single_ray(t_cub *game, double angle)
 			var.mapx += var.stepx;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
-				hit = false;
 				if (var.raydir.x > 0)
 					game->dir = 'E';
 				else
@@ -175,7 +179,6 @@ double cast_single_ray(t_cub *game, double angle)
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
-				hit = true;	
 				if (var.raydir.y > 0)
 					game->dir = 'S';
 				else
