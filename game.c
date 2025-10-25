@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/25 13:43:33 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 18:03:54 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,7 +192,7 @@ int main(int ac, char **av)
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);
 	mlx_hook(cub.render.win, 2, 1L<<0, handle_keypres, &cub);
 	mlx_loop_hook(cub.render.mlx, render, &cub);
-	mlx_key_hook(cub.render.win, handle_keypress, NULL);
+	// mlx_key_hook(cub.render.win, handle_keypress, NULL);
 	mlx_loop(cub.render.mlx);
 }
 
