@@ -151,3 +151,4 @@ void cast_all_map_rays(t_cub *game);
 int	get_data(t_game *game, int argc, char **argv);
 void wall_hight_draw(t_cub *game, double distance, int i);
 unsigned int get_tex_color(t_image *tex, int x, int y);
+double get_distance(t_dda *var, t_cub *game, int flag);

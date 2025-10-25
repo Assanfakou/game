@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/25 14:41:47 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 16:53:43 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,23 +134,23 @@ void decide_where(t_dda *var, t_cub *game)
 	}
 }
 
-void draw_rays_map(t_cub *game, t_dda var, int flag)
+void draw_rays_map(t_cub *game, t_dda *var, int flag)
 {
 	double distance;
 	t_vector ve;
 
 	if (flag)
 	{
-		distance = var.sidedist.x - var.deltadist.x;
-		ve.x = game->player->vec_p->x + var.raydir.x * distance;
-		ve.y = game->player->vec_p->y + var.raydir.y * distance;
+		distance = var->sidedist.x - var->deltadist.x;
+		ve.x = game->player->vec_p->x + var->raydir.x * distance;
+		ve.y = game->player->vec_p->y + var->raydir.y * distance;
 		draw_line(&game->map_img, game->player->vec_p->x / TILE * TILEIM, game->player->vec_p->y / TILE * TILEIM,ve.x/TILE *TILEIM, ve.y /TILE *TILEIM, GRE); 
 	}
 	else
 	{
-		distance = var.sidedist.y - var.deltadist.y;
-		ve.x = game->player->vec_p->x + var.raydir.x * distance;
-		ve.y = game->player->vec_p->y + var.raydir.y * distance;
+		distance = var->sidedist.y - var->deltadist.y;
+		ve.x = game->player->vec_p->x + var->raydir.x * distance;
+		ve.y = game->player->vec_p->y + var->raydir.y * distance;
 		draw_line(&game->map_img, game->player->vec_p->x / TILE * TILEIM, game->player->vec_p->y / TILE * TILEIM,ve.x / TILE * TILEIM, ve.y / TILE * TILEIM, GRE); 
 	}
 }
@@ -161,7 +161,6 @@ double cast_single_ray(t_cub *game, double angle)
 
 	var.raydir.x = cos(angle);
 	var.raydir.y = sin(angle);
-
 	decide_where(&var, game);
 	while (1)
 	{
@@ -171,16 +170,7 @@ double cast_single_ray(t_cub *game, double angle)
 			var.mapx += var.stepx;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
-				if (var.raydir.x > 0)
-					game->dir = 'E';
-				else
-					game->dir = 'W';
-				draw_rays_map(game, var, 1);
-				wallx.x = game->player->vec_p->y + (var.sidedist.x - var.deltadist.x) * var.raydir.y;
-				wallx.x /= TILE;
-				wallx.x -= floor(wallx.x);
-				game->xwall = wallx.x;
-				return ((var.sidedist.x - var.deltadist.x) * cos(angle - game->player->angle));
+				return (get_distance(&var, game, 1) * cos(angle - game->player->angle));
 			}
 		}
 		else
@@ -189,18 +179,40 @@ double cast_single_ray(t_cub *game, double angle)
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')
 			{
-				if (var.raydir.y > 0)
-					game->dir = 'S';
-				else
-					game->dir = 'N';
-				draw_rays_map(game, var, 0);
-				wallx.x = game->player->vec_p->x + (var.sidedist.y - var.deltadist.y) * var.raydir.x;
-				wallx.x /= TILE;
-				wallx.x -= floor(wallx.x);
-				game->xwall = wallx.x;
-				return ((var.sidedist.y - var.deltadist.y) * cos(angle - game->player->angle));
+				return (get_distance(&var, game, 0) * cos(angle - game->player->angle));
 			}
 		}
+	}
+}
+
+double get_distance(t_dda *var, t_cub *game, int flag)
+{
+	if (!flag)
+	{
+		if (var->raydir.y > 0)
+			game->dir = 'S';
+		else
+			game->dir = 'N';
+		draw_rays_map(game, var, flag);
+		wallx.x = game->player->vec_p->x + (var->sidedist.y - var->deltadist.y) * var->raydir.x;
+		wallx.x /= TILE;
+		wallx.x -= floor(wallx.x);
+		game->xwall = wallx.x;
+		return ((var->sidedist.y - var->deltadist.y));
 
 	}
+	else
+	{
+		if (var->raydir.x > 0)
+			game->dir = 'E';
+		else
+			game->dir = 'W';
+		draw_rays_map(game, var, flag);
+		wallx.x = game->player->vec_p->y + (var->sidedist.x - var->deltadist.x) * var->raydir.y;
+		wallx.x /= TILE;
+		wallx.x -= floor(wallx.x);
+		game->xwall = wallx.x;
+		return (var->sidedist.x - var->deltadist.x);
+	}
+
 }
