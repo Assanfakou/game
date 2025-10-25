@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/25 16:53:43 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 17:10:31 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,18 +169,14 @@ double cast_single_ray(t_cub *game, double angle)
 			var.sidedist.x += var.deltadist.x;
 			var.mapx += var.stepx;
 			if (game->data->map[var.mapy][var.mapx] == '1')
-			{
 				return (get_distance(&var, game, 1) * cos(angle - game->player->angle));
-			}
 		}
 		else
 		{
 			var.sidedist.y += var.deltadist.y;
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')
-			{
 				return (get_distance(&var, game, 0) * cos(angle - game->player->angle));
-			}
 		}
 	}
 }
@@ -194,12 +190,10 @@ double get_distance(t_dda *var, t_cub *game, int flag)
 		else
 			game->dir = 'N';
 		draw_rays_map(game, var, flag);
-		wallx.x = game->player->vec_p->x + (var->sidedist.y - var->deltadist.y) * var->raydir.x;
-		wallx.x /= TILE;
-		wallx.x -= floor(wallx.x);
-		game->xwall = wallx.x;
+		game->xwall = game->player->vec_p->x + (var->sidedist.y - var->deltadist.y) * var->raydir.x;
+		game->xwall /= TILE;
+		game->xwall -= floor(game->xwall);
 		return ((var->sidedist.y - var->deltadist.y));
-
 	}
 	else
 	{
@@ -208,11 +202,9 @@ double get_distance(t_dda *var, t_cub *game, int flag)
 		else
 			game->dir = 'W';
 		draw_rays_map(game, var, flag);
-		wallx.x = game->player->vec_p->y + (var->sidedist.x - var->deltadist.x) * var->raydir.y;
-		wallx.x /= TILE;
-		wallx.x -= floor(wallx.x);
-		game->xwall = wallx.x;
+		game->xwall = game->player->vec_p->y + (var->sidedist.x - var->deltadist.x) * var->raydir.y;
+		game->xwall /= TILE;
+		game->xwall -= floor(game->xwall);
 		return (var->sidedist.x - var->deltadist.x);
 	}
-
 }
