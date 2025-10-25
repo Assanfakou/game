@@ -42,13 +42,13 @@ int handle_keypres(int keycode, t_cub *game)
 			player->vec_p->y = new_y;
 		}
 	}
-	if (keycode == LEFT)
+	if (keycode == LEFT || keycode == LFARR)
 	{
 		player->angle -= 0.1;
 		player->vec_d->x = cos(player->angle);
 		player->vec_d->y = sin(player->angle);
 	}
-	if (keycode == RIGHT)
+	if (keycode == RIGHT || keycode == RIGARR)
 	{
 		player->angle += 0.1;
 		player->vec_d->x = cos(player->angle);
@@ -56,6 +56,7 @@ int handle_keypres(int keycode, t_cub *game)
 	}
 	if (keycode == ESC)
 	{
+		mlx_clear_window(game->render.mlx, game->render.win);
 		mlx_destroy_image(game->render.mlx, game->image.buff);
 		mlx_destroy_image(game->render.mlx, game->map_img.buff);
 		mlx_destroy_image(game->render.mlx, game->tex.east.buff);
@@ -63,8 +64,9 @@ int handle_keypres(int keycode, t_cub *game)
 		mlx_destroy_image(game->render.mlx, game->tex.west.buff);
 		mlx_destroy_image(game->render.mlx, game->tex.south.buff);
 		mlx_destroy_window(game->render.mlx, game->render.win);
+
 		free_game_struct(game->data);
-		exit(1);
+		exit(EXIT_SUCCESS);
 	}
 	return (0);
 }

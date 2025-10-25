@@ -37,6 +37,8 @@
 #define DOWN 115
 #define RIGHT 100
 #define LEFT 97
+#define LFARR 65361
+#define RIGARR 65363
 
 typedef struct s_vector
 {

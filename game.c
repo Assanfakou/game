@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/25 18:03:54 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 18:57:25 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,6 +166,18 @@ void set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 	p->vec_d = d;
 	p->speed = 10;
 }
+int close_window(t_cub *game)
+{
+	mlx_clear_window(game->render.mlx, game->render.win);
+	mlx_destroy_image(game->render.mlx, game->map_img.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.east.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.north.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.west.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.south.buff);
+	mlx_destroy_window(game->render.mlx, game->render.win);
+	mlx_destroy_image(game->render.mlx, game->image.buff);
+	exit(EXIT_SUCCESS);
+}
 		
 int main(int ac, char **av)
 {
@@ -192,6 +204,7 @@ int main(int ac, char **av)
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);
 	mlx_hook(cub.render.win, 2, 1L<<0, handle_keypres, &cub);
 	mlx_loop_hook(cub.render.mlx, render, &cub);
+	mlx_hook(cub.render.win, 17, 0, close_window, &cub);
 	// mlx_key_hook(cub.render.win, handle_keypress, NULL);
 	mlx_loop(cub.render.mlx);
 }
