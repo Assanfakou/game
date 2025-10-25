@@ -44,6 +44,12 @@ typedef struct s_vector
 	double y;
 }	t_vector;
 
+typedef struct s_line
+{
+	double start_y;
+	double end_y;
+}	t_line;
+
 typedef struct s_image
 {
 	void *addr;

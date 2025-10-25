@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/25 13:50:05 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 14:41:47 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,55 +28,65 @@ unsigned int get_tex_color(t_image *texture, int x, int y)
 	return *(unsigned int *)(dest);
 }
 
-void wall_hight_draw(t_cub *game, double distance, int i)
+void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, double texp)
 {
-    double wall_hight = game->image.height * (TILE / distance);
-    double start_y = (game->image.height / 2) - (wall_hight / 2);
-    double end_y = (game->image.height / 2) + (wall_hight / 2);
-    double step;
-    double tex_pos;
-    int texX;
+	int y;
+	int tex_y;
+	double tex_pos;
 	unsigned int color;
 
+	tex_pos = texp;
+	y = line.start_y;
+	while (y < line.end_y)
+	{
+		tex_y = tex_pos;
+		tex_pos += step;
+		if (game->dir == 'S')
+			color = get_tex_color(&game->tex.south, tex_x, tex_y);
+		else if (game->dir == 'N')
+			color = get_tex_color(&game->tex.north, tex_x, tex_y);
+		else if (game->dir == 'W')
+			color = get_tex_color(&game->tex.west, tex_x, tex_y);
+		else
+			color = get_tex_color(&game->tex.east, tex_x, tex_y);
+		my_mlx_pixel_put(&game->image, i, y, color);
+		y++;
+	}
+}
+
+void wall_hight_draw(t_cub *game, double distance, int i)
+{
+	double wall_hight;
+	t_line line;
+	double step;
+	double tex_pos;
+	int texX;
+
+	wall_hight = game->image.height * (TILE / distance);
+	line.start_y = (game->image.height / 2) - (wall_hight / 2);
+	line.end_y = (game->image.height / 2) + (wall_hight / 2);
 	if (game->dir == 'S')
 	{
-    	step = 1.0 * game->tex.south.height / wall_hight;
-    	texX = (int)(game->xwall * game->tex.south.width);
+		step = 1.0 * game->tex.south.height / wall_hight;
+		texX = (int)(game->xwall * game->tex.south.width);
 	}
 	else if (game->dir == 'N')
 	{
-    	step = 1.0 * game->tex.north.height / wall_hight;
-    	texX = (int)(game->xwall * game->tex.north.width);
+		step = 1.0 * game->tex.north.height / wall_hight;
+		texX = (int)(game->xwall * game->tex.north.width);
 	}
 	else if (game->dir == 'W')
 	{
-    	step = 1.0 * game->tex.west.height / wall_hight;
-    	texX = (int)(game->xwall * game->tex.west.width);
+		step = 1.0 * game->tex.west.height / wall_hight;
+		texX = (int)(game->xwall * game->tex.west.width);
 	}
 	else
 	{
-    	step = 1.0 * game->tex.east.height / wall_hight;
-    	texX = (int)(game->xwall * game->tex.east.width);
+		step = 1.0 * game->tex.east.height / wall_hight;
+		texX = (int)(game->xwall * game->tex.east.width);
 	}
-
-	tex_pos = (start_y - game->image.height / 2 + wall_hight / 2) * step;
-	int y = start_y;
-    while (y < end_y)
-    {
-        int texY = (int)tex_pos;
-		//adding the steps
-        tex_pos += step;
-		if (game->dir == 'S')
-        	color = get_tex_color(&game->tex.south, texX, texY);
-		else if (game->dir == 'N')
-        	color = get_tex_color(&game->tex.north, texX, texY);
-		else if (game->dir == 'W')
-        	color = get_tex_color(&game->tex.west, texX, texY);
-		else
-        	color = get_tex_color(&game->tex.east, texX, texY);
-        my_mlx_pixel_put(&game->image, i, y, color);
-		y++;
-    }
+	tex_pos = (line.start_y - game->image.height / 2 + wall_hight / 2) * step;
+	draw_the_vertical(game, i, line, texX, step, tex_pos);
 }
 
 void cast_all_rays(t_cub *game)
