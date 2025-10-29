@@ -6,13 +6,12 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/29 14:53:31 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:08:09 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
 
-t_vector wallx;
 unsigned int get_tex_color(t_image *texture, int x, int y)
 {
 	char *dest;
@@ -53,40 +52,58 @@ void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, 
 		y++;
 	}
 }
+/**
+ * set_texture_params - Sets the texture step and X coordinate for the wall
+ * @game: Pointer to the game struct containing textures and direction
+ * @wall_hight: Calculated height of the wall on screen
+ * @step: Pointer to the step variable (height increment per pixel in texture)
+ * @texX: Pointer to the X coordinate in the texture
+ *
+ * This function selects the correct texture based on wall direction
+ * and calculates the horizontal texture coordinate (texX) and the
+ * step size to sample texture vertically.
+ */
 
-void wall_hight_draw(t_cub *game, double distance, int i)
+void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
+{
+	t_image *tex;
+
+	if (game->dir == 'N')
+		tex = &game->tex.north;
+	else if (game->dir == 'S')
+		tex = &game->tex.south;
+	else if (game->dir == 'W')
+		tex = &game->tex.west;
+	else
+		tex = &game->tex.east;
+	*step = 1.0 * tex->height / wall_hight;
+	*tex_x = (int)(game->xwall * tex->width);
+}
+/**
+ * wall_height_calc - Calculates the wall height and draws vertical line
+ * @game: Pointer to the game struct
+ * @distance: Distance from the player to the wall
+ * @i: Current column on the screen (x coordinate)
+ *
+ * This function calculates the height of a wall slice based on distance,
+ * determines the texture parameters, and calls the function to draw
+ * the vertical line with correct texture mapping.
+ */
+
+void wall_hight_cal(t_cub *game, double distance, int i)
 {
 	double wall_hight;
 	t_line line;
 	double step;
 	double tex_pos;
-	int texX;
+	int tex_x;
 
 	wall_hight = game->image.height * (TILE / distance);
 	line.start_y = (game->image.height / 2) - (wall_hight / 2);
 	line.end_y = (game->image.height / 2) + (wall_hight / 2);
-	if (game->dir == 'S')
-	{
-		step = 1.0 * game->tex.south.height / wall_hight;
-		texX = (int)(game->xwall * game->tex.south.width);
-	}
-	else if (game->dir == 'N')
-	{
-		step = 1.0 * game->tex.north.height / wall_hight;
-		texX = (int)(game->xwall * game->tex.north.width);
-	}
-	else if (game->dir == 'W')
-	{
-		step = 1.0 * game->tex.west.height / wall_hight;
-		texX = (int)(game->xwall * game->tex.west.width);
-	}
-	else
-	{
-		step = 1.0 * game->tex.east.height / wall_hight;
-		texX = (int)(game->xwall * game->tex.east.width);
-	}
+	set_tex_params(game, wall_hight, &step, &tex_x);
 	tex_pos = (line.start_y - game->image.height / 2 + wall_hight / 2) * step;
-	draw_the_vertical(game, i, line, texX, step, tex_pos);
+	draw_the_vertical(game, i, line, tex_x, step, tex_pos);
 }
 
 void cast_all_rays(t_cub *game)
