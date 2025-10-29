@@ -6,11 +6,26 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/29 17:57:51 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/29 18:04:24 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
+
+/**
+ * get_tex_color - Retrieves the color of a pixel from a texture
+ * @texture: Pointer to the texture image
+ * @x: X-coordinate in the texture
+ * @y: Y-coordinate in the texture
+ *
+ * This function safely gets the color of the pixel at (x, y) in the texture.
+ * It clamps x and y to the texture boundaries to avoid reading out of bounds.
+ * The color is read directly from the image data using the formula:
+ *   dest = addr + (y * line_length + x * (bpp / 8))
+ * and then returned as an unsigned int.
+ *
+ * Return: The color of the pixel at (x, y) in ARGB format.
+ */
 
 unsigned int get_tex_color(t_image *texture, int x, int y)
 {
@@ -121,6 +136,17 @@ void wall_hight_cal(t_cub *game, double distance, int i)
 	tex_pos = 0;//(line.start_y - game->image.height / 2 + wall_hight / 2) * step;
 	draw_the_vertical(game, i, line, tex_x, step, tex_pos);
 }
+
+/**
+ * cast_all_rays - Casts a ray for every vertical screen column
+ * @game: Pointer to the game structure containing player and map info
+ *
+ * This function loops through every column of the screen and calculates
+ * the corresponding ray angle based on the player's viewing angle and
+ * the field of view (FOV). For each ray, it calls cast_single_ray to
+ * find the distance to the nearest wall and then calls wall_height_cal
+ * to draw the vertical wall slice for that column.
+ */
 
 void cast_all_rays(t_cub *game)
 {
