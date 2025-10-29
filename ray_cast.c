@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/29 18:25:42 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/29 18:31:45 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,6 +274,19 @@ double cast_single_ray(t_cub *game, double angle)
 		}
 	}
 }
+/**
+ * get_distance - Calculates the distance from the player to a wall hit
+ * @var: Pointer to the DDA structure containing ray info
+ * @game: Pointer to the game structure
+ * @flag: Indicates which side was hit (0 = horizontal, 1 = vertical)
+ *
+ * This function determines the wall direction based on the ray direction,
+ * draws the ray on the minimap, calculates the exact hit point along the
+ * wall (xwall) for texture mapping, and returns the distance from the
+ * player to the wall hit.
+ *
+ * Return: Distance from the player to the wall along the ray.
+ */
 
 double get_distance(t_dda *var, t_cub *game, int flag)
 {
