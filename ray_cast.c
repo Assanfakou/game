@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_cast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/25 17:10:31 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/29 14:53:31 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,8 +107,8 @@ void cast_all_rays(t_cub *game)
 
 void decide_where(t_dda *var, t_cub *game)
 {
-	var->deltadist.x = fabs(1 / var->raydir.x) * TILE;
-	var->deltadist.y = fabs(1 / var->raydir.y) * TILE;
+	var->deltadist.x = TILE / fabs(var->raydir.x);
+	var->deltadist.y = TILE / fabs(var->raydir.y);
 	var->mapx = (int)(game->player->vec_p->x / TILE);
 	var->mapy = (int)(game->player->vec_p->y / TILE);
 
