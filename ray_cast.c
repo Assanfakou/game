@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/29 17:08:09 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/29 17:57:51 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 unsigned int get_tex_color(t_image *texture, int x, int y)
 {
-	char *dest;
+	char	*dest;
+
 	if (x < 0)
 		x = 0;
 	if (x >= texture->width)
@@ -26,6 +27,21 @@ unsigned int get_tex_color(t_image *texture, int x, int y)
 	dest = texture->addr + (y * texture->line_length + x * (texture->bpp / 8));
 	return *(unsigned int *)(dest);
 }
+/**
+ * draw_the_vertical - Draws a vertical wall slice with the correct texture
+ * @game: Pointer to the game structure containing images and textures
+ * @i: X-coordinate of the screen column to draw
+ * @line: Struct containing start_y and end_y for the wall slice
+ * @tex_x: X-coordinate in the wall texture
+ * @step: The vertical step to move in the texture per screen pixel
+ * @texp: Starting Y position in the texture (usually 0 in your engine)
+ *
+ * This function loops from the top (start_y) to the bottom (end_y) of a wall
+ * slice and draws each pixel on the screen. For each pixel, it calculates
+ * which Y-coordinate of the wall texture to use and retrieves its color.
+ * It then plots the pixel on the image using my_mlx_pixel_put. The function
+ * selects the texture based on the wall direction (N, S, W, E).
+ */
 
 void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, double texp)
 {
@@ -102,7 +118,7 @@ void wall_hight_cal(t_cub *game, double distance, int i)
 	line.start_y = (game->image.height / 2) - (wall_hight / 2);
 	line.end_y = (game->image.height / 2) + (wall_hight / 2);
 	set_tex_params(game, wall_hight, &step, &tex_x);
-	tex_pos = (line.start_y - game->image.height / 2 + wall_hight / 2) * step;
+	tex_pos = 0;//(line.start_y - game->image.height / 2 + wall_hight / 2) * step;
 	draw_the_vertical(game, i, line, tex_x, step, tex_pos);
 }
 
@@ -117,7 +133,7 @@ void cast_all_rays(t_cub *game)
 	{
 		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / game->image.width);
 		distance = cast_single_ray(game, ray_angle);
-		wall_hight_draw(game, distance, i);
+		wall_hight_cal(game, distance, i);
 		i++;
 	}
 }
