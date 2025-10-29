@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lzari <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/10/03 09:48:48 by lzari             #+#    #+#             */
-/*   Updated: 2025/10/06 15:59:32 by assankou         ###   ########.fr       */
+/*   Created: 2025/10/20 15:40:32 by lzari             #+#    #+#             */
+/*   Updated: 2025/10/20 15:40:34 by lzari            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,9 @@ int	validate_map_characters(t_game *game)
 			if (!is_valid_map_char(game->map[i][j]))
 			{
 				printf("Error: Invalid character '%c' at (%d,%d)\n",
-					game->map[i][j],i,j);
+						game->map[i][j],
+						i,
+						j);
 				return (0);
 			}
 			if (is_player_char(game->map[i][j]))
@@ -142,32 +144,25 @@ int	validate_map_characters(t_game *game)
 	return (1);
 }
 
-int	is_valid_position(t_game *game, int y, int x)
+static int	is_walkable(char c)
 {
-	if (y < 0 || y >= game->map_height || x < 0 || x >= game->map_width)
+	return (c == '0' || c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
+
+static int	check_position_walls(t_game *game, int y, int x)
+{
+	if (y == 0 || y == game->map_height - 1)
 		return (0);
-	return (game->map[y][x] == '0' || is_player_char(game->map[y][x]));
+	if (x == 0 || x == game->map_width - 1)
+		return (0);
+	if (game->map[y - 1][x] == ' ' || game->map[y + 1][x] == ' ')
+		return (0);
+	if (game->map[y][x - 1] == ' ' || game->map[y][x + 1] == ' ')
+		return (0);
+	return (1);
 }
 
-void	flood_fill(t_game *game, char **visited, int y, int x)
-{
-	if (y < 0 || y >= game->map_height || x < 0 || x >= game->map_width)
-		return ;
-	if (visited[y][x] == '1' || game->map[y][x] == '1')
-		return ;
-	if (game->map[y][x] == ' ')
-	{
-		visited[y][x] = 'E';
-		return ;
-	}
-	visited[y][x] = '1';
-	flood_fill(game, visited, y - 1, x);
-	flood_fill(game, visited, y + 1, x);
-	flood_fill(game, visited, y, x - 1);
-	flood_fill(game, visited, y, x + 1);
-}
-
-int	check_flood_result(t_game *game, char **visited)
+int	validate_map_walls(t_game *game)
 {
 	int	i;
 	int	j;
@@ -178,70 +173,19 @@ int	check_flood_result(t_game *game, char **visited)
 		j = 0;
 		while (j < game->map_width)
 		{
-			if (visited[i][j] == 'E')
+			if (is_walkable(game->map[i][j]))
 			{
-				printf("Error: Map not closed - reached edge at (%d,%d)\n", i,
-						j);
-				return (0);
+				if (!check_position_walls(game, i, j))
+				{
+					printf("Error: Map not closed at position (%d,%d)\n", i, j);
+					return (0);
+				}
 			}
 			j++;
 		}
 		i++;
 	}
 	return (1);
-}
-
-char	**create_visited_array(t_game *game)
-{
-	char	**visited;
-	int		i;
-	int		j;
-
-	visited = malloc(sizeof(char *) * game->map_height);
-	if (!visited)
-		return (NULL);
-	i = 0;
-	while (i < game->map_height)
-	{
-		visited[i] = malloc(game->map_width + 1);
-		if (!visited[i])
-		{
-			while (i > 0)
-				free(visited[--i]);
-			free(visited);
-			return (NULL);
-		}
-		j = 0;
-		while (j < game->map_width)
-		{
-			visited[i][j] = '0';
-			j++;
-		}
-		visited[i][j] = '\0';
-		i++;
-	}
-	return (visited);
-}
-
-int	validate_map_walls(t_game *game)
-{
-	char	**visited;
-	int		result;
-	int		i;
-
-	visited = create_visited_array(game);
-	if (!visited)
-		return (0);
-	flood_fill(game, visited, game->player_y, game->player_x);
-	result = check_flood_result(game, visited);
-	i = 0;
-	while (i < game->map_height)
-	{
-		free(visited[i]);
-		i++;
-	}
-	free(visited);
-	return (result);
 }
 
 int	parse_map(char **lines, int start_idx, t_game *game)
