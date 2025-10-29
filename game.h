@@ -1,9 +1,10 @@
-//#include "minilibx/mlx.h"
-#include "mlx.h"
+#include "minilibx/mlx.h"
+//#include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 #include <sys/time.h>
 #include "parse/parsing.h"
+#include <stdbool.h>
 
 #define FOV (M_PI / 3)
 #define RAY_LENGTH 50
@@ -20,7 +21,7 @@
 
 #define WIDTH 1800
 #define HEIGHT 1000
-#define TILE 50
+#define TILE 60
 #define NUM_RAYS WIDTH 
 
 #define WIDTHMAP 280
@@ -36,12 +37,20 @@
 #define DOWN 115
 #define RIGHT 100
 #define LEFT 97
+#define LFARR 65361
+#define RIGARR 65363
 
 typedef struct s_vector
 {
 	double x;
 	double y;
 }	t_vector;
+
+typedef struct s_line
+{
+	double start_y;
+	double end_y;
+}	t_line;
 
 typedef struct s_image
 {
@@ -53,6 +62,15 @@ typedef struct s_image
 	int width;
 	int height;
 }	t_image;
+
+
+typedef struct s_textures
+{
+	t_image south;
+	t_image north;
+	t_image east;
+	t_image west;
+}	t_textures;
 
 typedef struct s_render 
 {
@@ -81,12 +99,14 @@ typedef struct s_mlx
 
 typedef struct s_cub
 {
-
 	t_game *data;
 	t_render render;
 	t_image image;
 	t_image map_img;
+	t_textures tex;
 	t_player *player;
+	double xwall;
+	char dir;
 }	t_cub;
 
 
@@ -101,12 +121,7 @@ typedef struct s_dda
     int stepy;
 }   t_dda;
 
-typedef struct s_txtrs
-{
-	void *wall;
-	int floor_color;
-	int sky_color;
-}	t_textrs;
+
 
 
 void draw_line(t_image *image, int start_x, int start_y, int end_x, int end_y, int color);
@@ -137,3 +152,9 @@ void cast_all_map_rays(t_cub *game);
 
 int	get_data(t_game *game, int argc, char **argv);
 void wall_hight_draw(t_cub *game, double distance, int i);
+unsigned int get_tex_color(t_image *tex, int x, int y);
+double get_distance(t_dda *var, t_cub *game, int flag);
+void draw_rays_map(t_cub *game, t_dda *var, int flag);
+void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, double texp);
+void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x);
+void decide_where(t_dda *var, t_cub *game);

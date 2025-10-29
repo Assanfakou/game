@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/10 11:17:29 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/10/25 18:57:25 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void draw_map(t_cub *game)
 		while (map[y][x])
 		{
 			if (map[y][x] == '1')
-			 	draw_squar(&game->map_img, x, y, RED);
+			 	draw_squar(&game->map_img, x, y, 0xFFD700);
 			x++;
 		}
 		y++;
@@ -79,24 +79,6 @@ void	draw_line(t_image *img, int x0, int y0, int x1, int y1, int color)
 	}
 }
 
-void print_map(char **map)
-{
-	int y = 0;
-	int x;
-
-	while (map[y])
-	{
-		x = 0;
-		while (map[y][x])
-		{
-			printf("%c, ", map[y][x]);
-			x++;
-		}
-		printf("\n");
-		y++;
-	}	
-	printf("#############################################\n");
-}
 int rgb_to_int(int r, int g, int b)
 {
 	int collor;
@@ -104,6 +86,7 @@ int rgb_to_int(int r, int g, int b)
 	collor = (r << 16) | (g << 8) | b;
 	return (collor);
 }
+
 void draw_floor_and_ceiling(t_image *image, t_game *game)
 {
 	int y = 0;
@@ -183,6 +166,18 @@ void set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 	p->vec_d = d;
 	p->speed = 10;
 }
+int close_window(t_cub *game)
+{
+	mlx_clear_window(game->render.mlx, game->render.win);
+	mlx_destroy_image(game->render.mlx, game->map_img.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.east.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.north.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.west.buff);
+	mlx_destroy_image(game->render.mlx, game->tex.south.buff);
+	mlx_destroy_window(game->render.mlx, game->render.win);
+	mlx_destroy_image(game->render.mlx, game->image.buff);
+	exit(EXIT_SUCCESS);
+}
 		
 int main(int ac, char **av)
 {
@@ -194,7 +189,7 @@ int main(int ac, char **av)
 
 	if (get_data(&data, ac, av))
 		return 1;
-	print_map(data.map);
+	printf("name : %s", data.east_texture);
 	
 	cub = cub_init(&data);
 
@@ -204,13 +199,13 @@ int main(int ac, char **av)
 	cub.data = &data;
 
 	draw_map(&cub);
-	print_map(cub.data->map);
 	
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0, 0);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0, 0);
 	mlx_hook(cub.render.win, 2, 1L<<0, handle_keypres, &cub);
 	mlx_loop_hook(cub.render.mlx, render, &cub);
-	mlx_key_hook(cub.render.win, handle_keypress, NULL);
+	mlx_hook(cub.render.win, 17, 0, close_window, &cub);
+	// mlx_key_hook(cub.render.win, handle_keypress, NULL);
 	mlx_loop(cub.render.mlx);
 }
 
