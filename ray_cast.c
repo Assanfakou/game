@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/29 18:04:24 by assankou         ###   ########.fr       */
+/*   Updated: 2025/10/29 18:25:42 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,17 @@ void cast_all_rays(t_cub *game)
 		i++;
 	}
 }
+/**
+ * decide_where - Initializes DDA variables 
+ * @var: Pointer to the DDA struct containing ray information
+ * @game: Pointer to the game structure containing player position
+ *
+ * This function calculates the distance increments (deltadist) for the ray
+ * in x and y directions, determines the current map square of the player,
+ * and sets the step direction and initial side distances (sidedist) for
+ * the Digital Differential Analyzer algorithm. These values are
+ * used to efficiently step through the map grid to find wall intersections.
+ */
 
 void decide_where(t_dda *var, t_cub *game)
 {
@@ -192,6 +203,16 @@ void decide_where(t_dda *var, t_cub *game)
 		var->sidedist.y = ((var->mapy + 1) * TILE - game->player->vec_p->y) / fabs(var->raydir.y);
 	}
 }
+/**
+ * draw_rays_map - Draws a single ray on the 2D minimap
+ * @game: Pointer to the game structure containing player and map info
+ * @var: Pointer to the DDA structure with ray information
+ * @flag: Determines which side of the wall was hit (1 for vertical, 0 for horizontal)
+ *
+ * This function calculates the endpoint of a ray based on DDA distances
+ * and draws a line from the player's position to the hit point on the minimap.
+ * It scales the coordinates to the minimap resolution using TILEIM.
+ */
 
 void draw_rays_map(t_cub *game, t_dda *var, int flag)
 {
@@ -213,7 +234,21 @@ void draw_rays_map(t_cub *game, t_dda *var, int flag)
 		draw_line(&game->map_img, game->player->vec_p->x / TILE * TILEIM, game->player->vec_p->y / TILE * TILEIM,ve.x / TILE * TILEIM, ve.y / TILE * TILEIM, GRE); 
 	}
 }
-	
+/**
+ * cast_single_ray - Casts a ray and finds the distance to the first wall
+ * @game: Pointer to the game structure containing player and map info
+ * @angle: Angle of the ray in radians
+ *
+ * This function initializes a DDA ray with the given angle and steps through
+ * the map grid using the Digital Differential Analyzer (DDA) algorithm until
+ * it hits a wall. For each step, it chooses whether to move in the x or y
+ * direction based on which side distance is smaller. Once a wall is hit, it
+ * calculates the perpendicular distance to the wall (correcting for fish-eye
+ * effect) and returns it.
+ *
+ * Return: Perpendicular distance from the player to the first wall hit.
+ */
+
 double cast_single_ray(t_cub *game, double angle)
 {
 	t_dda var;
