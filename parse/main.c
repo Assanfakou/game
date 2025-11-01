@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:38 by lzari             #+#    #+#             */
-/*   Updated: 2025/11/01 12:44:35 by assankou         ###   ########.fr       */
+/*   Updated: 2025/11/01 14:03:27 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,7 +207,7 @@ int	get_data(t_game *game, int argc, char **argv)
 		return (1);
 	}
 	// print_final_result(game);
-	// free(file_content);
+	free(file_content);
 	free_string_array(lines);
 	// free_game_struct(game);
 	return (0);

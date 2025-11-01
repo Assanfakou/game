@@ -121,9 +121,6 @@ typedef struct s_dda
     int stepy;
 }   t_dda;
 
-
-
-
 void draw_line(t_image *image, int start_x, int start_y, int end_x, int end_y, int color);
 void my_mlx_pixel_put(t_image *image, int x, int y, int color);
 
@@ -132,23 +129,17 @@ void cast_all_rays(t_cub *game);
 double cast_single_ray(t_cub *game, double ray_angle);
 
 
-int	handle_keypress(int keycode);
-int handle_keypres(int keycode, t_cub *game);
-//mlx
+int	handle_keypress(int keycode, t_cub *cub);
 
 t_image new_image(t_render render, int width, int height);
 t_cub cub_init(t_game *game);
 
-
-// map 
-
-void drawLineVertical(t_image *image, int x, int height);
-void drawLineHorizontal(t_image *image, int y, int width);
+void draw_line_vertical(t_image *image, int x, int height);
+void draw_line_horizontal(t_image *image, int y, int width);
 void draw_squar(t_image *image, int x, int y, int color);
 void draw_grids(t_cub *game);
 void draw_player(t_image *image, t_player *player);
 
-void cast_all_map_rays(t_cub *game);
 
 int	get_data(t_game *game, int argc, char **argv);
 void wall_hight_draw(t_cub *game, double distance, int i);
@@ -160,3 +151,9 @@ void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x);
 void decide_where(t_dda *var, t_cub *game);
 
 int close_window(t_cub *game);
+int	rgb_to_int(int *color);
+double	get_delta_time(void);
+void move_afterward(t_cub *game);
+void move_back(t_cub *game);
+void rotate_left(t_cub *game);
+void rotate_right(t_cub *game);

@@ -16,12 +16,13 @@
  * selects the texture based on the wall direction (N, S, W, E).
  */
 
-void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, double texp)
+void	draw_the_vertical(t_cub *game, int i, t_line line, int tex_x,
+		double step, double texp)
 {
-	int y;
-	int tex_y;
-	double tex_pos;
-	unsigned int color;
+	int				y;
+	int				tex_y;
+	double			tex_pos;
+	unsigned int	color;
 
 	tex_pos = texp;
 	y = line.start_y;
@@ -53,7 +54,7 @@ void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, 
  * step size to sample texture vertically.
  */
 
-void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
+void	set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
 {
 	t_image *tex;
 

@@ -1,59 +1,85 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   key_pressed.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/01 16:17:38 by hfakou            #+#    #+#             */
+/*   Updated: 2025/11/01 16:18:04 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
-int	handle_keypress(int keycode)
+void move_afterward(t_cub *game)
 {
-	if (keycode == ESC)
+	t_vector new;
+	t_player *player;
+	int map_x;
+	int map_y;
+
+	player = game->player;
+	new.y = player->vec_p->y + player->vec_d->y * player->speed;
+	new.x = player->vec_p->x + player->vec_d->x * player->speed;
+	map_y = (int)(new.y / TILE);
+	map_x = (int)(new.x / TILE);
+	if (game->data->map[map_y][map_x] != '1')
 	{
-		exit(EXIT_SUCCESS);
+		player->vec_p->x = new.x;
+		player->vec_p->y = new.y;
 	}
-	return (0);
 }
 
-int handle_keypres(int keycode, t_cub *game)
+void move_back(t_cub *game)
+{
+	t_vector new;
+	t_player *player;
+	int map_x;
+	int map_y;
+
+	player = game->player;
+	new.y = player->vec_p->y - player->vec_d->y * player->speed;
+	new.x = player->vec_p->x - player->vec_d->x * player->speed;
+	map_y = (int)(new.y / TILE);
+	map_x = (int)(new.x / TILE);
+	if (game->data->map[map_y][map_x] != '1')
+	{
+		player->vec_p->x = new.x;
+		player->vec_p->y = new.y;
+	}
+}
+
+void rotate_left(t_cub *game)
 {
 	t_player *player;
-	double new_y;
-	double new_x;
-	int map_y;
-	int map_x;
-	
+
 	player = game->player;
+	player->angle -= 0.1;
+	player->vec_d->x = cos(player->angle);
+	player->vec_d->y = sin(player->angle);
+}
+
+void rotate_right(t_cub *game)
+{
+	t_player *player;
+
+	player = game->player;
+	player->angle += 0.1;
+	player->vec_d->x = cos(player->angle);
+	player->vec_d->y = sin(player->angle);
+}
+
+int handle_keypress(int keycode, t_cub *game)
+{
 	if (keycode == UP)
-	{
-		new_y = player->vec_p->y + player->vec_d->y * player->speed;
-		new_x = player->vec_p->x + player->vec_d->x * player->speed;
-		map_y = (int)(new_y / TILE);
-		map_x = (int)(new_x / TILE);
-		if (game->data->map[map_y][map_x] != '1')
-		{
-			player->vec_p->x = new_x;
-			player->vec_p->y = new_y;
-		}
-	}
+		move_afterward(game);
 	if (keycode == DOWN)
-	{
-		new_y = player->vec_p->y - player->vec_d->y * player->speed;
-		new_x = player->vec_p->x - player->vec_d->x * player->speed;
-		map_y = (int)(new_y / TILE);
-		map_x = (int)(new_x / TILE);
-		if (game->data->map[map_y][map_x] != '1')
-		{
-			player->vec_p->x = new_x;
-			player->vec_p->y = new_y;
-		}
-	}
+		move_back(game);
 	if (keycode == LEFT || keycode == LFARR)
-	{
-		player->angle -= 0.1;
-		player->vec_d->x = cos(player->angle);
-		player->vec_d->y = sin(player->angle);
-	}
+		rotate_left(game);
 	if (keycode == RIGHT || keycode == RIGARR)
-	{
-		player->angle += 0.1;
-		player->vec_d->x = cos(player->angle);
-		player->vec_d->y = sin(player->angle);
-	}
+		rotate_right(game);
 	if (keycode == ESC)
 		close_window(game);
 	return (0);
