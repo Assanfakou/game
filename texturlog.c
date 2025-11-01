@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:33:27 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 18:55:22 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 20:20:29 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ void	draw_the_vertical(t_cub *game, t_line line, int tex_x, double step)
 
 void	set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
 {
-	t_image *tex;
+	t_image	*tex;
 
 	if (game->dir == 'N')
 		tex = &game->tex.north;
@@ -79,7 +79,7 @@ void	set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
 	*tex_x = (int)(game->xwall * tex->width);
 }
 
-void init_var(t_dda *var, t_cub *game, double angle)
+void	init_var(t_dda *var, t_cub *game, double angle)
 {
 	var->raydir.x = cos(angle);
 	var->raydir.y = sin(angle);

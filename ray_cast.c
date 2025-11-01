@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 18:55:04 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 21:01:18 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	cast_all_rays(t_cub *game)
 	i = 0;
 	while (i < game->image.width)
 	{
-		ray_angle = game->player->angle - (FOV / 2) + i * (FOV
+		ray_angle = game->player->angle - (game->fov / 2) + i * (game->fov
 				/ game->image.width);
 		distance = cast_single_ray(game, ray_angle);
 		game->ray = i;
@@ -163,10 +163,7 @@ double	get_distance(t_dda *var, t_cub *game, int flag)
 {
 	if (!flag)
 	{
-		if (var->raydir.y > 0)
-			game->dir = 'S';
-		else
-			game->dir = 'N';
+		which_wall(var, game, true);
 		draw_rays_map(game, var, flag);
 		game->xwall = game->player->vec_p->x + (var->sidedist.y
 				- var->deltadist.y) * var->raydir.x;
@@ -176,10 +173,7 @@ double	get_distance(t_dda *var, t_cub *game, int flag)
 	}
 	else
 	{
-		if (var->raydir.x > 0)
-			game->dir = 'E';
-		else
-			game->dir = 'W';
+		which_wall(var, game, false);
 		draw_rays_map(game, var, flag);
 		game->xwall = game->player->vec_p->y + (var->sidedist.x
 				- var->deltadist.x) * var->raydir.y;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/01 20:17:05 by hfakou            #+#    #+#             */
+/*   Updated: 2025/11/01 20:29:30 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
 /**
@@ -17,7 +29,7 @@
 
 unsigned int	get_tex_color(t_image *texture, int x, int y)
 {
-	char *dest;
+	char	*dest;
 
 	if (x < 0)
 		x = 0;
@@ -34,9 +46,9 @@ unsigned int	get_tex_color(t_image *texture, int x, int y)
 int	rgb_to_int(int *color)
 {
 	int	collor;
-	int r;
-	int g;
-	int b;
+	int	r;
+	int	g;
+	int	b;
 
 	r = color[0];
 	g = color[1];
@@ -54,13 +66,14 @@ double	get_delta_time(void)
 	gettimeofday(&current_time, NULL);
 	if (last_time.tv_sec == 0 && last_time.tv_usec == 0)
 		last_time = current_time;
-	delta = (current_time.tv_sec - last_time.tv_sec) +
-		(current_time.tv_usec - last_time.tv_usec) / 1000000.0;
+	delta = (current_time.tv_sec - last_time.tv_sec)
+		+ (current_time.tv_usec - last_time.tv_usec) / 1000000.0;
 	last_time = current_time;
 	return (delta);
 }
 
-void	update_point(t_vector_int *start, int *err, t_vector_int d, t_vector_int s)
+void	update_point(t_vector_int *start, int *err, t_vector_int d,
+		t_vector_int s)
 {
 	int	e2;
 
@@ -79,9 +92,9 @@ void	update_point(t_vector_int *start, int *err, t_vector_int d, t_vector_int s)
 
 void	draw_line(t_image *img, t_vector_int start, t_vector_int end, int color)
 {
-	t_vector_int d;
-	t_vector_int s;
-	int	err;
+	t_vector_int	d;
+	t_vector_int	s;
+	int				err;
 
 	d.x = abs(end.x - start.x);
 	d.y = abs(end.y - start.y);

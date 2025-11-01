@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 17:31:41 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 21:00:21 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,20 +64,20 @@ void	draw_floor_and_ceiling(t_image *image, int *ceiling, int *floor)
 int	render(t_cub *game)
 {
 	ft_bzero(game->image.addr, (size_t)game->image.line_length
-			* game->data->map_height * TILE);
+		* game->data->map_height * TILE);
 	ft_bzero(game->map_img.addr, (size_t)game->map_img.line_length
-			* game->data->map_height * TILEIM);
+		* game->data->map_height * TILEIM);
 	draw_grids(game);
 	draw_player(&game->map_img, game->player);
 	draw_map(game);
 	draw_floor_and_ceiling(&game->image, game->data->ceiling_color,
-			game->data->floor_color);
+		game->data->floor_color);
 	cast_all_rays(game);
 	printf("FPS: %d\n", (int)(1.0 / get_delta_time()));
 	mlx_put_image_to_window(game->render.mlx, game->render.win,
-			game->image.buff, 0, 0);
+		game->image.buff, 0, 0);
 	mlx_put_image_to_window(game->render.mlx, game->render.win,
-			game->map_img.buff, 0, 0);
+		game->map_img.buff, 0, 0);
 	return (0);
 }
 
@@ -114,11 +114,12 @@ int	main(int ac, char **av)
 	set_player(&player, &p_v, &d, data);
 	cub.player = &player;
 	cub.data = &data;
+	cub.fov = M_PI / 3;
 	draw_map(&cub);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0,
-			0);
+		0);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0,
-			0);
+		0);
 	mlx_hook(cub.render.win, 2, 1L << 0, handle_keypress, &cub);
 	mlx_loop_hook(cub.render.mlx, render, &cub);
 	mlx_hook(cub.render.win, 17, 0, close_window, &cub);

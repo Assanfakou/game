@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 14:40:13 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 20:19:36 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	draw_player(t_image *image, t_player *player)
 		{
 			if (i * i + j * j <= raduis * raduis)
 				my_mlx_pixel_put(image, (player->vec_p->x / TILE) * TILEIM + i,
-						player->vec_p->y / TILE * TILEIM + j, 0xFFFFFF);
+					player->vec_p->y / TILE * TILEIM + j, 0xFFFFFF);
 			j++;
 		}
 		i++;
@@ -88,11 +88,11 @@ void	draw_grids(t_cub *game)
 		while (row <= game->data->map_height)
 		{
 			draw_line_horizontal(&game->map_img, row * TILEIM,
-					game->data->map_width * TILEIM);
+				game->data->map_width * TILEIM);
 			row++;
 		}
 		draw_line_vertical(&game->map_img, col * TILEIM, game->data->map_height
-				* TILEIM);
+			* TILEIM);
 		col++;
 	}
 }

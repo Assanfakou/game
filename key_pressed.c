@@ -12,12 +12,12 @@
 
 #include "game.h"
 
-void move_afterward(t_cub *game)
+void	move_afterward(t_cub *game)
 {
-	t_vector new;
-	t_player *player;
-	int map_x;
-	int map_y;
+	t_vector	new;
+	t_player	*player;
+	int			map_x;
+	int			map_y;
 
 	player = game->player;
 	new.y = player->vec_p->y + player->vec_d->y * player->speed;
@@ -31,12 +31,12 @@ void move_afterward(t_cub *game)
 	}
 }
 
-void move_back(t_cub *game)
+void	move_back(t_cub *game)
 {
-	t_vector new;
-	t_player *player;
-	int map_x;
-	int map_y;
+	t_vector	new;
+	t_player	*player;
+	int			map_x;
+	int			map_y;
 
 	player = game->player;
 	new.y = player->vec_p->y - player->vec_d->y * player->speed;
@@ -50,9 +50,9 @@ void move_back(t_cub *game)
 	}
 }
 
-void rotate_left(t_cub *game)
+void	rotate_left(t_cub *game)
 {
-	t_player *player;
+	t_player	*player;
 
 	player = game->player;
 	player->angle -= 0.1;
@@ -60,9 +60,9 @@ void rotate_left(t_cub *game)
 	player->vec_d->y = sin(player->angle);
 }
 
-void rotate_right(t_cub *game)
+void	rotate_right(t_cub *game)
 {
-	t_player *player;
+	t_player	*player;
 
 	player = game->player;
 	player->angle += 0.1;
@@ -70,7 +70,7 @@ void rotate_right(t_cub *game)
 	player->vec_d->y = sin(player->angle);
 }
 
-int handle_keypress(int keycode, t_cub *game)
+int	handle_keypress(int keycode, t_cub *game)
 {
 	if (keycode == UP)
 		move_afterward(game);
