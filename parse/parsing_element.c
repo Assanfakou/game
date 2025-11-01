@@ -84,6 +84,7 @@ static int	process_line(char *line, t_game *game, int *elements_found)
 	}
 	else
 	{
+		printf("hey\n");
 		printf("Error: Invalid line format: '%s'\n", line);
 		return (0);
 	}
@@ -101,6 +102,8 @@ int	parse_elements(char **lines, t_game *game)
 	{
 		if (ft_strlen(lines[i]) != 0)
 		{
+			if (!is_texture_line(lines[i]) && !is_color_line(lines[i]))
+				break;
 			if (!process_line(lines[i], game, &elements_found))
 				return (0);
 		}

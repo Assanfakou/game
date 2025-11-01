@@ -155,6 +155,7 @@ int	get_data(t_game *game, int argc, char **argv)
 	printf("DEBUG: map_start returned = %d\n", map_start);
 	if (map_start == 0)
 	{
+		printf("check here\n");
 		printf("Error: Failed to parse elements (textures/colors)\n");
 		// free(file_content);
 		// free_string_array(lines);
