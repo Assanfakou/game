@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 17:27:04 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 17:31:41 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,49 +30,6 @@ void	draw_map(t_cub *game)
 			x++;
 		}
 		y++;
-	}
-}
-
-void	update_point(t_vector_int *start, int *err, t_vector_int d, t_vector_int s)
-{
-	int	e2;
-
-	e2 = *err * 2;
-	if (e2 > -d.y)
-	{
-		*err -= d.y;
-		start->x += s.x;
-	}
-	if (e2 < d.x)
-	{
-		*err += d.x;
-		start->y += s.y;
-	}
-}
-
-void	draw_line(t_image *img, t_vector_int start, t_vector_int end, int color)
-{
-	t_vector_int d;
-	t_vector_int s;
-	int	err;
-
-	d.x = abs(end.x - start.x);
-	d.y = abs(end.y - start.y);
-	if (start.x < end.x)
-		s.x = 1;
-	else
-		s.x = -1;
-	if (start.y < end.y)
-		s.y = 1;
-	else
-		s.y = -1;
-	err = d.x - d.y;
-	while (1)
-	{
-		my_mlx_pixel_put(img, start.x, start.y, color);
-		if (start.x == end.x && start.y == end.y)
-			break ;
-		update_point(&start, &err, d, s);
 	}
 }
 
@@ -123,6 +80,7 @@ int	render(t_cub *game)
 			game->map_img.buff, 0, 0);
 	return (0);
 }
+
 void	set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 {
 	p_v->x = data.player_x * TILE + TILE / 2;

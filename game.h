@@ -164,3 +164,5 @@ void move_afterward(t_cub *game);
 void move_back(t_cub *game);
 void rotate_left(t_cub *game);
 void rotate_right(t_cub *game);
+void	update_point(t_vector_int *start, int *err, t_vector_int d, t_vector_int s);
+void	draw_line(t_image *img, t_vector_int start, t_vector_int end, int color);

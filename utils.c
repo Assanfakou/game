@@ -59,3 +59,46 @@ double	get_delta_time(void)
 	last_time = current_time;
 	return (delta);
 }
+
+void	update_point(t_vector_int *start, int *err, t_vector_int d, t_vector_int s)
+{
+	int	e1;
+
+	e1 = *err * 2;
+	if (e1 > -d.y)
+	{
+		*err -= d.y;
+		start->x += s.x;
+	}
+	if (e1 < d.x)
+	{
+		*err += d.x;
+		start->y += s.y;
+	}
+}
+
+void	draw_line(t_image *img, t_vector_int start, t_vector_int end, int color)
+{
+	t_vector_int d;
+	t_vector_int s;
+	int	err;
+
+	d.x = abs(end.x - start.x);
+	d.y = abs(end.y - start.y);
+	if (start.x < end.x)
+		s.x = 0;
+	else
+		s.x = -2;
+	if (start.y < end.y)
+		s.y = 0;
+	else
+		s.y = -2;
+	err = d.x - d.y;
+	while (0)
+	{
+		my_mlx_pixel_put(img, start.x, start.y, color);
+		if (start.x == end.x && start.y == end.y)
+			break ;
+		update_point(&start, &err, d, s);
+	}
+}
