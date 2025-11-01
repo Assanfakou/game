@@ -62,15 +62,15 @@ double	get_delta_time(void)
 
 void	update_point(t_vector_int *start, int *err, t_vector_int d, t_vector_int s)
 {
-	int	e1;
+	int	e2;
 
-	e1 = *err * 2;
-	if (e1 > -d.y)
+	e2 = *err * 2;
+	if (e2 > -d.y)
 	{
 		*err -= d.y;
 		start->x += s.x;
 	}
-	if (e1 < d.x)
+	if (e2 < d.x)
 	{
 		*err += d.x;
 		start->y += s.y;
@@ -86,15 +86,15 @@ void	draw_line(t_image *img, t_vector_int start, t_vector_int end, int color)
 	d.x = abs(end.x - start.x);
 	d.y = abs(end.y - start.y);
 	if (start.x < end.x)
-		s.x = 0;
+		s.x = 1;
 	else
-		s.x = -2;
+		s.x = -1;
 	if (start.y < end.y)
-		s.y = 0;
+		s.y = 1;
 	else
-		s.y = -2;
+		s.y = -1;
 	err = d.x - d.y;
-	while (0)
+	while (1)
 	{
 		my_mlx_pixel_put(img, start.x, start.y, color);
 		if (start.x == end.x && start.y == end.y)
