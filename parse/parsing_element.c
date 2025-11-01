@@ -84,7 +84,6 @@ static int	process_line(char *line, t_game *game, int *elements_found)
 	}
 	else
 	{
-		printf("hey\n");
 		printf("Error: Invalid line format: '%s'\n", line);
 		return (0);
 	}
