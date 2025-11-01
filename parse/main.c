@@ -6,7 +6,7 @@
 /*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:38 by lzari             #+#    #+#             */
-/*   Updated: 2025/10/07 00:24:45 by assankou         ###   ########.fr       */
+/*   Updated: 2025/11/01 12:44:35 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,15 +132,15 @@ int	get_data(t_game *game, int argc, char **argv)
 	if (!file_content)
 	{
 		print_error("Failed to read file");
-		// free_game_struct(game);
+		free_game_struct(game);
 		return (1);
 	}
 	line_count = count_lines(file_content);
 	if (line_count == 0)
 	{
 		print_error("Empty file");
-		// free(file_content);
-		// free_game_struct(game);
+		free(file_content);
+		free_game_struct(game);
 		return (1);
 	}
 	lines = split_lines(file_content, line_count);
@@ -148,7 +148,7 @@ int	get_data(t_game *game, int argc, char **argv)
 	{
 		print_error("Failed to split file content");
 		free(file_content);
-		// free_game_struct(game);
+		free_game_struct(game);
 		return (1);
 	}
 	map_start = parse_elements(lines, game);
@@ -157,9 +157,9 @@ int	get_data(t_game *game, int argc, char **argv)
 	{
 		printf("check here\n");
 		printf("Error: Failed to parse elements (textures/colors)\n");
-		// free(file_content);
-		// free_string_array(lines);
-		// free_game_struct(game);
+		free(file_content);
+		free_string_array(lines);
+		free_game_struct(game);
 		return (1);
 	}
 
@@ -208,7 +208,7 @@ int	get_data(t_game *game, int argc, char **argv)
 	}
 	// print_final_result(game);
 	// free(file_content);
-	// free_string_array(lines);
+	free_string_array(lines);
 	// free_game_struct(game);
 	return (0);
 }
