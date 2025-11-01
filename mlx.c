@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 19:06:24 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 19:53:03 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,11 @@ t_image	new_image(t_render render, int width, int height)
 }
 void get_bufer_texture(t_image *image, t_render *mlx, char *texture)
 {
-	image->buff = mlx_xpm_file_to_image(mlx->mlx, texture,&image.width, &image.height);
-	image->addr = mlx_get_data_addr(image->buff, &image.bpp, &image.line_length,
-			&image.endian);//here to move somthing
+	image->buff = mlx_xpm_file_to_image(mlx->mlx, texture, 
+		&image->width, &image->height);
+	image->addr = mlx_get_data_addr(image->buff, &image->bpp, 
+		&image->line_length, &image->endian);
+}
 t_textures	get_texture_data(t_game *data, t_render *mlx)
 {
 	t_textures	textures;
@@ -53,22 +55,10 @@ t_textures	get_texture_data(t_game *data, t_render *mlx)
 	t_image		west;
 	t_image		south;
 
-	north.buff = mlx_xpm_file_to_image(mlx->mlx, data->north_texture,
-			&north.width, &north.height);
-	north.addr = mlx_get_data_addr(north.buff, &north.bpp, &north.line_length,
-			&north.endian);
-	east.buff = mlx_xpm_file_to_image(mlx->mlx, data->east_texture, &east.width,
-			&east.height);
-	east.addr = mlx_get_data_addr(east.buff, &east.bpp, &east.line_length,
-			&east.endian);
-	west.buff = mlx_xpm_file_to_image(mlx->mlx, data->west_texture, &west.width,
-			&west.height);
-	west.addr = mlx_get_data_addr(west.buff, &west.bpp, &west.line_length,
-			&east.endian);
-	south.buff = mlx_xpm_file_to_image(mlx->mlx, data->south_texture,
-			&south.width, &south.height);
-	south.addr = mlx_get_data_addr(south.buff, &south.bpp, &south.line_length,
-			&south.endian);
+	get_bufer_texture(&north, mlx, data->north_texture);
+	get_bufer_texture(&east, mlx, data->east_texture);
+	get_bufer_texture(&west, mlx, data->west_texture);
+	get_bufer_texture(&south, mlx, data->south_texture);
 	textures.north = north;
 	textures.east = east;
 	textures.west = west;
