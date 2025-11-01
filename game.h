@@ -46,6 +46,13 @@ typedef struct s_vector
 	double y;
 }	t_vector;
 
+typedef struct s_vector_int
+{
+	int x;
+	int y;
+}	t_vector_int;
+
+
 typedef struct s_line
 {
 	double start_y;
@@ -121,7 +128,7 @@ typedef struct s_dda
     int stepy;
 }   t_dda;
 
-void draw_line(t_image *image, int start_x, int start_y, int end_x, int end_y, int color);
+void draw_line(t_image *image, t_vector_int start, t_vector_int end, int color);
 void my_mlx_pixel_put(t_image *image, int x, int y, int color);
 
 //ray_casting

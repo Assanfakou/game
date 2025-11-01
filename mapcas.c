@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mapcas.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/01 17:16:15 by hfakou            #+#    #+#             */
+/*   Updated: 2025/11/01 17:18:26 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
 /**
@@ -14,25 +26,26 @@
 
 void	draw_rays_map(t_cub *game, t_dda *var, int flag)
 {
-	double distance;
-	t_vector ve;
+	double			dis;
+	t_vector_int	start;
+	t_vector_int	end;
 
 	if (flag)
 	{
-		distance = var->sidedist.x - var->deltadist.x;
-		ve.x = game->player->vec_p->x + var->raydir.x * distance;
-		ve.y = game->player->vec_p->y + var->raydir.y * distance;
-		draw_line(&game->map_img, game->player->vec_p->x / TILE * TILEIM,
-				game->player->vec_p->y / TILE * TILEIM, ve.x / TILE * TILEIM,
-				ve.y / TILE * TILEIM, GRE);
+		dis = var->sidedist.x - var->deltadist.x;
+		start.x = game->player->vec_p->x / TILE * TILEIM;
+		start.y = game->player->vec_p->y / TILE * TILEIM;
+		end.x = (game->player->vec_p->x + var->raydir.x * dis) / TILE * TILEIM;
+		end.y = (game->player->vec_p->y + var->raydir.y * dis) / TILE * TILEIM;
+		draw_line(&game->map_img, start, end, GRE);
 	}
 	else
 	{
-		distance = var->sidedist.y - var->deltadist.y;
-		ve.x = game->player->vec_p->x + var->raydir.x * distance;
-		ve.y = game->player->vec_p->y + var->raydir.y * distance;
-		draw_line(&game->map_img, game->player->vec_p->x / TILE * TILEIM,
-				game->player->vec_p->y / TILE * TILEIM, ve.x / TILE * TILEIM,
-				ve.y / TILE * TILEIM, GRE);
+		dis = var->sidedist.y - var->deltadist.y;
+		start.x = game->player->vec_p->x / TILE * TILEIM;
+		start.y = game->player->vec_p->y / TILE * TILEIM;
+		end.x = (game->player->vec_p->x + var->raydir.x * dis) / TILE * TILEIM;
+		end.y = (game->player->vec_p->y + var->raydir.y * dis) / TILE * TILEIM;
+		draw_line(&game->map_img, start, end, GRE);
 	}
 }
