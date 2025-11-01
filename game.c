@@ -169,14 +169,18 @@ void set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 int close_window(t_cub *game)
 {
 	mlx_clear_window(game->render.mlx, game->render.win);
+	mlx_destroy_image(game->render.mlx, game->image.buff);
 	mlx_destroy_image(game->render.mlx, game->map_img.buff);
 	mlx_destroy_image(game->render.mlx, game->tex.east.buff);
 	mlx_destroy_image(game->render.mlx, game->tex.north.buff);
 	mlx_destroy_image(game->render.mlx, game->tex.west.buff);
 	mlx_destroy_image(game->render.mlx, game->tex.south.buff);
 	mlx_destroy_window(game->render.mlx, game->render.win);
-	mlx_destroy_image(game->render.mlx, game->image.buff);
+	mlx_destroy_display(game->render.mlx);
+	free(game->render.mlx);
+	free_game_struct(game->data);
 	exit(EXIT_SUCCESS);
+	return (0);
 }
 		
 int main(int ac, char **av)

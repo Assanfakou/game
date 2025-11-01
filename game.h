@@ -1,5 +1,5 @@
-#include "minilibx/mlx.h"
-//#include "mlx.h"
+//#include "minilibx/mlx.h"
+#include "mlx.h"
 #include "libft/libft.h"
 #include <math.h>
 #include <sys/time.h>
@@ -158,3 +158,5 @@ void draw_rays_map(t_cub *game, t_dda *var, int flag);
 void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, double texp);
 void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x);
 void decide_where(t_dda *var, t_cub *game);
+
+int close_window(t_cub *game);

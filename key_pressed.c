@@ -55,21 +55,6 @@ int handle_keypres(int keycode, t_cub *game)
 		player->vec_d->y = sin(player->angle);
 	}
 	if (keycode == ESC)
-	{
-		mlx_clear_window(game->render.mlx, game->render.win);
-		mlx_destroy_image(game->render.mlx, game->image.buff);
-		mlx_destroy_image(game->render.mlx, game->map_img.buff);
-		mlx_destroy_image(game->render.mlx, game->tex.east.buff);
-		mlx_destroy_image(game->render.mlx, game->tex.north.buff);
-		mlx_destroy_image(game->render.mlx, game->tex.west.buff);
-		mlx_destroy_image(game->render.mlx, game->tex.south.buff);
-		mlx_destroy_window(game->render.mlx, game->render.win);
-		mlx_destroy_display(game->render.mlx);
-
-		free(game->render.mlx);
-		free_game_struct(game->data);
-		exit(EXIT_SUCCESS);
-	}
+		close_window(game);
 	return (0);
 }
-	
