@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 14:17:12 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 17:35:06 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,15 @@ void	wall_hight_cal(t_cub *game, double distance, int i)
 	double	wall_hight;
 	t_line	line;
 	double	step;
-	double	tex_pos;
+	// double	tex_pos;
 	int		tex_x;
 
 	wall_hight = game->image.height * (TILE / distance);
 	line.start_y = (game->image.height / 2) - (wall_hight / 2);
 	line.end_y = (game->image.height / 2) + (wall_hight / 2);
 	set_tex_params(game, wall_hight, &step, &tex_x);
-	tex_pos = 0;
-	draw_the_vertical(game, i, line, tex_x, step, tex_pos);
+	// tex_pos = 0;
+	draw_the_vertical(game, i, line, tex_x, step);
 }
 
 /**

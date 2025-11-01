@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   texturlog.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/01 17:33:27 by hfakou            #+#    #+#             */
+/*   Updated: 2025/11/01 17:34:04 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
 /**
@@ -17,14 +29,14 @@
  */
 
 void	draw_the_vertical(t_cub *game, int i, t_line line, int tex_x,
-		double step, double texp)
+		double step)
 {
 	int				y;
 	int				tex_y;
 	double			tex_pos;
 	unsigned int	color;
 
-	tex_pos = texp;
+	tex_pos = 0;
 	y = line.start_y;
 	while (y < line.end_y)
 	{

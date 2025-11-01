@@ -153,7 +153,7 @@ void wall_hight_draw(t_cub *game, double distance, int i);
 unsigned int get_tex_color(t_image *tex, int x, int y);
 double get_distance(t_dda *var, t_cub *game, int flag);
 void draw_rays_map(t_cub *game, t_dda *var, int flag);
-void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, double texp);
+void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step);
 void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x);
 void decide_where(t_dda *var, t_cub *game);
 
