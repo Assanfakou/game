@@ -6,13 +6,12 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 21:24:07 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 22:17:52 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
-int maphigh = 0;
-int mapwidth = 0;
+
 
 void	draw_map(t_cub *game)
 {
@@ -29,10 +28,8 @@ void	draw_map(t_cub *game)
 		{
 			if (map[y][x] == '1')
 				draw_squar(&game->map_img, x, y, 0xFFD700);
-			mapwidth = x;
 			x++;
 		}
-		maphigh = y;
 		y++;
 	}
 }
@@ -124,10 +121,17 @@ int	main(int ac, char **av)
 	int    screen_h;
 
 	mlx_get_screen_size(cub.render.mlx, &screen_w, &screen_h);
-	if (screen_h > maphigh * TILE)
+	printf("map hight %d \n", cub.data->map_height);
+	if (screen_h < cub.data->map_height * TILE)
+	{
+		printf("height\n");
 		exit(1);
-	if ( > mapwidth * TILE)
+	}
+	if (screen_w < cub.data->map_width * TILE)
+	{
+		printf("width\n");
 		exit(1);
+	}
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0,
 		0);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0,
