@@ -59,3 +59,18 @@ int	parse_colors_values(char *color_str, int *rgb)
 	free(trimmed);
 	return (result);
 }
+
+int	check_duplicate_color(t_game *game, char *trimmed)
+{
+	if (ft_strncmp(trimmed, "F", 1) == 0 && game->floor_color[0] != -1)
+	{
+		printf("Error: Duplicate floor color\n");
+		return (0);
+	}
+	if (ft_strncmp(trimmed, "C", 1) == 0 && game->ceiling_color[0] != -1)
+	{
+		printf("Error: Duplicate ceiling color\n");
+		return (0);
+	}
+	return (1);
+}
