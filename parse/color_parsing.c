@@ -28,7 +28,7 @@ static int	ft_isdigit_str(char *str)
 	return (1);
 }
 
-static int	count_commas(char *str)
+int	count_commas(char *str)
 {
 	int	count;
 	int	i;
@@ -84,58 +84,18 @@ static int	validate_rgb_component(char *component)
 	return (value);
 }
 
-static int	parse_rgb_components(char *color_str, int *rgb)
+int	parse_one_rgb_component(char *color_str, int *pos, int *value)
 {
-	int		pos;
-	int		i;
 	char	*component;
-	int		value;
 
-	pos = 0;
-	i = 0;
-	while (i < 3)
-	{
-		component = extract_number(color_str, &pos);
-		if (!component)
-			return (0);
-		value = validate_rgb_component(component);
-		free(component);
-		if (value == -1)
-			return (0);
-		rgb[i] = value;
-		while (color_str[pos] && ft_isspace(color_str[pos]))
-			pos++;
-		if (i < 2)
-		{
-			if (color_str[pos] != ',')
-				return (0);
-			pos++;
-		}
-		i++;
-	}
-	while (color_str[pos] && ft_isspace(color_str[pos]))
-		pos++;
-	if (color_str[pos] == '\0')
-		return (1);
-	return (0);
-}
-
-int	parse_colors_values(char *color_str, int *rgb)
-{
-	char	*trimmed;
-	int		result;
-
-	if (!color_str)
+	component = extract_number(color_str, pos);
+	if (!component)
 		return (0);
-	trimmed = trim_whitespace(color_str);
-	if (!trimmed)
+	*value = validate_rgb_component(component);
+	free(component);
+	if (*value == -1)
 		return (0);
-	if (count_commas(trimmed) != 2)
-	{
-		free(trimmed);
-		return (0);
-	}
-	result = parse_rgb_components(trimmed, rgb);
-	free(trimmed);
-	return (result);
+	while (color_str[*pos] && ft_isspace(color_str[*pos]))
+		(*pos)++;
+	return (1);
 }
