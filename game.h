@@ -114,6 +114,7 @@ typedef struct s_cub
 	t_player *player;
 	double xwall;
 	char dir;
+	int ray;
 }	t_cub;
 
 
@@ -149,11 +150,11 @@ void draw_player(t_image *image, t_player *player);
 
 
 int	get_data(t_game *game, int argc, char **argv);
-void wall_hight_draw(t_cub *game, double distance, int i);
+void wall_hight_draw(t_cub *game, double distance);
 unsigned int get_tex_color(t_image *tex, int x, int y);
 double get_distance(t_dda *var, t_cub *game, int flag);
 void draw_rays_map(t_cub *game, t_dda *var, int flag);
-void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step);
+void draw_the_vertical(t_cub *game, t_line line, int tex_x, double step);
 void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x);
 void decide_where(t_dda *var, t_cub *game);
 
@@ -166,3 +167,4 @@ void rotate_left(t_cub *game);
 void rotate_right(t_cub *game);
 void	update_point(t_vector_int *start, int *err, t_vector_int d, t_vector_int s);
 void	draw_line(t_image *img, t_vector_int start, t_vector_int end, int color);
+void init_var(t_dda *var, t_cub *game, double angle);

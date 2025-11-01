@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 14:48:26 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 19:06:24 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,11 @@ t_image	new_image(t_render render, int width, int height)
 			&new_image.line_length, &new_image.endian);
 	return (new_image);
 }
-
+void get_bufer_texture(t_image *image, t_render *mlx, char *texture)
+{
+	image->buff = mlx_xpm_file_to_image(mlx->mlx, texture,&image.width, &image.height);
+	image->addr = mlx_get_data_addr(image->buff, &image.bpp, &image.line_length,
+			&image.endian);//here to move somthing
 t_textures	get_texture_data(t_game *data, t_render *mlx)
 {
 	t_textures	textures;

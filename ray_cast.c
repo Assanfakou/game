@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 17:35:06 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 18:55:04 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,24 @@
  * wall_height_calc - Calculates the wall height and draws vertical line
  * @game: Pointer to the game struct
  * @distance: Distance from the player to the wall
- * @i: Current column on the screen (x coordinate)
  *
  * This function calculates the height of a wall slice based on distance,
  * determines the texture parameters, and calls the function to draw
  * the vertical line with correct texture mapping.
  */
 
-void	wall_hight_cal(t_cub *game, double distance, int i)
+void	wall_hight_cal(t_cub *game, double distance)
 {
 	double	wall_hight;
 	t_line	line;
 	double	step;
-	// double	tex_pos;
 	int		tex_x;
 
 	wall_hight = game->image.height * (TILE / distance);
 	line.start_y = (game->image.height / 2) - (wall_hight / 2);
 	line.end_y = (game->image.height / 2) + (wall_hight / 2);
 	set_tex_params(game, wall_hight, &step, &tex_x);
-	// tex_pos = 0;
-	draw_the_vertical(game, i, line, tex_x, step);
+	draw_the_vertical(game, line, tex_x, step);
 }
 
 /**
@@ -62,7 +59,8 @@ void	cast_all_rays(t_cub *game)
 		ray_angle = game->player->angle - (FOV / 2) + i * (FOV
 				/ game->image.width);
 		distance = cast_single_ray(game, ray_angle);
-		wall_hight_cal(game, distance, i);
+		game->ray = i;
+		wall_hight_cal(game, distance);
 		i++;
 	}
 }
@@ -86,8 +84,7 @@ double	cast_single_ray(t_cub *game, double angle)
 {
 	t_dda	var;
 
-	var.raydir.x = cos(angle);
-	var.raydir.y = sin(angle);
+	init_var(&var, game, angle);
 	decide_where(&var, game);
 	while (1)
 	{
@@ -123,10 +120,6 @@ double	cast_single_ray(t_cub *game, double angle)
 
 void	decide_where(t_dda *var, t_cub *game)
 {
-	var->deltadist.x = TILE / fabs(var->raydir.x);
-	var->deltadist.y = TILE / fabs(var->raydir.y);
-	var->mapx = (int)(game->player->vec_p->x / TILE);
-	var->mapy = (int)(game->player->vec_p->y / TILE);
 	if (var->raydir.x < 0)
 	{
 		var->stepx = -1;
@@ -179,7 +172,7 @@ double	get_distance(t_dda *var, t_cub *game, int flag)
 				- var->deltadist.y) * var->raydir.x;
 		game->xwall /= TILE;
 		game->xwall -= floor(game->xwall);
-		return ((var->sidedist.y - var->deltadist.y));
+		return (var->sidedist.y - var->deltadist.y);
 	}
 	else
 	{
