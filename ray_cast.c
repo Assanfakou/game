@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ray_cast.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 16:00:43 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/29 18:43:06 by assankou         ###   ########.fr       */
+/*   Updated: 2025/11/01 21:01:18 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,27 +16,24 @@
  * wall_height_calc - Calculates the wall height and draws vertical line
  * @game: Pointer to the game struct
  * @distance: Distance from the player to the wall
- * @i: Current column on the screen (x coordinate)
  *
  * This function calculates the height of a wall slice based on distance,
  * determines the texture parameters, and calls the function to draw
  * the vertical line with correct texture mapping.
  */
 
-void wall_hight_cal(t_cub *game, double distance, int i)
+void	wall_hight_cal(t_cub *game, double distance)
 {
-	double wall_hight;
-	t_line line;
-	double step;
-	double tex_pos;
-	int tex_x;
+	double	wall_hight;
+	t_line	line;
+	double	step;
+	int		tex_x;
 
 	wall_hight = game->image.height * (TILE / distance);
 	line.start_y = (game->image.height / 2) - (wall_hight / 2);
 	line.end_y = (game->image.height / 2) + (wall_hight / 2);
 	set_tex_params(game, wall_hight, &step, &tex_x);
-	tex_pos = 0;//(line.start_y - game->image.height / 2 + wall_hight / 2) * step;
-	draw_the_vertical(game, i, line, tex_x, step, tex_pos);
+	draw_the_vertical(game, line, tex_x, step);
 }
 
 /**
@@ -50,18 +47,20 @@ void wall_hight_cal(t_cub *game, double distance, int i)
  * to draw the vertical wall slice for that column.
  */
 
-void cast_all_rays(t_cub *game)
+void	cast_all_rays(t_cub *game)
 {
-	double ray_angle;
-	int	i;
-	double distance;
+	double	ray_angle;
+	int		i;
+	double	distance;
 
 	i = 0;
 	while (i < game->image.width)
 	{
-		ray_angle = game->player->angle - (FOV / 2) + i * (FOV / game->image.width);
+		ray_angle = game->player->angle - (game->fov / 2) + i * (game->fov
+				/ game->image.width);
 		distance = cast_single_ray(game, ray_angle);
-		wall_hight_cal(game, distance, i);
+		game->ray = i;
+		wall_hight_cal(game, distance);
 		i++;
 	}
 }
@@ -81,12 +80,11 @@ void cast_all_rays(t_cub *game)
  * Return: Perpendicular distance from the player to the first wall hit.
  */
 
-double cast_single_ray(t_cub *game, double angle)
+double	cast_single_ray(t_cub *game, double angle)
 {
-	t_dda var;
+	t_dda	var;
 
-	var.raydir.x = cos(angle);
-	var.raydir.y = sin(angle);
+	init_var(&var, game, angle);
 	decide_where(&var, game);
 	while (1)
 	{
@@ -95,14 +93,16 @@ double cast_single_ray(t_cub *game, double angle)
 			var.sidedist.x += var.deltadist.x;
 			var.mapx += var.stepx;
 			if (game->data->map[var.mapy][var.mapx] == '1')
-				return (get_distance(&var, game, 1) * cos(angle - game->player->angle));
+				return (get_distance(&var, game, 1) * cos(angle
+						- game->player->angle));
 		}
 		else
 		{
 			var.sidedist.y += var.deltadist.y;
 			var.mapy += var.stepy;
 			if (game->data->map[var.mapy][var.mapx] == '1')
-				return (get_distance(&var, game, 0) * cos(angle - game->player->angle));
+				return (get_distance(&var, game, 0) * cos(angle
+						- game->player->angle));
 		}
 	}
 }
@@ -118,32 +118,31 @@ double cast_single_ray(t_cub *game, double angle)
  * used to efficiently step through the map grid to find wall intersections.
  */
 
-void decide_where(t_dda *var, t_cub *game)
+void	decide_where(t_dda *var, t_cub *game)
 {
-	var->deltadist.x = TILE / fabs(var->raydir.x);
-	var->deltadist.y = TILE / fabs(var->raydir.y);
-	var->mapx = (int)(game->player->vec_p->x / TILE);
-	var->mapy = (int)(game->player->vec_p->y / TILE);
-
 	if (var->raydir.x < 0)
 	{
 		var->stepx = -1;
-		var->sidedist.x = (game->player->vec_p->x - var->mapx * TILE) / fabs(var->raydir.x);
+		var->sidedist.x = (game->player->vec_p->x - var->mapx * TILE)
+			/ fabs(var->raydir.x);
 	}
 	else
 	{
 		var->stepx = 1;
-		var->sidedist.x = ((var->mapx + 1) * TILE - game->player->vec_p->x) / fabs(var->raydir.x);
+		var->sidedist.x = ((var->mapx + 1) * TILE - game->player->vec_p->x)
+			/ fabs(var->raydir.x);
 	}
 	if (var->raydir.y < 0)
 	{
 		var->stepy = -1;
-		var->sidedist.y = (game->player->vec_p->y - var->mapy * TILE) / fabs(var->raydir.y);
+		var->sidedist.y = (game->player->vec_p->y - var->mapy * TILE)
+			/ fabs(var->raydir.y);
 	}
 	else
 	{
 		var->stepy = 1;
-		var->sidedist.y = ((var->mapy + 1) * TILE - game->player->vec_p->y) / fabs(var->raydir.y);
+		var->sidedist.y = ((var->mapy + 1) * TILE - game->player->vec_p->y)
+			/ fabs(var->raydir.y);
 	}
 }
 /**
@@ -160,28 +159,24 @@ void decide_where(t_dda *var, t_cub *game)
  * Return: Distance from the player to the wall along the ray.
  */
 
-double get_distance(t_dda *var, t_cub *game, int flag)
+double	get_distance(t_dda *var, t_cub *game, int flag)
 {
 	if (!flag)
 	{
-		if (var->raydir.y > 0)
-			game->dir = 'S';
-		else
-			game->dir = 'N';
+		which_wall(var, game, true);
 		draw_rays_map(game, var, flag);
-		game->xwall = game->player->vec_p->x + (var->sidedist.y - var->deltadist.y) * var->raydir.x;
+		game->xwall = game->player->vec_p->x + (var->sidedist.y
+				- var->deltadist.y) * var->raydir.x;
 		game->xwall /= TILE;
 		game->xwall -= floor(game->xwall);
-		return ((var->sidedist.y - var->deltadist.y));
+		return (var->sidedist.y - var->deltadist.y);
 	}
 	else
 	{
-		if (var->raydir.x > 0)
-			game->dir = 'E';
-		else
-			game->dir = 'W';
+		which_wall(var, game, false);
 		draw_rays_map(game, var, flag);
-		game->xwall = game->player->vec_p->y + (var->sidedist.x - var->deltadist.x) * var->raydir.y;
+		game->xwall = game->player->vec_p->y + (var->sidedist.x
+				- var->deltadist.x) * var->raydir.y;
 		game->xwall /= TILE;
 		game->xwall -= floor(game->xwall);
 		return (var->sidedist.x - var->deltadist.x);

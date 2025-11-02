@@ -1,13 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   texturlog.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/01 17:33:27 by hfakou            #+#    #+#             */
+/*   Updated: 2025/11/01 20:20:29 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
 /**
  * draw_the_vertical - Draws a vertical wall slice with the correct texture
  * @game: Pointer to the game structure containing images and textures
- * @i: X-coordinate of the screen column to draw
  * @line: Struct containing start_y and end_y for the wall slice
  * @tex_x: X-coordinate in the wall texture
  * @step: The vertical step to move in the texture per screen pixel
- * @texp: Starting Y position in the texture (usually 0 in your engine)
  *
  * This function loops from the top (start_y) to the bottom (end_y) of a wall
  * slice and draws each pixel on the screen. For each pixel, it calculates
@@ -16,14 +26,14 @@
  * selects the texture based on the wall direction (N, S, W, E).
  */
 
-void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, double texp)
+void	draw_the_vertical(t_cub *game, t_line line, int tex_x, double step)
 {
-	int y;
-	int tex_y;
-	double tex_pos;
-	unsigned int color;
+	int				y;
+	int				tex_y;
+	double			tex_pos;
+	unsigned int	color;
 
-	tex_pos = texp;
+	tex_pos = 0;
 	y = line.start_y;
 	while (y < line.end_y)
 	{
@@ -37,7 +47,7 @@ void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, 
 			color = get_tex_color(&game->tex.west, tex_x, tex_y);
 		else
 			color = get_tex_color(&game->tex.east, tex_x, tex_y);
-		my_mlx_pixel_put(&game->image, i, y, color);
+		my_mlx_pixel_put(&game->image, game->ray, y, color);
 		y++;
 	}
 }
@@ -53,9 +63,9 @@ void draw_the_vertical(t_cub *game, int i, t_line line, int tex_x, double step, 
  * step size to sample texture vertically.
  */
 
-void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
+void	set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
 {
-	t_image *tex;
+	t_image	*tex;
 
 	if (game->dir == 'N')
 		tex = &game->tex.north;
@@ -67,4 +77,14 @@ void set_tex_params(t_cub *game, double wall_hight, double *step, int *tex_x)
 		tex = &game->tex.east;
 	*step = 1.0 * tex->height / wall_hight;
 	*tex_x = (int)(game->xwall * tex->width);
+}
+
+void	init_var(t_dda *var, t_cub *game, double angle)
+{
+	var->raydir.x = cos(angle);
+	var->raydir.y = sin(angle);
+	var->deltadist.x = TILE / fabs(var->raydir.x);
+	var->deltadist.y = TILE / fabs(var->raydir.y);
+	var->mapx = (int)(game->player->vec_p->x / TILE);
+	var->mapy = (int)(game->player->vec_p->y / TILE);
 }

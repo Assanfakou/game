@@ -6,15 +6,15 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/12 22:14:31 by hfakou            #+#    #+#             */
-/*   Updated: 2025/10/25 13:37:03 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/01 20:19:36 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
 
-void drawLineVertical(t_image *img, int x, int height)
+void	draw_line_vertical(t_image *img, int x, int height)
 {
-	int y;
+	int	y;
 
 	y = 0;
 	while (y <= height)
@@ -24,9 +24,9 @@ void drawLineVertical(t_image *img, int x, int height)
 	}
 }
 
-void drawLineHorizontal(t_image *image, int y, int width)
+void	draw_line_horizontal(t_image *image, int y, int width)
 {
-	int x;
+	int	x;
 
 	x = 0;
 	while (x <= width)
@@ -36,30 +36,30 @@ void drawLineHorizontal(t_image *image, int y, int width)
 	}
 }
 
-void draw_squar(t_image *image, int x, int y, int color)
+void	draw_squar(t_image *image, int x, int y, int color)
 {
-	int i;
-	int j;
+	int	i;
+	int	j;
 
 	i = 0;
 	while (i < TILEIM)
 	{
-		j = 0;	
+		j = 0;
 		while (j < TILEIM)
 		{
 			my_mlx_pixel_put(image, x * TILEIM + i, y * TILEIM + j, color);
 			j++;
 		}
-		i++; 
+		i++;
 	}
 }
 
-void draw_player(t_image *image, t_player *player)
+void	draw_player(t_image *image, t_player *player)
 {
-	int raduis;
-	int i; 
-	int j;
-	
+	int	raduis;
+	int	i;
+	int	j;
+
 	raduis = 4;
 	i = -raduis;
 	while (i <= raduis)
@@ -67,18 +67,19 @@ void draw_player(t_image *image, t_player *player)
 		j = -raduis;
 		while (j <= raduis)
 		{
-			if (i*i + j*j <= raduis*raduis)
-				my_mlx_pixel_put(image, (player->vec_p->x / TILE) * TILEIM + i, player->vec_p->y / TILE * TILEIM + j, 0xFFFFFF);
+			if (i * i + j * j <= raduis * raduis)
+				my_mlx_pixel_put(image, (player->vec_p->x / TILE) * TILEIM + i,
+					player->vec_p->y / TILE * TILEIM + j, 0xFFFFFF);
 			j++;
 		}
 		i++;
 	}
 }
 
-void draw_grids(t_cub *game)
+void	draw_grids(t_cub *game)
 {
-	int row;
-	int col;
+	int	row;
+	int	col;
 
 	col = 0;
 	while (col <= game->data->map_width)
@@ -86,10 +87,12 @@ void draw_grids(t_cub *game)
 		row = 0;
 		while (row <= game->data->map_height)
 		{
-			drawLineHorizontal(&game->map_img, row * TILEIM, game->data->map_width * TILEIM);
+			draw_line_horizontal(&game->map_img, row * TILEIM,
+				game->data->map_width * TILEIM);
 			row++;
 		}
-		drawLineVertical(&game->map_img, col * TILEIM, game->data->map_height * TILEIM);
+		draw_line_vertical(&game->map_img, col * TILEIM, game->data->map_height
+			* TILEIM);
 		col++;
 	}
 }

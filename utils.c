@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/01 20:17:05 by hfakou            #+#    #+#             */
+/*   Updated: 2025/11/01 20:29:30 by hfakou           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "game.h"
 
 /**
@@ -15,7 +27,7 @@
  * Return: The color of the pixel at (x, y) in ARGB format.
  */
 
-unsigned int get_tex_color(t_image *texture, int x, int y)
+unsigned int	get_tex_color(t_image *texture, int x, int y)
 {
 	char	*dest;
 
@@ -28,5 +40,78 @@ unsigned int get_tex_color(t_image *texture, int x, int y)
 	if (y >= texture->height)
 		y = texture->height - 1;
 	dest = texture->addr + (y * texture->line_length + x * (texture->bpp / 8));
-	return *(unsigned int *)(dest);
+	return (*(unsigned int *)(dest));
+}
+
+int	rgb_to_int(int *color)
+{
+	int	collor;
+	int	r;
+	int	g;
+	int	b;
+
+	r = color[0];
+	g = color[1];
+	b = color[2];
+	collor = (r << 16) | (g << 8) | b;
+	return (collor);
+}
+
+double	get_delta_time(void)
+{
+	static struct timeval	last_time = {0, 0};
+	struct timeval			current_time;
+	double					delta;
+
+	gettimeofday(&current_time, NULL);
+	if (last_time.tv_sec == 0 && last_time.tv_usec == 0)
+		last_time = current_time;
+	delta = (current_time.tv_sec - last_time.tv_sec)
+		+ (current_time.tv_usec - last_time.tv_usec) / 1000000.0;
+	last_time = current_time;
+	return (delta);
+}
+
+void	update_point(t_vector_int *start, int *err, t_vector_int d,
+		t_vector_int s)
+{
+	int	e2;
+
+	e2 = *err * 2;
+	if (e2 > -d.y)
+	{
+		*err -= d.y;
+		start->x += s.x;
+	}
+	if (e2 < d.x)
+	{
+		*err += d.x;
+		start->y += s.y;
+	}
+}
+
+void	draw_line(t_image *img, t_vector_int start, t_vector_int end, int color)
+{
+	t_vector_int	d;
+	t_vector_int	s;
+	int				err;
+
+	d.x = abs(end.x - start.x);
+	d.y = abs(end.y - start.y);
+	if (start.x < end.x)
+		s.x = 1;
+	else
+		s.x = -1;
+	if (start.y < end.y)
+		s.y = 1;
+	else
+		s.y = -1;
+	err = d.x - d.y;
+	while (1)
+	{
+		my_mlx_pixel_put(img, start.x, start.y, color);
+		if (start.x == end.x && start.y == end.y)
+			break ;
+		update_point(&start, &err, d, s);
+	}
 }
