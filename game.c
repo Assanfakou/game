@@ -3,15 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 22:17:52 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/02 18:10:05 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
-
 
 void	draw_map(t_cub *game)
 {
@@ -100,7 +99,6 @@ void	set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 	p->vec_d = d;
 	p->speed = 10;
 }
-
 int	main(int ac, char **av)
 {
 	t_cub		cub;
@@ -116,22 +114,8 @@ int	main(int ac, char **av)
 	cub.player = &player;
 	cub.data = &data;
 	cub.fov = M_PI / 3;
+	check_screen(&cub);
 	draw_map(&cub);
-	int    screen_w;
-	int    screen_h;
-
-	mlx_get_screen_size(cub.render.mlx, &screen_w, &screen_h);
-	printf("map hight %d \n", cub.data->map_height);
-	if (screen_h < cub.data->map_height * TILE)
-	{
-		printf("height\n");
-		exit(1);
-	}
-	if (screen_w < cub.data->map_width * TILE)
-	{
-		printf("width\n");
-		exit(1);
-	}
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.image.buff, 0,
 		0);
 	mlx_put_image_to_window(cub.render.mlx, cub.render.win, cub.map_img.buff, 0,

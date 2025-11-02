@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   game.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 20:30:02 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 21:03:00 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/02 18:10:44 by assankou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "minilibx/mlx.h"
 #ifndef GAME_H
 # define GAME_H
 
+#include "minilibx/mlx.h"
+//# include "mlx.h"
 # include "libft/libft.h"
-# include "mlx.h"
 # include "parse/parsing.h"
 # include <math.h>
 # include <stdbool.h>
@@ -26,7 +26,7 @@
 # endif
 
 # ifndef TILE
-#  define TILE 60
+#  define TILE 80
 # endif
 
 # ifndef WIDTH
@@ -209,4 +209,5 @@ void			draw_line(t_image *img, t_vector_int start, t_vector_int end,
 					int color);
 void			init_var(t_dda *var, t_cub *game, double angle);
 void			which_wall(t_dda *var, t_cub *game, bool flag);
+void check_screen(t_cub *game);
 #endif
