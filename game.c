@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   game.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/02 18:10:05 by assankou         ###   ########.fr       */
+/*   Updated: 2025/11/02 22:09:49 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ void	set_player(t_player *p, t_vector *p_v, t_vector *d, t_game data)
 	p->vec_d = d;
 	p->speed = 10;
 }
+
 int	main(int ac, char **av)
 {
 	t_cub		cub;

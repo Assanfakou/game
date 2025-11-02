@@ -57,17 +57,16 @@ void	which_wall(t_dda *var, t_cub *game, bool flag)
 	}
 }
 
-void check_screen(t_cub *game)
+void	check_screen(t_cub *game)
 {
-	int    screen_w;
-	int    screen_h;
+	int	screen_w;
+	int	screen_h;
 
 	mlx_get_screen_size(game->render.mlx, &screen_w, &screen_h);
 	printf("map hight %d \n", game->data->map_height * TILE);
 	printf("map width %d \n", game->data->map_width);
 	printf("screen hight %d \n", screen_h);
 	printf("screen width %d \n", screen_w);
-
 	if (screen_h < game->data->map_height * TILE)
 	{
 		printf("height\n");

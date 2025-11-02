@@ -13,7 +13,7 @@
 #ifndef GAME_H
 # define GAME_H
 
-#include "minilibx/mlx.h"
+# include "minilibx/mlx.h"
 //# include "mlx.h"
 # include "libft/libft.h"
 # include "parse/parsing.h"
@@ -209,5 +209,5 @@ void			draw_line(t_image *img, t_vector_int start, t_vector_int end,
 					int color);
 void			init_var(t_dda *var, t_cub *game, double angle);
 void			which_wall(t_dda *var, t_cub *game, bool flag);
-void check_screen(t_cub *game);
+void			check_screen(t_cub *game);
 #endif
