@@ -1,7 +1,7 @@
-NO ./textures/1.xpm
-SO ./textures/2.xpm
-EA ./textures/3.xpm
-WE ./textures/4.xpm
+NO ./textures/gen.xpm
+SO ./textures/gen2.xpm
+EA ./textures/gen3.xpm
+WE ./textures/gen4.xpm
 
 C 0,220,220
 F 100,150,200
