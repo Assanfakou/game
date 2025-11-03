@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_util.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 20:12:12 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/02 18:10:28 by assankou         ###   ########.fr       */
+/*   Updated: 2025/11/03 09:18:35 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,13 +69,13 @@ void	check_screen(t_cub *game)
 	printf("screen width %d \n", screen_w);
 	if (screen_h < game->data->map_height * TILE)
 	{
-		printf("height\n");
+		printf("height too long\n");
 		close_window(game);
 		exit(1);
 	}
 	if (screen_w < game->data->map_width * TILE)
 	{
-		printf("width\n");
+		printf("width too long\n");
 		close_window(game);
 		exit(1);
 	}

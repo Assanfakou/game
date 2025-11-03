@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 17:33:27 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 20:20:29 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/03 10:00:28 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	draw_the_vertical(t_cub *game, t_line line, int tex_x, double step)
 	while (y < line.end_y)
 	{
 		tex_y = tex_pos;
-		tex_pos += step;
 		if (game->dir == 'S')
 			color = get_tex_color(&game->tex.south, tex_x, tex_y);
 		else if (game->dir == 'N')
@@ -48,6 +47,7 @@ void	draw_the_vertical(t_cub *game, t_line line, int tex_x, double step)
 		else
 			color = get_tex_color(&game->tex.east, tex_x, tex_y);
 		my_mlx_pixel_put(&game->image, game->ray, y, color);
+		tex_pos += step;
 		y++;
 	}
 }
@@ -56,7 +56,7 @@ void	draw_the_vertical(t_cub *game, t_line line, int tex_x, double step)
  * @game: Pointer to the game struct containing textures and direction
  * @wall_hight: Calculated height of the wall on screen
  * @step: Pointer to the step variable (height increment per pixel in texture)
- * @texX: Pointer to the X coordinate in the texture
+ * @tex_x: Pointer to the X coordinate in the texture
  *
  * This function selects the correct texture based on wall direction
  * and calculates the horizontal texture coordinate (texX) and the

@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   game.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 20:30:02 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/02 18:10:44 by assankou         ###   ########.fr       */
+/*   Updated: 2025/11/03 09:40:08 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GAME_H
 # define GAME_H
 
-# include "minilibx/mlx.h"
-//# include "mlx.h"
+// # include "minilibx/mlx.h"
+# include "mlx.h"
 # include "libft/libft.h"
 # include "parse/parsing.h"
 # include <math.h>
