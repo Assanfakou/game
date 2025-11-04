@@ -3,127 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
+/*   By: lzari <lzari@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:48:38 by lzari             #+#    #+#             */
-/*   Updated: 2025/11/01 14:03:27 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/04 15:42:42 by lzari            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-int	validate_extension(char *file_name)
+static int	free_resources(t_game *game,
+		char *file_content, char **lines, char *msg)
 {
-	int	len;
-
-	if (!file_name)
-		return (0);
-	len = ft_strlen(file_name);
-	if (len < 5)
-		return (0);
-	if (ft_strncmp(file_name + len - 4, ".cub", 4) != 0)
-		return (0);
+	if (lines)
+		free_string_array(lines);
+	if (file_content)
+		free(file_content);
+	if (game)
+		free_game_struct(game);
+	if (msg)
+		print_error(msg);
 	return (1);
 }
 
-int	is_directory(char *path)
+static int	parse_lines_and_map(t_game *game,
+		char **lines, char *file_content)
 {
-	int	fd;
+	int	map_start;
 
-	fd = open(path, O_DIRECTORY);
-	if (fd >= 0)
-	{
-		close(fd);
-		return (1);
-	}
+	map_start = parse_elements(lines, game);
+	if (map_start == 0 || !parse_map(lines, map_start, game))
+		return (free_resources(game,
+				file_content,
+				lines,
+				"Invalid map or elements"));
+	free(file_content);
+	free_string_array(lines);
 	return (0);
 }
 
-int	file_exists_and_readable(char *file_name)
+static int	parse_file_content(t_game *game, char *file_content)
 {
-	int	fd;
+	char	**lines;
+	int		line_count;
 
-	fd = open(file_name, O_RDONLY);
-	if (fd == -1)
-	{
-		printf("Error: Cannot open file '%s': %s\n", file_name,
-				strerror(errno));
-		return (0);
-	}
-	close(fd);
-	return (1);
-}
-
-int	valid_argument(int argc, char **argv)
-{
-	if (argc != 2)
-	{
-		print_error("Invalid number of arguments");
-		return (0);
-	}
-	if (!argv[1])
-	{
-		print_error("Invalid argument: NULL file path");
-		return (0);
-	}
-	if (is_directory(argv[1]))
-	{
-		print_error("Argument is a directory, not a file");
-		return (0);
-	}
-	if (!file_exists_and_readable(argv[1]))
-		return (0);
-	if (!validate_extension(argv[1]))
-	{
-		print_error("Invalid file extension. Use .cub files only");
-		return (0);
-	}
-	return (1);
-}
-
-void	print_parsed_elements(t_game *game)
-{
-	printf("\n=== PARSED ELEMENTS ===\n");
-
-	if (game->north_texture)
-		printf("North texture: %s\n", game->north_texture);
-	else
-		printf("North texture: NULL\n");
-
-	if (game->south_texture)
-		printf("South texture: %s\n", game->south_texture);
-	else
-		printf("South texture: NULL\n");
-
-	if (game->west_texture)
-		printf("West texture: %s\n", game->west_texture);
-	else
-		printf("West texture: NULL\n");
-
-	if (game->east_texture)
-		printf("East texture: %s\n", game->east_texture);
-	else
-		printf("East texture: NULL\n");
-
-	printf("Floor color: R:%d G:%d B:%d\n",
-		game->floor_color[0],
-		game->floor_color[1],
-		game->floor_color[2]);
-
-	printf("Ceiling color: R:%d G:%d B:%d\n",
-		game->ceiling_color[0],
-		game->ceiling_color[1],
-		game->ceiling_color[2]);
-
-	printf("========================\n\n");
+	line_count = count_lines(file_content);
+	if (line_count == 0)
+		return (free_resources(game,
+				file_content,
+				NULL,
+				"Empty file"));
+	lines = split_lines(file_content, line_count);
+	if (!lines)
+		return (free_resources(game,
+				file_content,
+				NULL,
+				"Failed to split file content"));
+	return (parse_lines_and_map(game, lines, file_content));
 }
 
 int	get_data(t_game *game, int argc, char **argv)
 {
 	char	*file_content;
-	char	**lines;
-	int		line_count;
-	int		map_start;
 
 	if (!valid_argument(argc, argv))
 		return (1);
@@ -135,80 +76,7 @@ int	get_data(t_game *game, int argc, char **argv)
 		free_game_struct(game);
 		return (1);
 	}
-	line_count = count_lines(file_content);
-	if (line_count == 0)
-	{
-		print_error("Empty file");
-		free(file_content);
-		free_game_struct(game);
+	if (parse_file_content(game, file_content))
 		return (1);
-	}
-	lines = split_lines(file_content, line_count);
-	if (!lines)
-	{
-		print_error("Failed to split file content");
-		free(file_content);
-		free_game_struct(game);
-		return (1);
-	}
-	map_start = parse_elements(lines, game);
-	printf("DEBUG: map_start returned = %d\n", map_start);
-	if (map_start == 0)
-	{
-		printf("check here\n");
-		printf("Error: Failed to parse elements (textures/colors)\n");
-		free(file_content);
-		free_string_array(lines);
-		free_game_struct(game);
-		return (1);
-	}
-
-	printf("\n=== PARSED ELEMENTS ===\n");
-
-	if (game->north_texture)
-		printf("North texture: %s\n", game->north_texture);
-	else
-		printf("North texture: NULL\n");
-
-	if (game->south_texture)
-		printf("South texture: %s\n", game->south_texture);
-	else
-		printf("South texture: NULL\n");
-
-	if (game->west_texture)
-		printf("West texture: %s\n", game->west_texture);
-	else
-		printf("West texture: NULL\n");
-
-	if (game->east_texture)
-		printf("East texture: %s\n", game->east_texture);
-	else
-		printf("East texture: NULL\n");
-
-	printf("Floor color: R:%d G:%d B:%d\n",
-		game->floor_color[0],
-		game->floor_color[1],
-		game->floor_color[2]);
-
-	printf("Ceiling color: R:%d G:%d B:%d\n",
-		game->ceiling_color[0],
-		game->ceiling_color[1],
-		game->ceiling_color[2]);
-
-	printf("========================\n\n");
-
-	printf("DEBUG: Starting map parsing at line %d\n", map_start);
-	if (!parse_map(lines, map_start, game))
-	{
-		// printf("Error: Map parsing failed\n");
-		free(file_content);
-		free_string_array(lines);
-		free_game_struct(game);
-		return (1);
-	}
-	// print_final_result(game);
-	free(file_content);
-	free_string_array(lines);
-	// free_game_struct(game);
 	return (0);
 }

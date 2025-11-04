@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utilis.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lzari <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: lzari <lzari@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:49:37 by lzari             #+#    #+#             */
-/*   Updated: 2025/10/03 09:49:40 by lzari            ###   ########.fr       */
+/*   Updated: 2025/11/04 15:42:23 by lzari            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	ft_strncmp(const char *s1, const char *s2, size_t n)
 void	print_error(char *msg)
 {
 	printf("Error: %s\n", msg);
-	exit(EXIT_FAILURE);
+	// exit(EXIT_FAILURE);
 }
 
 int	ft_strlen(const char *str)

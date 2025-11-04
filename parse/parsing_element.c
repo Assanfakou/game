@@ -102,7 +102,7 @@ int	parse_elements(char **lines, t_game *game)
 		if (ft_strlen(lines[i]) != 0)
 		{
 			if (!is_texture_line(lines[i]) && !is_color_line(lines[i]))
-				break;
+				break ;
 			if (!process_line(lines[i], game, &elements_found))
 				return (0);
 		}

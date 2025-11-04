@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: assankou <assankou@student.42.fr>          +#+  +:+       +#+        */
+/*   By: lzari <lzari@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/03 09:49:52 by lzari             #+#    #+#             */
-/*   Updated: 2025/10/06 16:11:41 by assankou         ###   ########.fr       */
+/*   Updated: 2025/11/03 11:47:58 by lzari            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int			file_exists_and_readable(char *file_name);
 void		print_error(char *msg);
 
 int			parse_map(char **lines, int start_idx, t_game *game);
-void		print_final_result(t_game *game);
 
 int			is_valid_map_char(char c);
 int			is_player_char(char c);
