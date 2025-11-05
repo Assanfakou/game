@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 20:30:02 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/03 09:40:08 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/05 16:10:07 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@
 # include <math.h>
 # include <stdbool.h>
 # include <sys/time.h>
+
+extern bool m_flag;
 
 # ifndef TILEIM
 #  define TILEIM 12
@@ -64,6 +66,9 @@
 # ifndef UP
 #  define UP 119
 # endif
+
+# define M 109
+# define N 110
 
 # ifndef DOWN
 #  define DOWN 115

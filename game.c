@@ -6,11 +6,13 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/09/11 16:04:17 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/02 22:09:49 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/05 16:07:32 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "game.h"
+
+bool m_flag = false;
 
 void	draw_map(t_cub *game)
 {
@@ -76,8 +78,8 @@ int	render(t_cub *game)
 	printf("FPS: %d\n", (int)(1.0 / get_delta_time()));
 	mlx_put_image_to_window(game->render.mlx, game->render.win,
 		game->image.buff, 0, 0);
-	mlx_put_image_to_window(game->render.mlx, game->render.win,
-		game->map_img.buff, 0, 0);
+	if (m_flag)
+		mlx_put_image_to_window(game->render.mlx, game->render.win, game->map_img.buff, 0, 0);
 	return (0);
 }
 

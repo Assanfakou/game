@@ -6,7 +6,7 @@
 /*   By: hfakou <hfakou@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/01 16:17:38 by hfakou            #+#    #+#             */
-/*   Updated: 2025/11/01 16:18:04 by hfakou           ###   ########.fr       */
+/*   Updated: 2025/11/05 16:09:06 by hfakou           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,9 @@ int	handle_keypress(int keycode, t_cub *game)
 		rotate_right(game);
 	if (keycode == ESC)
 		close_window(game);
+	if (keycode == M)
+		m_flag = true;	
+	if (keycode == N)
+		m_flag = false;
 	return (0);
 }
